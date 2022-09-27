@@ -1,5 +1,5 @@
 import requests
-from extract_metadata import extract_metadata
+from server.extract_metadata import extract_metadata
 
 URL = 'http://127.0.0.1:5000/api/'
 
