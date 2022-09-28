@@ -8,8 +8,11 @@ import json
 i2c = busio.I2C(board.SCL, board.SDA)
 amg = adafruit_amg88xx.AMG88XX(i2c)
 
+IP="192.168.11.79"
+PORT=1883
+
 client = mqtt.Client()
-client.connect("192.168.11.79", 1883, 60)
+client.connect(IP, PORT, 60)
 
 while True:
     client.publish("sensor/temperature", payload=amg.temperature)
