@@ -4,16 +4,16 @@ Sensors are named as `sensor/webcam`, `sensor/ir`, `sensor/lux`, `sensor/tof`.
 
 ## Management channel
 ```
-management/<sensor>
+management/<device>/<sensor>
 ```
 
 ## Alert channel
 ```
-alert/<sensor>
+alert/<device>/<sensor>
 ```
 
 ## Data channels
 ```
-data/<sensor>/<unit>
+data/<device>/<sensor>/<mesurement>
 ```
-Unit here means whe unit of measurement. This could be temperature or distance etc.
+Measurement here means the measured data. This could be array of pixels, temperature, distance etc
