@@ -8,7 +8,7 @@ PORT=1883
 def on_connect(client, userdata, flags, rc):
     print("connected with result code " + str(rc))
 
-    client.subscribe("sensor/temperature")
+    client.subscribe("alert/iotpi014")
 
 
 def on_message(client, userdata, msg):
