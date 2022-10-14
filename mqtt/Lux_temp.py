@@ -16,7 +16,7 @@ client.connect(IP, PORT, 60)
 status_old = bool(float(tsl.lux) > 46)
 change = True
 
-if float(tsl.lux) > 46:
+if status_old:
      client.publish("alert/iotp015/lux", payload="Status: Light")
      print("Status: Light")
 else:
