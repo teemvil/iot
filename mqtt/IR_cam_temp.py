@@ -8,13 +8,13 @@ import math
 
 i2c = busio.I2C(board.SCL, board.SDA)
 amg = adafruit_amg88xx.AMG88XX(i2c)
-client.publish("management", payload="Iotpi014 IR sensor started")
 
 IP="192.168.11.79"
 PORT=1883
 
 client = mqtt.Client()
 client.connect(IP, PORT, 60)
+client.publish("management", payload="Iotpi014 IR sensor started")
 
 while True:
     #client.publish("sensor/temperature", payload=amg.temperature)
