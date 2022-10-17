@@ -25,7 +25,7 @@ ap = argparse.ArgumentParser(description='Displays the log file in real-time')
 args = ap.parse_args()
 
 def processMessage(payload, topic):
-    print(topic+" "+str(payload))
+    #print(topic+" "+str(payload))
 
     if topic == "alert":
         #TODO
@@ -35,9 +35,9 @@ def processMessage(payload, topic):
         #TODO
         print("management message detected: " + str(payload))
 
-    if topic == "data":
+    else:
         #TODO
-        print("data detected: " + str(payload))
+        print("data detected from " topic + ": " + str(payload))
 
 def on_message(client, userdata, msg):
     #if args.nottheaded==False:
