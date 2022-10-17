@@ -27,12 +27,25 @@ args = ap.parse_args()
 def processMessage(payload, topic):
     print(topic+" "+str(payload))
 
+    if topic == "alert":
+        #TODO
+        print("alert detected: " + payload)
+
+    if topic == "management":
+        #TODO
+        print("management message detected: " + payload)
+
+    if topic.str.contains("data"):
+        #TODO
+        print("data detected: " + payload)
+
 def on_message(client, userdata, msg):
     #if args.nottheaded==False:
     x = threading.Thread(target=processMessage, args=(msg.payload, msg.topic,))
     x.start()
-  #  else:
-  #      processMessage(msg.payload, msg.topic)
+    # else:
+    #     processMessage(msg.payload, msg.topic)
+
     
 
 
