@@ -4,6 +4,7 @@ import board
 import adafruit_tsl2561
 import paho.mqtt.client as mqtt
 import json
+import math
 
 i2c = busio.I2C(board.SCL, board.SDA)
 tsl = adafruit_ts12561.TSL2561(i2c)
@@ -26,8 +27,8 @@ else:
      print("Satus: Dark")
 
 while True:
-     print("sensor/lux: " + str(tsl.lux))
-     client.publish("data/iotpi015/sensor/lux", payload=tsl.lux)
+     print("sensor/lux: " + str(math.floor(tsl.lux)))
+     client.publish("data/iotpi015/sensor/lux", payload=math.floor(tsl.lux))
 
      status = bool(float(tsl.lux) > 46)
      if status != status_old:
