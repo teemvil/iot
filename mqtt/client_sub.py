@@ -3,7 +3,7 @@ import paho.mqtt.subscribe as subscribe
 import json
 import ast
 import threading
-from colors import *
+#from colors import *
 import argparse
 
 IP="192.168.11.79"
@@ -28,11 +28,11 @@ def processMessage(payload, topic):
     print(topic+" "+str(payload))
 
 def on_message(client, userdata, msg):
-    if args.nottheaded==False:
-        x = threading.Thread(target=processMessage, args=(msg.payload, msg.topic,))
-        x.start()
-    else:
-        processMessage(msg.payload, msg.topic)
+    #if args.nottheaded==False:
+    x = threading.Thread(target=processMessage, args=(msg.payload, msg.topic,))
+    x.start()
+  #  else:
+  #      processMessage(msg.payload, msg.topic)
     
 
 
