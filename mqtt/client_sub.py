@@ -29,15 +29,15 @@ def processMessage(payload, topic):
 
     if topic == "alert":
         #TODO
-        print("alert detected: " + payload)
+        print("alert detected: " + str(payload))
 
     if topic == "management":
         #TODO
-        print("management message detected: " + payload)
+        print("management message detected: " + str(payload))
 
-    if topic.str.contains("data"):
+    if topic == "data":
         #TODO
-        print("data detected: " + payload)
+        print("data detected: " + str(payload))
 
 def on_message(client, userdata, msg):
     #if args.nottheaded==False:
