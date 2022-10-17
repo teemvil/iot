@@ -16,11 +16,13 @@ client.connect(IP, PORT, 60)
 status_old = bool(float(tsl.lux) > 46)
 change = True
 
+client.publish("management", payload="iotpi015: lux sensor on")
+
 if status_old:
-     client.publish("alert/iotp015/lux", payload="Status: Light")
+     client.publish("alert", payload="iotpi15: Status: Light")
      print("Status: Light")
 else:
-     client.publish("alert/iotp015/lux", payload="Status: Dark")
+     client.publish("alert", payload="iotpi015: Status: Dark")
      print("Satus: Dark")
 
 while True:
@@ -35,10 +37,10 @@ while True:
 
      if change:
           if status:
-               client.publish("alert/iotp015/lux", payload="Status: Light")
+               client.publish("alert", payload="iotp015: Status: Light")
                print("Status: Light")
           else:
-               client.publish("alert/iotp015/lux", payload="Status: Dark")
+               client.publish("alert", payload="iotp015: Status: Dark")
                print("Satus: Dark")
 
      status_old = status
