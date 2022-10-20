@@ -17,18 +17,23 @@ client.connect(IP, PORT, 60)
 status_old = bool(float(tsl.lux) > 46)
 change = True
 
-client.publish("management", payload="iotpi015: lux sensor on")
+client.publish("management", payload=json.dumps({"name": "iotpi15", "message": "Lux sensor is on"}))
 
 if status_old:
-     client.publish("alert", payload="iotpi15: Status: Light")
+     client.publish("alert", payload=json.dumps({"name": "iotpi15", "message": "Status: Light"}))
      print("Status: Light")
 else:
-     client.publish("alert", payload="iotpi015: Status: Dark")
+     client.publish("alert", payload=json.dumps({"name": "iotpi15", "message": "Status: Dark"}))
      print("Satus: Dark")
 
 while True:
      print("sensor/lux: " + str(math.floor(tsl.lux)))
-     client.publish("data/iotpi015/sensor/lux", payload=math.floor(tsl.lux))
+
+     dataload={
+          "sensor": "lux",
+          "data": math.floor(tsl.lux)
+     }
+     client.publish("data/iotpi015/sensor/lux", payload=json.dumps(dataload))
 
      status = bool(float(tsl.lux) > 46)
      if status != status_old:
@@ -38,10 +43,10 @@ while True:
 
      if change:
           if status:
-               client.publish("alert", payload="iotp015: Status: Light")
+               client.publish("alert", payload=json.dumps({"name": "iotp015", "message": "Status: Light"}))
                print("Status: Light")
           else:
-               client.publish("alert", payload="iotp015: Status: Dark")
+               client.publish("alert", payload=json.dumps({"name": "iotp015", "message": "Status: Dark"}))
                print("Satus: Dark")
 
      status_old = status
