@@ -27,6 +27,10 @@ ap = argparse.ArgumentParser(description='Displays the log file in real-time')
 args = ap.parse_args()
 
 q = queue.Queue()
+lux_q = queue.LifoQueue()
+tof_q = queue.LifoQueue()
+temp_q = queue.LifoQueue()
+pix_q = queue.LifoQueue()
 
 def handleAlert(payload):
     print("alert detected: " + payload)
@@ -36,30 +40,38 @@ def handleManagement(payload):
 
 dataCount = 0
 def handleData(topic, payload, q):
+    global dataCount
+    global lux_q
+    global tof_q
+    global pix_q
+    global temp_q
 
     if topic == "data/iotpi015/sensor/lux":
-        q.push(payload, "lux")
+        lux_q.put(payload, "lux")
 
     if topic == "data/iotpi014/sensor/ir/temperature":
-        q.push(payload, "temp")
+        temp_q.put(payload, "temp")
     
     if topic == "data/iotpi014/sensor/ir/pixels":
-        q.push(payload, "pix")    
+        pix_q.put(payload, "pix")    
 
     if topic == "data/iotpi016/sensor/tof":
-        q.push(payload, "tof")
+        tof_q.put(payload, "tof")
     
     dataCount = dataCount +1
 
     if dataCount>50:
-        print(str(q.pull))
+        lq=lux_q.get()
+        tq=tof_q.get()
+        #print("From lux queue: " + str(lq) + "; From tof queue: " + str(tq))
+        getFromQueue()
         dataCount=0
     
 
 def getFromQueue():
-    print(str(q.pull))
+    print("From lux queue: " + str(lux_q.get()) + "; From tof queue: " + str(tof_q.get()))
 
-def processMessage(payload, topic, q):
+def processMessage(payload, topic):
     print(topic+" "+str(payload))   
 
     if topic == "alert":
@@ -69,12 +81,12 @@ def processMessage(payload, topic, q):
         if topic == "management":
             handleManagement(payload)
         else:
-            handleData(topic, payload, q)
+            handleData(topic, payload)
 
 
 def on_message(client, userdata, msg):
     
-    x = threading.Thread(target=processMessage, args=(msg.payload, msg.topic, q))
+    x = threading.Thread(target=processMessage, args=(msg.payload, msg.topic))
     x.start()
 
 
