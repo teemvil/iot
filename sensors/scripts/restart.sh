@@ -1,2 +1,2 @@
 #!/bin/bash
-systemctl restart startupCheck.service
+systemctl restart startup.check.service
