@@ -23,10 +23,7 @@ def take_picture():
 def get_image():
     take_picture()
     return send_file('webcam_pic.jpg', mimetype="image/jpg")
-    # with open('webcam_pic.jpg', 'rb') as image_file:
-        # encoded_string = base64.b64encode(image_file.read())
-        # return encoded_string
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
