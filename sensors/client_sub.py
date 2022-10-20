@@ -5,6 +5,8 @@ import ast
 import threading
 #from colors import *
 import argparse
+import queue
+from queue import Queue
 
 IP="192.168.11.79"
 PORT=1883
@@ -24,6 +26,7 @@ def on_connect(client, userdata, flags, rc):
 ap = argparse.ArgumentParser(description='Displays the log file in real-time')
 args = ap.parse_args()
 
+q = queue.Queue()
 
 def handleAlert(payload):
     print("alert detected: " + payload)
@@ -31,38 +34,47 @@ def handleAlert(payload):
 def handleManagement(payload):
     print("management message detected: " + payload)
 
-def handleData(payload):
-    load = json.loads(payload)
-    
-    if load["sensor"] == "lux":
-        #TODO
-        print("lux data detected: " + load["data"])
-        
-    if load["sensor"] == "tof":
-        #TODO
-        print("tof data detected: " + load["data"])
+dataCount = 0
+def handleData(topic, payload, q):
 
-    if load["sensor"] == "ir":
-        #TODO
-        print("ir data detected: " + load["data"])
+    if topic == "data/iotpi015/sensor/lux":
+        q.push(payload, "lux")
+
+    if topic == "data/iotpi014/sensor/ir/temperature":
+        q.push(payload, "temp")
+    
+    if topic == "data/iotpi014/sensor/ir/pixels":
+        q.push(payload, "pix")    
+
+    if topic == "data/iotpi016/sensor/tof":
+        q.push(payload, "tof")
+    
+    dataCount = dataCount +1
+
+    if dataCount>50:
+        print(str(q.pull))
+        dataCount=0
     
 
-def processMessage(payload, topic):
-    print(topic+" "+str(payload))
-    
+def getFromQueue():
+    print(str(q.pull))
+
+def processMessage(payload, topic, q):
+    print(topic+" "+str(payload))   
+
     if topic == "alert":
         handleAlert(payload)
 
-    if topic == "management":
-        handleManagement(payload)
-    
-    if topic == "data":
-        handleData(payload)
+    else:
+        if topic == "management":
+            handleManagement(payload)
+        else:
+            handleData(topic, payload, q)
 
 
 def on_message(client, userdata, msg):
     
-    x = threading.Thread(target=processMessage, args=(msg.payload, msg.topic,))
+    x = threading.Thread(target=processMessage, args=(msg.payload, msg.topic, q))
     x.start()
 
 
