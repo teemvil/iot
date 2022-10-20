@@ -9,4 +9,11 @@ And the service is called `startup.check.service`. The file is located `/etc/sys
 
 ## Installation
 
-There is a small installation script which just moves two files to sepcific folders. After runnning the `./install.sh` script start the service using systemd: `sudo systemctl start startup.check.service`. There is also a small script which restarts the daemon.
+There is a small installation script which just moves two files to sepcific folders. After runnning the `./install.sh` script enable and start the service using systemd: 
+
+```
+sudo systemctl enable startup.check.service
+sudo systemctl start startup.check.service
+```
+
+There is also a small script which restarts the daemon.
