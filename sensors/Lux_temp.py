@@ -7,7 +7,7 @@ import json
 import math
 
 i2c = busio.I2C(board.SCL, board.SDA)
-tsl = adafruit_ts12561.TSL2561(i2c)
+tsl = adafruit_tsl2561.TSL2561(i2c)
 
 IP="192.168.11.79"
 PORT=1883
