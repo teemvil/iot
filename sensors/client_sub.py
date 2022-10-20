@@ -24,29 +24,48 @@ def on_connect(client, userdata, flags, rc):
 ap = argparse.ArgumentParser(description='Displays the log file in real-time')
 args = ap.parse_args()
 
-def processMessage(payload, topic):
-    #print(topic+" "+str(payload))
 
-    if topic == "alert":
+def handleAlert(payload):
+    print("alert detected: " + payload)
+
+def handleManagement(payload):
+    print("management message detected: " + payload)
+
+def handleData(payload):
+    load = json.loads(payload)
+    
+    if load["sensor"] == "lux":
         #TODO
-        print("alert detected: " + str(payload))
+        print("lux data detected: " + load["data"])
+        
+    if load["sensor"] == "tof":
+        #TODO
+        print("tof data detected: " + load["data"])
+
+    if load["sensor"] == "ir":
+        #TODO
+        print("ir data detected: " + load["data"])
+    
+
+def processMessage(payload, topic):
+    print(topic+" "+str(payload))
+    
+    if topic == "alert":
+        handleAlert(payload)
 
     if topic == "management":
-        #TODO
-        print("management message detected: " + str(payload))
+        handleManagement(payload)
+    
+    if topic == "data":
+        handleData(payload)
 
-    else:
-        #TODO
-        print("data detected from " topic + ": " + str(payload))
 
 def on_message(client, userdata, msg):
-    #if args.nottheaded==False:
+    
     x = threading.Thread(target=processMessage, args=(msg.payload, msg.topic,))
     x.start()
-    # else:
-    #     processMessage(msg.payload, msg.topic)
 
-    
+
 
 
 client = mqtt.Client()
