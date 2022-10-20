@@ -18,4 +18,4 @@ payload = {
     "hostname": hostname
 }
 
-client.publish(f"alert/{hostname}", json.dumps(payload))
+client.publish(f"management", json.dumps(payload))
