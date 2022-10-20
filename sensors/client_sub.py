@@ -39,7 +39,7 @@ def handleManagement(payload):
     print("management message detected: " + payload)
 
 dataCount = 0
-def handleData(topic, payload, q):
+def handleData(topic, payload):
     global dataCount
     global lux_q
     global tof_q
