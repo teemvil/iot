@@ -4,17 +4,11 @@ import json
 import requests
 import threading
 
-HOSTNAME = socket.gethostname()
 IP = "192.168.11.79"
 PORT = 8520
 MQTT_BROKER_PORT = 1883
 BASE_URL = f"http://{IP}:{PORT}"
-MQTT_TOPIC = f"alert/{HOSTNAME}"
-
-with open("/etc/iotDevice.json") as f:
-    data = json.load(f)
-
-ITEM_ID = data["item_id"]
+MQTT_TOPIC = f"management"
 
 client = mqtt.Client()
 client.connect(IP, MQTT_BROKER_PORT, 60)
@@ -61,7 +55,7 @@ def get_policy_id() -> str:
     return pid["itemid"]
 
 
-def create_dict() -> dict:
+def create_dict(payload) -> dict:
     """
     Creates a dictionary with the necessary information.
 
@@ -73,12 +67,13 @@ def create_dict() -> dict:
     dict 
         the newly created dictionary.
     """
-    element = requests.get(f"{BASE_URL}/v2/element/name/{HOSTNAME}").json()
+    hostname = payload["hostname"]
+    element = requests.get(f"{BASE_URL}/v2/element/name/{hostname}").json()
     tpm = element["tpm2"]["tpm0"]
     eid = element["itemid"]
 
-    pid = get_policy_id()
     sid = open_session()
+    pid = get_policy_id()
 
     akname = tpm["ekname"]
     ekpub = tpm["ekpem"]
@@ -102,8 +97,8 @@ def attest(o: dict) -> str:
     """
     claim = requests.post(f"{BASE_URL}/v2/attest",
                           json=o, headers={"Content-Type": "application/json"})
+    print(claim)
     return claim.json()
-
 
 def verify(o: dict) -> str:
     """
@@ -136,9 +131,8 @@ def check_validity(payload: dict):
     ----------
     payload : dict
         this is currently unused.
-
     """
-    o = create_dict()
+    o = create_dict(payload)
     session_id = o["sid"]["itemid"]
 
     cid = attest(o)["claim"]
@@ -168,7 +162,7 @@ def run():
         client.subscribe("management")
 
     def on_message(client, userdata, msg):
-        x = threading.Thread(target=check_validity(msg.payload))
+        x = threading.Thread(target=check_validity(json.loads(msg.payload)))
         x.start()
 
     client.on_message = on_message
