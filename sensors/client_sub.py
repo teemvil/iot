@@ -5,6 +5,8 @@ import ast
 import threading
 #from colors import *
 import argparse
+import queue
+from queue import Queue
 
 IP="192.168.11.79"
 PORT=1883
@@ -24,6 +26,11 @@ def on_connect(client, userdata, flags, rc):
 ap = argparse.ArgumentParser(description='Displays the log file in real-time')
 args = ap.parse_args()
 
+q = queue.Queue()
+lux_q = queue.LifoQueue()
+tof_q = queue.LifoQueue()
+temp_q = queue.LifoQueue()
+pix_q = queue.LifoQueue()
 
 def handleAlert(payload):
     print("alert detected: " + payload)
@@ -31,38 +38,55 @@ def handleAlert(payload):
 def handleManagement(payload):
     print("management message detected: " + payload)
 
-def handleData(payload):
-    load = json.loads(payload)
-    
-    if load["sensor"] == "lux":
-        #TODO
-        print("lux data detected: " + load["data"])
-        
-    if load["sensor"] == "tof":
-        #TODO
-        print("tof data detected: " + load["data"])
+dataCount = 0
+def handleData(topic, payload):
+    global dataCount
+    global lux_q
+    global tof_q
+    global pix_q
+    global temp_q
 
-    if load["sensor"] == "ir":
-        #TODO
-        print("ir data detected: " + load["data"])
+    if topic == "data/iotpi015/sensor/lux":
+        lux_q.put(payload, "lux")
+
+    if topic == "data/iotpi014/sensor/ir/temperature":
+        temp_q.put(payload, "temp")
     
+    if topic == "data/iotpi014/sensor/ir/pixels":
+        pix_q.put(payload, "pix")    
+
+    if topic == "data/iotpi016/sensor/tof":
+        tof_q.put(payload, "tof")
+    
+    dataCount = dataCount +1
+
+    if dataCount>50:
+        lq=lux_q.get()
+        tq=tof_q.get()
+        #print("From lux queue: " + str(lq) + "; From tof queue: " + str(tq))
+        getFromQueue()
+        dataCount=0
+    
+
+def getFromQueue():
+    print("From lux queue: " + str(lux_q.get()) + "; From tof queue: " + str(tof_q.get()))
 
 def processMessage(payload, topic):
-    print(topic+" "+str(payload))
-    
+    print(topic+" "+str(payload))   
+
     if topic == "alert":
         handleAlert(payload)
 
-    if topic == "management":
-        handleManagement(payload)
-    
-    if topic == "data":
-        handleData(payload)
+    else:
+        if topic == "management":
+            handleManagement(payload)
+        else:
+            handleData(topic, payload)
 
 
 def on_message(client, userdata, msg):
     
-    x = threading.Thread(target=processMessage, args=(msg.payload, msg.topic,))
+    x = threading.Thread(target=processMessage, args=(msg.payload, msg.topic))
     x.start()
 
 
