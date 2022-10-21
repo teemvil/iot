@@ -7,6 +7,7 @@ import threading
 import argparse
 import queue
 from queue import Queue
+import csv
 
 IP="192.168.11.79"
 PORT=1883
@@ -26,11 +27,17 @@ def on_connect(client, userdata, flags, rc):
 ap = argparse.ArgumentParser(description='Displays the log file in real-time')
 args = ap.parse_args()
 
-q = queue.Queue()
+# Create separate ques for each sensors' data
 lux_q = queue.LifoQueue()
 tof_q = queue.LifoQueue()
 temp_q = queue.LifoQueue()
 pix_q = queue.LifoQueue()
+
+# Create new file on start of program
+file=open("test.csv", "w")
+writer=csv.writer(file)
+writer.writerow(["lux", "tof", "temp", "pix"])
+file.close()
 
 def handleAlert(payload):
     print("alert detected: " + payload)
@@ -46,6 +53,7 @@ def handleData(topic, payload):
     global pix_q
     global temp_q
 
+    # Put the data in appropriate queue
     if topic == "data/iotpi015/sensor/lux":
         lux_q.put(payload, "lux")
 
@@ -60,16 +68,42 @@ def handleData(topic, payload):
     
     dataCount = dataCount +1
 
-    if dataCount>50:
-        lq=lux_q.get()
-        tq=tof_q.get()
-        #print("From lux queue: " + str(lq) + "; From tof queue: " + str(tq))
-        getFromQueue()
+    if dataCount>20:
         dataCount=0
+        getFromQueues()
     
 
-def getFromQueue():
-    print("From lux queue: " + str(lux_q.get()) + "; From tof queue: " + str(tof_q.get()))
+# Saves data from the queues to a csv file
+def getFromQueues():
+    if lux_q.empty() == True:
+        lq = 0
+    else:
+        lq=lux_q.get()
+    
+    if tof_q.empty() == True:
+        tq = 0
+    else:
+        tq=tof_q.get()
+
+    if temp_q.empty() == True:
+        teq = 0
+    else:
+        teq=temp_q.get()
+
+    if pix_q.empty() == True:
+        pixq = 0
+    else:
+        pixq=temp_q.get()
+
+    print("From lux queue: " + str(lq) + "; From tof queue: " + str(tq) + "; from temp queue: " + str(teq) + "; from pix queue: " + str(pixq))
+    
+    # Write the data as a new row to file
+    data =[int(lq), int(tq), int(teq), int(pixq)]
+    file = open("test.csv", "a")
+    writer = csv.writer(file)
+    writer.writerow(data)
+    file.close()
+
 
 def processMessage(payload, topic):
     print(topic+" "+str(payload))   
@@ -85,7 +119,7 @@ def processMessage(payload, topic):
 
 
 def on_message(client, userdata, msg):
-    
+    # Starts a processing thread
     x = threading.Thread(target=processMessage, args=(msg.payload, msg.topic))
     x.start()
 
