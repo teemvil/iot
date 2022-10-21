@@ -36,6 +36,7 @@ pix_q = queue.LifoQueue()
 # Create new file on start of program
 file=open("test.csv", "w")
 writer=csv.writer(file)
+# Create header row
 writer.writerow(["lux", "tof", "temp", "pix"])
 file.close()
 
