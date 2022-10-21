@@ -33,7 +33,7 @@ while True:
           "sensor": "lux",
           "data": math.floor(tsl.lux)
      }
-     client.publish("data/iotpi015/sensor/lux", payload=json.dumps(dataload))
+     client.publish("data/iotpi015/sensor/lux", payload=math.floor(tsl.lux))
 
      status = bool(float(tsl.lux) > 46)
      if status != status_old:
