@@ -3,17 +3,16 @@ import paho.mqtt.subscribe as subscribe
 import json
 import ast
 import threading
-#from colors import *
 import argparse
 import queue
 from queue import Queue
 import csv
+from datetime import datetime
 
 IP="192.168.11.79"
 PORT=1883
 
-# This is just a testing function. It listens to changes in the topic given to the
-# client.subscribe() function.
+# Starts listening to changes in the topic given to the client.subscribe() function.
 def on_connect(client, userdata, flags, rc):
     print("connected with result code " + str(rc))
 
@@ -33,20 +32,32 @@ tof_q = queue.LifoQueue()
 temp_q = queue.LifoQueue()
 pix_q = queue.LifoQueue()
 
-# Create new file on start of program
-file=open("test.csv", "w")
-writer=csv.writer(file)
-# Create header row
-writer.writerow(["lux", "tof", "temp", "pix"])
-file.close()
 
+# Create new file 
+def createNewFile(name):
+    file=open(name, "w")
+    writer=csv.writer(file)
+    # Create header row
+    writer.writerow(["lux", "tof", "temp", "pix", "time"])
+    file.close()
+
+# Always create new file when program starts
+t = datetime.now()
+filename="test-"+str(t.strftime('%m-%d-%Y_%H-%M-%S'))+".csv"
+createNewFile(filename)
+
+
+# Handles incoming alert messages
 def handleAlert(payload):
     print("alert detected: " + payload)
 
+# Handles incoming management messages
 def handleManagement(payload):
     print("management message detected: " + payload)
 
+# Datacounter for data handling
 dataCount = 0
+# Handles incoming data payloads
 def handleData(topic, payload):
     global dataCount
     global lux_q
@@ -69,11 +80,14 @@ def handleData(topic, payload):
     
     dataCount = dataCount +1
 
+    # Calls the data save function for every *20* data points gathered
     if dataCount>20:
         dataCount=0
         getFromQueues()
     
 
+# Save counter for queue process
+saveCount=0
 # Saves data from the queues to a csv file
 def getFromQueues():
     if lux_q.empty() == True:
@@ -96,16 +110,36 @@ def getFromQueues():
     else:
         pixq=temp_q.get()
 
+    # Because get() pulls the value out of the queue, they have to be put back in,
+    # just in case there are no new values before the next pull. 
+    # If not done, the queue would go backwards in time.
+    lux_q.put(lq)
+    tof_q.put(tq)
+    temp_q.put(teq)
+    pix_q.put(pixq)
+
     print("From lux queue: " + str(lq) + "; From tof queue: " + str(tq) + "; from temp queue: " + str(teq) + "; from pix queue: " + str(pixq))
     
     # Write the data as a new row to file
-    data =[int(lq), int(tq), int(teq), int(pixq)]
-    file = open("test.csv", "a")
+    global filename
+    global saveCount
+    data =[int(lq), int(tq), int(teq), int(pixq), str(datetime.now())]
+    file = open(filename, "a")
     writer = csv.writer(file)
     writer.writerow(data)
     file.close()
+    saveCount = saveCount+1
+    
+    # Creates a new file if *something*
+    # Now it's just a counter but could be taking a pic or whatever...
+    if saveCount > 100:
+        t = datetime.now()
+        filename="test-"+str(t.strftime('%m-%d-%Y_%H-%M-%S'))+".csv"
+        createNewFile(filename)
 
+    
 
+# Sends message for appropriate sub-routines for handling
 def processMessage(payload, topic):
     print(topic+" "+str(payload))   
 
@@ -119,8 +153,8 @@ def processMessage(payload, topic):
             handleData(topic, payload)
 
 
+# Starts a processing thread everytime a message is received
 def on_message(client, userdata, msg):
-    # Starts a processing thread
     x = threading.Thread(target=processMessage, args=(msg.payload, msg.topic))
     x.start()
 
@@ -134,3 +168,4 @@ client.on_message = on_message
 client.connect(IP, PORT, 60)
 
 client.loop_forever()
+
