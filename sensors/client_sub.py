@@ -48,16 +48,18 @@ t = datetime.now()
 filename="test-"+str(t.strftime('%m-%d-%Y_%H-%M-%S'))+".csv"
 createNewFile(filename)
 
-
+# Takes a picture if it is light enough(lux_status), warm enough(IR_status), and someone is close(tof_status) 
 def takePicture():
+    works = False
     if lux_status == True:
         if IR_status == True:
             if tof_status == True:
                 url = "http://192.168.11.125/api/images"
                 response = requests.get(url)
                 print(response)
-                print("Taking a picture!!!")
-                client.publish("alert", payload=("PICTIRE TAKESN!!!"))
+                client.publish("alert", payload=("PICTURE TAKEN!"))
+                works = True
+    return works
 
 
 # Handles incoming alert messages
@@ -204,11 +206,9 @@ def getFromQueues():
     file.close()
     saveCount = saveCount+1
     
-    # Tries to take picture GOTO
-    takePicture()
-    # Creates a new file if *something*
-    # Now it's just a counter but could be taking a pic or whatever...
-    if saveCount > 100:
+
+    # Creates a new file if picure is taken
+    if takePicture():
         t = datetime.now()
         filename="test-"+str(t.strftime('%m-%d-%Y_%H-%M-%S'))+".csv"
         createNewFile(filename)
@@ -246,7 +246,7 @@ client.connect(IP, PORT, 60)
 
 client.loop_forever()
 
-# Default statuses: dark, no presence and cold
+# Sends default statuses: dark, no presence and cold
 client.publish("alert", payload=json.dumps({"name": "iotp015", "message": "Status: Dark"}))
 client.publish("alert", payload=json.dumps({"name": "iotp016", "message": "Status: presence not detected"}))
 client.publish("alert", payload=json.dumps({"name": "iotp014", "message": "Status: COLD"}))
