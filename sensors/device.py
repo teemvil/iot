@@ -1,21 +1,23 @@
 from abc import ABC, abstractmethod
 
 class Device(ABC):
+    ip: str
+    port: int
     
-    def __init__(self):
-        print("init")
+    def __init__(self, ip, port):
+        self.ip = ip
+        self.port = port
 
     @abstractmethod
     def send_message(self):
-        print("Sending message")
-
-    def start_up():
-        print("starting up generic sensor")
+        pass
         
     @abstractmethod
     def measure_stuff(self):
-        print("sensor specific implementation")
-        ## sensor specific implementation
+        pass
+
+    def start_up(self):
+        print("starting up generic sensor")
 
     
 
