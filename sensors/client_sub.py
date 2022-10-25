@@ -52,7 +52,7 @@ createNewFile(filename)
 def takePicture():
     works = False
     if lux_status == True:
-        if IR_status == True:
+        if ir_status == True:
             if tof_status == True:
                 url = "http://192.168.11.125/api/images"
                 response = requests.get(url)
@@ -75,7 +75,7 @@ dataCount = 0
 # Default statuses is false
 lux_status = False
 tof_status = False
-IR_status = False
+ir_status = False
 # Handles incoming data payloads
 def handleData(topic, payload):
     global dataCount
@@ -85,7 +85,7 @@ def handleData(topic, payload):
     global temp_q
     global lux_status
     global tof_status
-    global IR_status
+    global ir_status
 
     # Handle data and put the data in appropriate queue
     if topic == "data/iotpi015/sensor/lux":
@@ -118,7 +118,7 @@ def handleData(topic, payload):
         change = True
         
         status = bool(float(payload) > 24)
-        if status != IR_status:
+        if status != ir_status:
             change = True
         else:
             change = False
@@ -131,7 +131,7 @@ def handleData(topic, payload):
                 client.publish("alert", payload=json.dumps({"name": "iotp014", "message": "Status: COLD"}))
                 print("Satus: COLD")
         
-        IR_status=status
+        ir_status=status
 
     if topic == "data/iotpi016/sensor/tof":
         tof_q.put(payload, "tof")
