@@ -8,6 +8,8 @@ import queue
 from queue import Queue
 import csv
 from datetime import datetime
+import math
+import requests
 
 IP="192.168.11.79"
 PORT=1883
@@ -47,6 +49,17 @@ filename="test-"+str(t.strftime('%m-%d-%Y_%H-%M-%S'))+".csv"
 createNewFile(filename)
 
 
+def takePicture():
+    if lux_status == True:
+        if IR_status == True:
+            if tof_status == True:
+                url = "http://192.168.11.125/api/images"
+                response = requests.get(url)
+                print(response)
+                print("Taking a picture!!!")
+                client.publish("alert", payload=("PICTIRE TAKESN!!!"))
+
+
 # Handles incoming alert messages
 def handleAlert(payload):
     print("alert detected: " + payload)
@@ -57,6 +70,10 @@ def handleManagement(payload):
 
 # Datacounter for data handling
 dataCount = 0
+# Default statuses is false
+lux_status = False
+tof_status = False
+IR_status = False
 # Handles incoming data payloads
 def handleData(topic, payload):
     global dataCount
@@ -64,10 +81,31 @@ def handleData(topic, payload):
     global tof_q
     global pix_q
     global temp_q
+    global lux_status
+    global tof_status
+    global IR_status
 
-    # Put the data in appropriate queue
+    # Handle data and put the data in appropriate queue
     if topic == "data/iotpi015/sensor/lux":
         lux_q.put(payload, "lux")
+
+        change = True
+        
+        status = bool(float(payload) > 46)
+        if status != lux_status:
+            change = True
+        else:
+            change = False
+
+        if change:
+            if status:
+                client.publish("alert", payload=json.dumps({"name": "iotp015", "message": "Status: Light"}))
+                print("Status: Light")
+            else:
+                client.publish("alert", payload=json.dumps({"name": "iotp015", "message": "Status: Dark"}))
+                print("Satus: Dark")
+
+        lux_status = status
 
     if topic == "data/iotpi014/sensor/ir/temperature":
         temp_q.put(payload, "temp")
@@ -75,8 +113,44 @@ def handleData(topic, payload):
     if topic == "data/iotpi014/sensor/ir/pixels":
         pix_q.put(payload, "pix")    
 
+        change = True
+        
+        status = bool(float(payload) > 24)
+        if status != IR_status:
+            change = True
+        else:
+            change = False
+
+        if change:
+            if status:
+                client.publish("alert", payload=json.dumps({"name": "iotp014", "message": "Status: HOT"}))
+                print("Status: HOT")
+            else:
+                client.publish("alert", payload=json.dumps({"name": "iotp014", "message": "Status: COLD"}))
+                print("Satus: COLD")
+        
+        IR_status=status
+
     if topic == "data/iotpi016/sensor/tof":
         tof_q.put(payload, "tof")
+
+        change = True
+        
+        status = bool(float(payload) > 800)
+        if status != tof_status:
+            change = True
+        else:
+            change = False
+
+        if change:
+            if status:
+                client.publish("alert", payload=json.dumps({"name": "iotp016", "message": "Status: presence detected"}))
+                print("Status: presence")
+            else:
+                client.publish("alert", payload=json.dumps({"name": "iotp016", "message": "Status: presence not detected"}))
+                print("Satus: NO presence")
+        
+        tof_status=status
     
     dataCount = dataCount +1
 
@@ -165,7 +239,15 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
+
 client.connect(IP, PORT, 60)
 
 client.loop_forever()
+
+# Default statuses: dark, no presence and cold
+client.publish("alert", payload=json.dumps({"name": "iotp015", "message": "Status: Dark"}))
+client.publish("alert", payload=json.dumps({"name": "iotp016", "message": "Status: presence not detected"}))
+client.publish("alert", payload=json.dumps({"name": "iotp014", "message": "Status: COLD"}))
+
+
 
