@@ -50,9 +50,9 @@ createNewFile(filename)
 
 
 def takePicture():
-    if lux_status == True:
-        if IR_status == True:
-            if tof_status == True:
+    if lux_status:
+        if IR_status:
+            if tof_status:
                 url = "http://192.168.11.125/api/images"
                 response = requests.get(url)
                 print(response)
@@ -164,22 +164,22 @@ def handleData(topic, payload):
 saveCount=0
 # Saves data from the queues to a csv file
 def getFromQueues():
-    if lux_q.empty() == True:
+    if lux_q.empty():
         lq = 0
     else:
         lq=lux_q.get()
     
-    if tof_q.empty() == True:
+    if tof_q.empty():
         tq = 0
     else:
         tq=tof_q.get()
 
-    if temp_q.empty() == True:
+    if temp_q.empty():
         teq = 0
     else:
         teq=temp_q.get()
 
-    if pix_q.empty() == True:
+    if pix_q.empty():
         pixq = 0
     else:
         pixq=temp_q.get()
@@ -197,13 +197,17 @@ def getFromQueues():
     # Write the data as a new row to file
     global filename
     global saveCount
-    data =[int(lq), int(tq), int(teq), int(pixq), str(datetime.now())]
-    file = open(filename, "a")
-    writer = csv.writer(file)
-    writer.writerow(data)
-    file.close()
-    saveCount = saveCount+1
-    
+    try:
+        data =[int(lq), int(tq), int(teq), int(pixq), str(datetime.now())]
+        file = open(filename, "a")
+        writer = csv.writer(file)
+        writer.writerow(data)
+        file.close()
+        saveCount = saveCount+1
+    except:
+        print("could not save file")
+        # Could send an mqtt msg?
+        
     # Creates a new file if *something*
     # Now it's just a counter but could be taking a pic or whatever...
     if saveCount > 100:

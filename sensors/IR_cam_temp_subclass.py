@@ -25,7 +25,6 @@ class IRSensor(Device):
     
     def __init__(self):
         super().__init__()
-        self.client.publish("management", payload=json.dumps({"name": "iotpi15", "message": "Lux sensor is on"}))
         self.payload["message"]= "IR sensor started on device"
         self.client.publish(f"management", json.dumps(self.payload))
 
