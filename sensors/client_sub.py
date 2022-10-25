@@ -204,6 +204,8 @@ def getFromQueues():
     file.close()
     saveCount = saveCount+1
     
+    # Tries to take picture GOTO
+    takePicture()
     # Creates a new file if *something*
     # Now it's just a counter but could be taking a pic or whatever...
     if saveCount > 100:
