@@ -248,6 +248,3 @@ client.loop_forever()
 client.publish("alert", payload=json.dumps({"name": "iotp015", "message": "Status: Dark"}))
 client.publish("alert", payload=json.dumps({"name": "iotp016", "message": "Status: presence not detected"}))
 client.publish("alert", payload=json.dumps({"name": "iotp014", "message": "Status: COLD"}))
-
-
-

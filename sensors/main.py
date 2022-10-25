@@ -1,4 +1,5 @@
 from Lux_subclass import LuxSensor
+from IR_cam_temp_subclass import IRSensor
 from device import Device
 
 # function to test if parameter base class is Device
@@ -7,24 +8,28 @@ def base_test(sensor):
         print("Base class is Device")
 
 def main():
-    LuxSensor.send_message()
-    test = LuxSensor()
-    test.measure_stuff()
-    test2 = LuxSensor()
-    arr = [test, test2]
+    #LuxSensor.send_message()
+    #test = LuxSensor()
+    #test.measure_stuff()
     
-    testivar = "22"
-    print(testivar.__class__.__bases__[0])
+    irsensor = IRSensor()
+    irsensor.measure_stuff()
     
-    base_test(testivar)
-    base_test(test)
-    base_test(test2)
-    print(arr)
+    #test2 = LuxSensor()
+    #arr = [test, test2]
+    
+    #testivar = "22"
+    #print(testivar.__class__.__bases__[0])
+    
+    #base_test(testivar)
+    #base_test(test)
+    #base_test(test2)
+    #print(arr)
     
     #shows the base class
-    print(test.__class__.__bases__[0])
+    #print(test.__class__.__bases__[0])
     
-    print(Device)
+    #print(Device)
     
 if __name__ == "__main__":
     main()
