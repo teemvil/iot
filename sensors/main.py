@@ -10,21 +10,21 @@ def main():
     LuxSensor.send_message()
     test = LuxSensor()
     test.measure_stuff()
-    test2 = LuxSensor()
-    arr = [test, test2]
+    #test2 = LuxSensor()
+    #arr = [test, test2]
     
-    testivar = "22"
-    print(testivar.__class__.__bases__[0])
+    #testivar = "22"
+    #print(testivar.__class__.__bases__[0])
     
-    base_test(testivar)
-    base_test(test)
-    base_test(test2)
-    print(arr)
+    #base_test(testivar)
+    #base_test(test)
+    #base_test(test2)
+    #print(arr)
     
     #shows the base class
-    print(test.__class__.__bases__[0])
+    #print(test.__class__.__bases__[0])
     
-    print(Device)
+    #print(Device)
     
 if __name__ == "__main__":
     main()
