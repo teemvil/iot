@@ -9,7 +9,7 @@ PORT=1883
 def on_connect(client, userdata, flags, rc):
     print("connected with result code " + str(rc))
 
-    client.subscribe("management")
+    client.subscribe("#")
 
 
 def on_message(client, userdata, msg):
