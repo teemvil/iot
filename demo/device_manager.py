@@ -1,6 +1,7 @@
 import device
 import paho.mqtt.client as mqtt
 import json
+import threading
 
 client = mqtt.Client()
 client.connect('127.0.0.1')
@@ -15,7 +16,10 @@ def on_message(_client, userdata, msg):
     if x['operation'] == 'verify' and x['type'] != 'sensor-startup':
         sensor.validate()
     elif x['operation'] == 'verify' and x['type'] == 'sensor-startup' and x['result'] == 'success':
-        sensor.measure_stuff()
+        t = threading.Thread(target=sensor.measure_stuff)
+        t.start()
+    elif x['operation'] == 'kill-process':
+        sensor.stop()
 
 
 def send_alert():
