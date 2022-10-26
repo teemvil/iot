@@ -20,8 +20,4 @@ payload = {
     "operation": "startup"
 }
 
-client.publish(f"management", json.dumps(payload))
-
-# Currently the path is just a test file
-# If everything is ok start the device manager here:
-os.system("python3 /home/metropolia/Innovationproject2022/controller/device_manager/test.py")
+client.publish("management", json.dumps(payload))
