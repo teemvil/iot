@@ -11,7 +11,11 @@ def on_message(_client, userdata, msg):
     # Listen to management topic.
     x = json.loads(msg.payload)
 
-    
+    # This is just horrible xD
+    if x['operation'] == 'verify' and x['type'] != 'sensor-startup':
+        sensor.validate()
+    elif x['operation'] == 'verify' and x['type'] == 'sensor-startup' and x['result'] == 'success':
+        sensor.measure_stuff()
 
 
 def send_alert():
