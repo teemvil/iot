@@ -55,7 +55,7 @@ createNewFile(filename)
 def takePicture():
     works = False
     if lux_status and ir_status and tof_status:
-        url = "http://192.168.11.125/api/images"
+        url = "http://192.168.11.79:1880/foo"
         response = requests.get(url)
         print(response)
         client.publish("alert", payload=("PICTURE TAKEN!"))
@@ -170,7 +170,7 @@ def handleData(topic, payload):
         getFromQueues()
     
 
-pic_status = False
+pic_status = True
 # Save counter for queue process
 saveCount=0
 # Saves data from the queues to a csv file
@@ -227,14 +227,14 @@ def getFromQueues():
     # so the camera doesn't just snap photos all the time when there is someone close.
     # Changes pic_status back to false every 100 saved datapoints.
     if saveCount > 100:
-        pic_status = False
-    if pic_status == False:
+        pic_status = True
+    if pic_status:
         if takePicture():    
             # Creates a new file if picture is taken
             t = datetime.now()
             filename="test-"+str(t.strftime('%m-%d-%Y_%H-%M-%S'))+".csv"
             createNewFile(filename)
-            pic_status = True
+            pic_status = False
     
 
 # Sends message for appropriate sub-routines for handling
