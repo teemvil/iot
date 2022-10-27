@@ -73,7 +73,7 @@ def handleManagement(payload):
 
 # Datacounter for data handling
 dataCount = 0
-# Default statuses is false
+# Default statuses False
 lux_status = False
 tof_status = False
 ir_status = False
@@ -87,6 +87,13 @@ def handleData(topic, payload):
     global lux_status
     global tof_status
     global ir_status
+    dataSaveFq = 30 #default value (when dark, cold and no presence detected)
+
+    # Increases data saving frequency if it is light and warm
+    if lux_status:
+        dataSaveFq = 20
+    if lux_status and ir_status:
+        dataSaveFq = 5
 
     # Handle data and put the data in appropriate queue
     if topic == "data/iotpi015/sensor/lux":
@@ -157,8 +164,8 @@ def handleData(topic, payload):
     
     dataCount = dataCount +1
 
-    # Calls the data save function for every *20* data points gathered
-    if dataCount>20:
+    # Calls the data save function for every given data points gathered
+    if dataCount>dataSaveFq:
         dataCount=0
         getFromQueues()
     
