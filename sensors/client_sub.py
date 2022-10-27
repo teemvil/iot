@@ -73,7 +73,7 @@ def handleManagement(payload):
 
 # Datacounter for data handling
 dataCount = 0
-# Default statuses False
+# Default statuses is false
 lux_status = False
 tof_status = False
 ir_status = False
@@ -170,6 +170,7 @@ def handleData(topic, payload):
         getFromQueues()
     
 
+pic_status = False
 # Save counter for queue process
 saveCount=0
 # Saves data from the queues to a csv file
@@ -216,17 +217,24 @@ def getFromQueues():
         writer.writerow(data)
         file.close()
     except:
-        print("File opening failed")
+        print("Error: File opening failed")
 
     saveCount = saveCount+1
     
+    global pic_status
 
-    # Creates a new file if picure is taken
-    if takePicture():
-        t = datetime.now()
-        filename="test-"+str(t.strftime('%m-%d-%Y_%H-%M-%S'))+".csv"
-        createNewFile(filename)
-
+    # Picture is taken only if pic_status is false, 
+    # so the camera doesn't just snap photos all the time when there is someone close.
+    # Changes pic_status back to false every 100 saved datapoints.
+    if saveCount > 100:
+        pic_status = False
+    if pic_status == False:
+        if takePicture():    
+            # Creates a new file if picture is taken
+            t = datetime.now()
+            filename="test-"+str(t.strftime('%m-%d-%Y_%H-%M-%S'))+".csv"
+            createNewFile(filename)
+            pic_status = True
     
 
 # Sends message for appropriate sub-routines for handling
