@@ -23,8 +23,11 @@ def open_session() -> str:
     string
         session as a JSON string.
     """
-    session = requests.post(f"{BASE_URL}/v2/sessions/open")
-    return session.json()
+    response = requests.post(f"{BASE_URL}/v2/sessions/open")
+    if response.ok:
+        return response.json()
+    else:
+        return '' 
 
 
 def close_session(id):
@@ -52,9 +55,13 @@ def get_policy_id() -> str:
     string
         policy id as a string.
     """
-    pid = requests.get(
+    response = requests.get(
         f"{BASE_URL}/v2/policy/name/TPMIdentityAttestation").json()
-    return pid["itemid"]
+    
+    if response.ok:
+        return response['pid']
+    else:
+        return '' 
 
 
 def create_dict(payload, sid) -> dict:
@@ -70,7 +77,13 @@ def create_dict(payload, sid) -> dict:
         the newly created dictionary.
     """
     hostname = payload["hostname"]
-    element = requests.get(f"{BASE_URL}/v2/element/name/{hostname}").json()
+    response = requests.get(f"{BASE_URL}/v2/element/name/{hostname}")
+
+    if not response.ok:
+        return {} 
+    
+    element = response.json()
+
     tpm = element["tpm2"]["tpm0"]
     eid = element["itemid"]
 
@@ -96,9 +109,12 @@ def attest(o: dict) -> str:
     o : dict 
         dictionary with the necessary fields for attest.
     """
-    claim = requests.post(f"{BASE_URL}/v2/attest",
+    response = requests.post(f"{BASE_URL}/v2/attest",
                           json=o, headers={"Content-Type": "application/json"})
-    return claim.json()
+    if response.ok:
+        return response.json()
+    else:
+        return ''
 
 
 def verify(o: dict) -> str:
@@ -118,7 +134,11 @@ def verify(o: dict) -> str:
     """
     response = requests.post(
         f"{BASE_URL}/v2/verify", headers={"Content-Type": "application/json"}, data=json.dumps(o))
-    return response.json()
+
+    if response.ok:
+        return response.json()
+    else:
+        return '' 
 
 
 def check_validity(payload: dict):
@@ -133,17 +153,25 @@ def check_validity(payload: dict):
     payload : dict
         this is currently unused.
     """
+    # These still need to have error handling implemented.
+    # MQTT error messages to be sent.
     sid = open_session()
+
     o = create_dict(payload, sid)
 
     cid = attest(o)["claim"]
 
     rul = ["tpm2rules/TPM2CredentialVerify", {}]
 
-    o.update({"cid": cid})
-    # This needed?
-    o.update({"sid": sid})
-    o.update({"rule": rul})
+    try:
+        o.update({"cid": cid})
+        # This needed?
+        o.update({"sid": sid})
+        o.update({"rule": rul})
+    except Exception as e:
+        print(e)
+        client.publish(MQTT_TOPIC, json.dumps({"type": "attestation fail"}))
+        return None
 
     result = verify(o)
 
