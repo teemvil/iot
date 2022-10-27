@@ -220,12 +220,12 @@ def getFromQueues():
         print("Error: File opening failed")
 
     saveCount = saveCount+1
-    
+   
     global pic_status
 
-    # Picture is taken only if pic_status is false, 
+    # Picture is taken only if pic_status is True, 
     # so the camera doesn't just snap photos all the time when there is someone close.
-    # Changes pic_status back to false every 100 saved datapoints.
+    # Taking a pic changes pic_status to false and it's turned back to True after 100 saved datapoints.
     if saveCount > 100:
         pic_status = True
     if pic_status:
@@ -235,6 +235,7 @@ def getFromQueues():
             filename="test-"+str(t.strftime('%m-%d-%Y_%H-%M-%S'))+".csv"
             createNewFile(filename)
             pic_status = False
+            saveCount = 0
     
 
 # Sends message for appropriate sub-routines for handling
