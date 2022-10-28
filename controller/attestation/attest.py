@@ -70,7 +70,14 @@ def create_dict(payload, sid) -> dict:
         the newly created dictionary.
     """
     hostname = payload["hostname"]
-    element = requests.get(f"{BASE_URL}/v2/element/name/{hostname}").json()
+
+    response = requests.get(f"{BASE_URL}/v2/element/name/{hostname}")
+
+    if not response.ok:
+        return {}
+
+    element = response.json()
+
     tpm = element["tpm2"]["tpm0"]
     eid = element["itemid"]
 
@@ -96,9 +103,13 @@ def attest(o: dict) -> str:
     o : dict 
         dictionary with the necessary fields for attest.
     """
-    claim = requests.post(f"{BASE_URL}/v2/attest",
+    response = requests.post(f"{BASE_URL}/v2/attest",
                           json=o, headers={"Content-Type": "application/json"})
-    return claim.json()
+
+    if not response.ok:
+        return ''
+
+    return response.json()
 
 
 def verify(o: dict) -> str:
@@ -118,10 +129,14 @@ def verify(o: dict) -> str:
     """
     response = requests.post(
         f"{BASE_URL}/v2/verify", headers={"Content-Type": "application/json"}, data=json.dumps(o))
+    
+    if not response.ok:
+        return ''
+
     return response.json()
 
 
-def check_validity(payload: dict):
+def check_validity(payload: dict) -> dict:
     """
     Main function of the program. Creates a dictionary from data gathered from the API
     and verifies it. The ruleset is currently hard-coded as a TPM2CredentialVerify but
@@ -136,7 +151,13 @@ def check_validity(payload: dict):
     sid = open_session()
     o = create_dict(payload, sid)
 
-    cid = attest(o)["claim"]
+    if not o:
+        return {"error": "object creation failed"}
+
+    cid = attest(o)
+
+    if not cid:
+        return {"error": "attestation failed"}
 
     rul = ["tpm2rules/TPM2CredentialVerify", {}]
 
@@ -147,11 +168,16 @@ def check_validity(payload: dict):
 
     result = verify(o)
 
+    if not result:
+        return {"error": "verification failed"}
+
     o.update({"result": result["result"]})
 
     close_session(sid)
 
     client.publish(MQTT_TOPIC, json.dumps(o))
+    
+    return o
 
 
 def run():

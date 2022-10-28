@@ -3,21 +3,34 @@ import paho.mqtt.client as mqtt
 import socket
 import json
 import requests
+import threading
 import os
 
-client = mqtt.Client()
-client.connect("192.168.11.79", 1883, 60)
+def setup():
+    mgr = device_manager
+    thread = threading.Thread(target=mgr.run)
+    thread.start()
 
-hostname = socket.gethostname()
-url = f"http://192.168.11.79:8520/element/name/{hostname}"
+def start():
+    client = mqtt.Client()
+    client.connect('192.168.11.79')
 
-response = requests.get(url).json()
-id = response["itemid"]
+    payload = {
+        'hostname': os.gethostname(),
+        'operation': 'process-startup',
+        'type': '',
+        'ip': '123.123.123.123',
+        'metadata': {
 
-payload = {
-    "itemid": id,
-    "hostname": hostname
-    "operation": "startup"
-}
+        }
+    }
 
-client.publish("management", json.dumps(payload))
+    client.publish('management', payload=json.dumps(payload))
+
+    payload.update({'type': 'attest'})
+    client.publish('management', payload=json.dumps(payload))
+
+
+if __name__ == '__main__':
+    setup()
+    start()
