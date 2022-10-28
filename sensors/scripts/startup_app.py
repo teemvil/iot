@@ -16,7 +16,7 @@ def start():
     client.connect('192.168.11.79')
 
     payload = {
-        'hostname': os.gethostname(),
+        'hostname': socket.gethostname(),
         'operation': 'process-startup',
         'type': '',
         'ip': '123.123.123.123',
