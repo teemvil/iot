@@ -10,7 +10,16 @@ json_file = {
     "itemid": "",
     "hostname": "",
     "ip": "",
-    "operation": "",
+    "message": "",
+    "event": "",
+    "device": {
+        "valid":"false",
+        "timestamp":""
+    },
+    "sensor": {
+        "name":"",
+        "timestamp":""
+    },
     "timestamp": ""
 }
 
@@ -19,15 +28,11 @@ def create_json ():
     json_file["ip"]=get_ip_address()
 
     now = datetime.now()
-    year = now.strftime("%Y")
-    month = now.strftime("%m")
-    day = now.strftime("%d")
-    time = now.strftime("%H:%M:%S")
     date_time = now.strftime("%d.%m.%Y, %H:%M:%S")
 
     #print("date and time:",date_time)	
 
-    json_file["timestamp"]= date_time
+    #json_file["timestamp"]= date_time
     save_to_device()
 
 def get_ip_address():
@@ -51,6 +56,16 @@ def save_to_device ():
         file_to_write = data_folder / "data_packet.json"
         with open(file_to_write, "w") as outfile:
             outfile.write(json_object)    
-       
+
+# For testing purposes to check for the file existence       
+"""
+def open_json():
+    with open(file_to_open, 'r') as openfile:    
+        json_object = json.load(openfile)    
+        #print(json_object)
+        #print(type(json_object))
+    return json_object
+"""       
 create_json()
 print(json_file)
+print(json_file["device"]["valid"])
