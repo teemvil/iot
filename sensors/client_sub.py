@@ -37,27 +37,30 @@ pix_q = queue.LifoQueue()
 
 # Create new file 
 def createNewFile(name):
-    file=open(name, "w")
-    writer=csv.writer(file)
-    # Create header row
-    writer.writerow(["lux", "tof", "temp", "pix", "time"])
-    file.close()
+    try:
+        file=open(name, "w")
+        writer=csv.writer(file)
+        # Create header row
+        writer.writerow(["lux", "tof", "temp", "pix", "time"])
+        file.close()
+    except:
+        print("Error: File creation failed")
 
 # Always create new file when program starts
 t = datetime.now()
 filename="test-"+str(t.strftime('%m-%d-%Y_%H-%M-%S'))+".csv"
 createNewFile(filename)
 
-
+# Takes a picture if it is light enough(lux_status), warm enough(ir_status), and someone is close(tof_status) 
 def takePicture():
-    if lux_status == True:
-        if IR_status == True:
-            if tof_status == True:
-                url = "http://192.168.11.125/api/images"
-                response = requests.get(url)
-                print(response)
-                print("Taking a picture!!!")
-                client.publish("alert", payload=("PICTIRE TAKESN!!!"))
+    works = False
+    if lux_status and ir_status and tof_status:
+        url = "http://192.168.11.79:1880/foo"
+        response = requests.get(url)
+        print(response)
+        client.publish("alert", payload=("PICTURE TAKEN!"))
+        works = True
+    return works
 
 
 # Handles incoming alert messages
@@ -73,7 +76,7 @@ dataCount = 0
 # Default statuses is false
 lux_status = False
 tof_status = False
-IR_status = False
+ir_status = False
 # Handles incoming data payloads
 def handleData(topic, payload):
     global dataCount
@@ -83,14 +86,21 @@ def handleData(topic, payload):
     global temp_q
     global lux_status
     global tof_status
-    global IR_status
+    global ir_status
+    dataSaveFq = 30 #default value (when dark, cold and no presence detected)
+
+    # Increases data saving frequency if it is light and warm
+    if lux_status:
+        dataSaveFq = 20
+    if lux_status and ir_status:
+        dataSaveFq = 5
 
     # Handle data and put the data in appropriate queue
     if topic == "data/iotpi015/sensor/lux":
         lux_q.put(payload, "lux")
 
+        # Check the status if it's light or not and compare to previous status
         change = True
-        
         status = bool(float(payload) > 46)
         if status != lux_status:
             change = True
@@ -113,10 +123,10 @@ def handleData(topic, payload):
     if topic == "data/iotpi014/sensor/ir/pixels":
         pix_q.put(payload, "pix")    
 
+        # Check the status if it's warm or not and compare to previous status
         change = True
-        
         status = bool(float(payload) > 24)
-        if status != IR_status:
+        if status != ir_status:
             change = True
         else:
             change = False
@@ -129,13 +139,13 @@ def handleData(topic, payload):
                 client.publish("alert", payload=json.dumps({"name": "iotp014", "message": "Status: COLD"}))
                 print("Satus: COLD")
         
-        IR_status=status
+        ir_status=status
 
     if topic == "data/iotpi016/sensor/tof":
         tof_q.put(payload, "tof")
 
+        # Check the status if there's someone close or not and compare to previous status
         change = True
-        
         status = bool(float(payload) > 800)
         if status != tof_status:
             change = True
@@ -154,32 +164,34 @@ def handleData(topic, payload):
     
     dataCount = dataCount +1
 
-    # Calls the data save function for every *20* data points gathered
-    if dataCount>20:
+    # Calls the data save function for every given data points gathered
+    if dataCount>dataSaveFq:
         dataCount=0
         getFromQueues()
     
 
+pic_status = True
 # Save counter for queue process
 saveCount=0
 # Saves data from the queues to a csv file
 def getFromQueues():
-    if lux_q.empty() == True:
+    # Get the values from the queues
+    if lux_q.empty():
         lq = 0
     else:
         lq=lux_q.get()
     
-    if tof_q.empty() == True:
+    if tof_q.empty():
         tq = 0
     else:
         tq=tof_q.get()
 
-    if temp_q.empty() == True:
+    if temp_q.empty():
         teq = 0
     else:
         teq=temp_q.get()
 
-    if pix_q.empty() == True:
+    if pix_q.empty():
         pixq = 0
     else:
         pixq=temp_q.get()
@@ -187,6 +199,7 @@ def getFromQueues():
     # Because get() pulls the value out of the queue, they have to be put back in,
     # just in case there are no new values before the next pull. 
     # If not done, the queue would go backwards in time.
+    # Is this what would be called "kludge"?
     lux_q.put(lq)
     tof_q.put(tq)
     temp_q.put(teq)
@@ -198,19 +211,31 @@ def getFromQueues():
     global filename
     global saveCount
     data =[int(lq), int(tq), int(teq), int(pixq), str(datetime.now())]
-    file = open(filename, "a")
-    writer = csv.writer(file)
-    writer.writerow(data)
-    file.close()
-    saveCount = saveCount+1
-    
-    # Creates a new file if *something*
-    # Now it's just a counter but could be taking a pic or whatever...
-    if saveCount > 100:
-        t = datetime.now()
-        filename="test-"+str(t.strftime('%m-%d-%Y_%H-%M-%S'))+".csv"
-        createNewFile(filename)
+    try:
+        file = open(filename, "a")
+        writer = csv.writer(file)
+        writer.writerow(data)
+        file.close()
+    except:
+        print("Error: File opening failed")
 
+    saveCount = saveCount+1
+   
+    global pic_status
+
+    # Picture is taken only if pic_status is True, 
+    # so the camera doesn't just snap photos all the time when there is someone close.
+    # Taking a pic changes pic_status to false and it's turned back to True after 100 saved datapoints.
+    if saveCount > 100:
+        pic_status = True
+    if pic_status:
+        if takePicture():    
+            # Creates a new file if picture is taken
+            t = datetime.now()
+            filename="test-"+str(t.strftime('%m-%d-%Y_%H-%M-%S'))+".csv"
+            createNewFile(filename)
+            pic_status = False
+            saveCount = 0
     
 
 # Sends message for appropriate sub-routines for handling
@@ -244,7 +269,7 @@ client.connect(IP, PORT, 60)
 
 client.loop_forever()
 
-# Default statuses: dark, no presence and cold
+# Sends default statuses: dark, no presence and cold
 client.publish("alert", payload=json.dumps({"name": "iotp015", "message": "Status: Dark"}))
 client.publish("alert", payload=json.dumps({"name": "iotp016", "message": "Status: presence not detected"}))
 client.publish("alert", payload=json.dumps({"name": "iotp014", "message": "Status: COLD"}))
