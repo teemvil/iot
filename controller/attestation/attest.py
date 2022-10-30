@@ -8,7 +8,7 @@ IP = "192.168.11.79"
 PORT = 8520
 MQTT_BROKER_PORT = 1883
 BASE_URL = f"http://{IP}:{PORT}"
-MQTT_TOPIC = f"management/attest"
+MQTT_TOPIC = f"testing/verify"
 
 client = mqtt.Client()
 client.connect(IP, MQTT_BROKER_PORT, 60)
@@ -27,7 +27,7 @@ def open_session() -> str:
     if response.ok:
         return response.json()
     else:
-        return '' 
+        return ''
 
 
 def close_session(id):
@@ -56,12 +56,12 @@ def get_policy_id() -> str:
         policy id as a string.
     """
     response = requests.get(
-        f"{BASE_URL}/v2/policy/name/TPMIdentityAttestation").json()
-    
+        f"{BASE_URL}/v2/policy/name/TPMIdentityAttestation")
+
     if response.ok:
-        return response['pid']
+        return response.json()['itemid']
     else:
-        return '' 
+        return ''
 
 
 def create_dict(payload, sid) -> dict:
@@ -76,12 +76,15 @@ def create_dict(payload, sid) -> dict:
     dict 
         the newly created dictionary.
     """
-    hostname = payload["hostname"]
+    if payload.get("hostname"):
+        hostname = payload["hostname"]
+    else:
+        return {}
     response = requests.get(f"{BASE_URL}/v2/element/name/{hostname}")
 
     if not response.ok:
-        return {} 
-    
+        return {}
+
     element = response.json()
 
     tpm = element["tpm2"]["tpm0"]
@@ -110,7 +113,7 @@ def attest(o: dict) -> str:
         dictionary with the necessary fields for attest.
     """
     response = requests.post(f"{BASE_URL}/v2/attest",
-                          json=o, headers={"Content-Type": "application/json"})
+                             json=o, headers={"Content-Type": "application/json"})
     if response.ok:
         return response.json()
     else:
@@ -138,7 +141,7 @@ def verify(o: dict) -> str:
     if response.ok:
         return response.json()
     else:
-        return '' 
+        return ''
 
 
 def check_validity(payload: dict):
@@ -159,27 +162,45 @@ def check_validity(payload: dict):
 
     o = create_dict(payload, sid)
 
-    cid = attest(o)["claim"]
+    if not o:
+        payload.update({"event": "validerror"})
+        payload.update({"valid": False})
+        payload.update({"message": "object creation failed"})
+        client.publish(MQTT_TOPIC, json.dumps(payload))
+        return None
+
+    cid = attest(o)
+
+    if not cid:
+        payload.update({"event": "validerror"})
+        payload.update({"valid": False})
+        payload.update({"message": "attestation failed"})
+        client.publish(MQTT_TOPIC, json.dumps(payload))
+        return None
 
     rul = ["tpm2rules/TPM2CredentialVerify", {}]
 
-    try:
-        o.update({"cid": cid})
-        # This needed?
-        o.update({"sid": sid})
-        o.update({"rule": rul})
-    except Exception as e:
-        print(e)
-        client.publish(MQTT_TOPIC, json.dumps({"type": "attestation fail"}))
-        return None
+    o.update({"cid": cid['claim']})
+    # This needed?
+    o.update({"sid": sid})
+    o.update({"rule": rul})
 
     result = verify(o)
+
+    print(result)
+
+    if not result:
+        return {"error": "verification failed"}
 
     o.update({"result": result["result"]})
 
     close_session(sid)
 
-    client.publish(MQTT_TOPIC, json.dumps(o))
+    payload.update({"valid": True})
+    payload.update({"event": "validation ok"})
+    payload.update({"message": "validation successful"})
+
+    client.publish(MQTT_TOPIC, json.dumps(payload))
 
 
 def run():
@@ -189,7 +210,7 @@ def run():
     verification. 
     """
     def on_connect(client, userdata, flags, rc):
-        client.subscribe("management")
+        client.subscribe("testing")
 
     def on_message(client, userdata, msg):
         x = threading.Thread(target=check_validity(json.loads(msg.payload)))
