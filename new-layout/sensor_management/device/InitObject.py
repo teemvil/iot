@@ -7,7 +7,7 @@ class InitObject:
     def __init__(self):
         self.client = mqtt.Client()
         self.config = self.read_config()
-        self.ip = '127.0.0.1'
+        self.ip = '192.168.11.79'
         self.port = 1883
 
     def read_config(self):
