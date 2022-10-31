@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class Device(ABC):
+class Sensor(ABC):
     
     def __init__(self):
         print("init")

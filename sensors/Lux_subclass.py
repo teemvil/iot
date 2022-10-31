@@ -1,4 +1,4 @@
-from device import Device
+from sensor import Sensor
 import time
 import busio
 import board
@@ -7,7 +7,7 @@ import paho.mqtt.client as mqtt
 import json
 import math
 
-class LuxSensor(Device):
+class LuxSensor(Sensor):
     i2c = busio.I2C(board.SCL, board.SDA)
     tsl = adafruit_tsl2561.TSL2561(i2c)
     IP="192.168.11.79"

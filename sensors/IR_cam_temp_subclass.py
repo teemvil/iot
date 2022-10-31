@@ -1,4 +1,4 @@
-from device import Device
+from sensor import Sensor
 import time
 import busio
 import board
@@ -8,7 +8,7 @@ import json
 import math
 import socket
 
-class IRSensor(Device):
+class IRSensor(Sensor):
     i2c = busio.I2C(board.SCL, board.SDA)
     amg = adafruit_amg88xx.AMG88XX(i2c)
 

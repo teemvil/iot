@@ -1,10 +1,10 @@
 from Lux_subclass import LuxSensor
 from IR_cam_temp_subclass import IRSensor
-from device import Device
+from device import Sensor
 
 # function to test if parameter base class is Device
 def base_test(sensor):
-    if sensor.__class__.__bases__[0] == Device:
+    if sensor.__class__.__bases__[0] == Sensor:
         print("Base class is Device")
 
 def main():

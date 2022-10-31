@@ -7,9 +7,9 @@ import json
 
 import socket
 
-from device import Device
+from sensor import Sensor
 
-class DistanceSensor(Device):
+class DistanceSensor(Sensor):
     i2c = busio.I2C(board.SCL, board.SDA)
     vl53 = adafruit_vl53l0x.VL53L0X(i2c)
     vl53.measurement_timing_budget = 33000
