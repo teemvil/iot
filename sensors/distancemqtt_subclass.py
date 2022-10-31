@@ -14,14 +14,8 @@ class DistanceSensor(Sensor):
     vl53 = adafruit_vl53l0x.VL53L0X(i2c)
     vl53.measurement_timing_budget = 33000
 
-
-    IP="192.168.11.79"
-    PORT=1883
-
     client = mqtt.Client()
-    client.connect(IP, PORT, 60)
 
-    alert_status = False
     payload = {
     "hostname": socket.gethostname(),
     "message": ""
@@ -46,7 +40,6 @@ class DistanceSensor(Sensor):
                 
                 if (self.vl53.range<800):
                     #client.publish("management", payload = socket.gethostname() + ": ToF sensor recording a precense under 80cm.")
-                    self.client.publish("alert", payload = socket.gethostname() + ": Precense detected!")
                     #print("Precense detected")
                     alert_status = True
                 else:
@@ -64,7 +57,6 @@ class DistanceSensor(Sensor):
                             time.sleep(1.0)
                         else:
                             #client.publish("management", payload = socket.gethostname() + ": ToF sensor recording stopped")
-                            self.client.publish("alert", payload = socket.gethostname() +  ": No precense detected.")
                             #print("Precense left")
                             alert_status=False
     

@@ -1,20 +1,24 @@
-from abc import ABC, abstractmethod
+from initObject import InitObject
 
-class Sensor(ABC):
+class Sensor(InitObject):
     
-    def __init__(self):
-        print("init")
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
 
-    @abstractmethod
-    def send_message(self):
-        print("Sending message")
+    #@abstractmethod
+    #def send_message(self):
+        #print("Sending message")
+        
 
     def start_up():
         print("starting up generic sensor")
         
-    @abstractmethod
-    def measure_stuff(self):
-        print("sensor specific implementation")
+
+        
+    #@abstractmethod
+    #def measure_stuff(self):
+        #print("sensor specific implementation")
         ## sensor specific implementation
 
     
