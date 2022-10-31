@@ -3,12 +3,13 @@ import socket
 import json
 import requests
 import threading
+from datetime import datetime
 
 IP = "192.168.11.79"
 PORT = 8520
 MQTT_BROKER_PORT = 1883
 BASE_URL = f"http://{IP}:{PORT}"
-MQTT_TOPIC = f"testing/verify"
+MQTT_TOPIC = "management"
 
 client = mqtt.Client()
 client.connect(IP, MQTT_BROKER_PORT, 60)
@@ -164,7 +165,8 @@ def check_validity(payload: dict):
 
     if not o:
         payload.update({"event": "validerror"})
-        payload.update({"valid": False})
+        # payload.update({"valid": False})
+        payload["device"]["valid"] = False
         payload.update({"message": "object creation failed"})
         client.publish(MQTT_TOPIC, json.dumps(payload))
         return None
@@ -173,7 +175,8 @@ def check_validity(payload: dict):
 
     if not cid:
         payload.update({"event": "validerror"})
-        payload.update({"valid": False})
+        # payload.update({"valid": False})
+        payload["device"]["valid"] = False
         payload.update({"message": "attestation failed"})
         client.publish(MQTT_TOPIC, json.dumps(payload))
         return None
@@ -187,8 +190,6 @@ def check_validity(payload: dict):
 
     result = verify(o)
 
-    print(result)
-
     if not result:
         return {"error": "verification failed"}
 
@@ -196,9 +197,14 @@ def check_validity(payload: dict):
 
     close_session(sid)
 
-    payload.update({"valid": True})
+    # payload.update({"valid": True})
+    payload["device"]["valid"] = True
+    payload.update({"itemid": o.get("eid")})
     payload.update({"event": "validation ok"})
     payload.update({"message": "validation successful"})
+    payload["device"]["timestamp"] = datetime.now().strftime("%d.%m.%Y, %H:%M:%S")
+
+    print(payload)
 
     client.publish(MQTT_TOPIC, json.dumps(payload))
 
@@ -210,9 +216,10 @@ def run():
     verification. 
     """
     def on_connect(client, userdata, flags, rc):
-        client.subscribe("testing")
+        client.subscribe("management/verify")
 
     def on_message(client, userdata, msg):
+        print(msg.payload)
         x = threading.Thread(target=check_validity(json.loads(msg.payload)))
         x.start()
 
