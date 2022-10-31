@@ -26,9 +26,8 @@ def start_devmngr(json_update):
 
 def attest_validate(json_update):
     json_object=json_update
-    json_object["event"] = "validation ok"
+    json_object["event"] = "validating device"
     json_object["message"] ="Device validation in process"
-    json_object["device"]["valid"] = True
     client.publish(f"management/verify", json.dumps(json_object))
 
 def on_connect(client, userdata, flags, rc):
@@ -41,7 +40,7 @@ def sensor_start (json_update):
     json_object["event"]= "sensorstart"
     json_object["timestamp"]= get_time_stamp()
     print("Sensor start")
-    os.system("python3 /etc/sensors/*.py")
+    os.system("python3 /home/metropolia/rangetest/sensors/*.py")
 
     client.publish(f"management", json.dumps(json_object))
 
