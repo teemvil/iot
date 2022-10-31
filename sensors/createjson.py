@@ -5,6 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 data_folder = Path("/etc/iotDevice/")
+file_to_open = data_folder / "data_packet.json"
 
 json_file = {
     "itemid": "",
@@ -13,14 +14,20 @@ json_file = {
     "message": "",
     "event": "",
     "device": {
-        "valid":"false",
+        "valid": False,
         "timestamp":""
     },
     "sensor": {
         "name":"",
         "timestamp":""
     },
-    "timestamp": ""
+    "timestamp": "",
+    "client": {
+        "host":"192.168.11.79",
+        "port":1883,
+        "keepalive":60
+    }
+
 }
 
 def create_json ():
@@ -69,3 +76,4 @@ def open_json():
 create_json()
 print(json_file)
 print(json_file["device"]["valid"])
+print(json_file["client"]["host"])
