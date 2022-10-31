@@ -10,7 +10,7 @@ def start():
     s = Sensor()
 
     t1 = threading.Thread(target=m.run)
-    t2 = threading.Thread(target=s.foobar)
+    t2 = threading.Thread(target=s.start_up)
     t1.start()
     t2.start()
 
