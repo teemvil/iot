@@ -7,8 +7,8 @@ class InitObject:
     def __init__(self):
         self.client = mqtt.Client()
         self.config = self.read_config()
-        self.ip = self.config["ip"]
-        self.port = self.config["port"]
+        self.ip = self.config["client"]["host"]
+        self.port = self.config["client"]["port"]
 
     def read_config(self):
         with open('../device/config.json', 'r') as f:
