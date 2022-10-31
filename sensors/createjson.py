@@ -20,7 +20,10 @@ json_file = {
         "name":"",
         "timestamp":""
     },
-    "timestamp": ""
+    "timestamp": "",
+    "host":"192.168.11.79",
+    "port":1883,
+    "keepalive":60
 }
 
 def create_json ():
@@ -69,3 +72,4 @@ def open_json():
 create_json()
 print(json_file)
 print(json_file["device"]["valid"])
+print(json_file["host"])
