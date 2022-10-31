@@ -10,6 +10,11 @@ class Sensor(InitObject):
 
     def start_up(self):
         self.connect()
-        while True:
-            self.client.publish('management', json.dumps(self.config))
-            time.sleep(2)
+        self.client.publish('management', json.dumps(self.config))
+
+        self.client.subscribe('management/iotpi014')
+        self.client.on_message = self.on_message
+    
+    def on_message(self, client, userdata, msg):
+        client.publish('data', json.dumps({'testdata': 'testdata'}))
+    
