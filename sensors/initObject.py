@@ -3,17 +3,10 @@ import json
 
 
 class InitObject:
-    
-    client = mqtt.Client()
-    config = {}
-    ip = '127.0.0.1'
-    port = 1883
-    
 
     def __init__(self):
         self.client = mqtt.Client()
         self.config = self.read_config()
-        print(self.config["ip"])
         self.ip = self.config["ip"]
         self.port = self.config["port"]
 
