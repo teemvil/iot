@@ -1,22 +1,21 @@
 {
   "itemid": "",
-  "hostname": "eos",
+  "hostname": "iotpi014",
   "ip": "",
   "message": "",
-  "event": "",
+  "event": "startup",
   "device": {
-      "valid": "False",
-      "timestamp":""
+    "valid": "False",
+    "timestamp": ""
   },
   "sensor": {
-      "name":"",
-      "timestamp":""
+    "name": "",
+    "timestamp": ""
   },
   "timestamp": "",
   "client": {
-      "host":"192.168.11.79",
-      "port":1883,
-      "keepalive":60
+    "host": "192.168.11.79",
+    "port": 1883,
+    "keepalive": 60
   }
-
 }
