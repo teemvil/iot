@@ -1,10 +1,10 @@
-from Lux_subclass import LuxSensor
+#from Lux_subclass import LuxSensor
 from IR_cam_temp_subclass import IRSensor
-from device import Device
+from sensor import Sensor
 
 # function to test if parameter base class is Device
 def base_test(sensor):
-    if sensor.__class__.__bases__[0] == Device:
+    if sensor.__class__.__bases__[0] == Sensor:
         print("Base class is Device")
 
 def main():
@@ -13,7 +13,13 @@ def main():
     #test.measure_stuff()
     
     irsensor = IRSensor()
-    irsensor.measure_stuff()
+    irsensor.connect()
+    #irsensor.measure_stuff()
+    #sens = Sensor()
+    
+    #sens.read_config()
+    #sens.connect()
+    
     
     #test2 = LuxSensor()
     #arr = [test, test2]
