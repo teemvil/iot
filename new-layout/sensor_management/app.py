@@ -5,7 +5,8 @@ from device.Manager import Manager
 import threading
 
 def start():
-    d = Device()
+    s = Sensor
+    d = Device(s)
     m = Manager()
 
     t1 = threading.Thread(target=d.startup_message)

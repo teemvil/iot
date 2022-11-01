@@ -4,8 +4,9 @@ import time
 
 
 class Device(InitObject):
-    def __init__(self):
+    def __init__(self, sensor):
         super().__init__()
+        sensor = sensor
 
     def startup_message(self):
         self.connect()
