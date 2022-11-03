@@ -29,7 +29,7 @@ header {
   height: 80%;
   max-width: 700px;
   /* max-height: 80%; */
-  margin: 50px 20px 0 5px;
+  margin: 3rem 20px 3rem 5px;
   word-break: break-all;
   box-shadow: 1px 1px 1px 1px black;
 }
@@ -41,9 +41,13 @@ header {
   height: 80%;
   max-width: 700px;
   /* max-height: 80%; */
-  margin: 50px 0 0 0;
+  margin: 1rem 0 1rem 0;
   word-break: break-all;
   /* box-shadow: 1px 1px 1px 1px black; */
+}
+
+.main_content-messages-message {
+  border-bottom: 1px solid black;
 }
 
 hr {
