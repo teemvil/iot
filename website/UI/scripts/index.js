@@ -16,7 +16,7 @@ websocket.onmessage = (event) => {
  * Creates a div with paragraphs to main_content div with data from the server.
  * @param {{topic: string; message: string}} data
  */
-const addElement = (data) => {
+ const addElement = (data) => {
     console.log(data)
     let { topic, host, sensor, message, deviceObject, valid} = JSON.parse(data);
     const newDiv = document.createElement("div");
@@ -27,15 +27,19 @@ const addElement = (data) => {
     const devDiv = document.createElement("div");
     console.log(deviceObject)
 
-  newTopic.appendChild(document.createTextNode(`topic: ${topic}`));
-  newHost.appendChild(document.createTextNode(`hostname: ${host}`));
-  newSensor.appendChild(document.createTextNode(`sensor: ${sensor}`));
-  newMessage.appendChild(document.createTextNode(`message: ${message}`));
+    newDiv.className="main_content-messages-message"
+    newTopic.appendChild(document.createTextNode(`topic: ${topic}`));
+    newHost.appendChild(document.createTextNode(`hostname: ${host}`));
+    newSensor.appendChild(document.createTextNode(`sensor: ${sensor}`));
+    newMessage.appendChild(document.createTextNode(`message: ${message}`));
 
-  newDiv.appendChild(newTopic);
-  newDiv.appendChild(newHost);
-  newDiv.appendChild(newSensor);
-  newDiv.appendChild(newMessage);
+    newDiv.appendChild(newTopic);
+    newDiv.appendChild(newHost);
+    newDiv.appendChild(newSensor);
+    newDiv.appendChild(newMessage);
+
 
     document.getElementById("main_content").prepend(newDiv);
+    document.getElementById("main_content-devices").innerHTML=`device:${deviceObject}; valid:${valid}`;
+
 }
