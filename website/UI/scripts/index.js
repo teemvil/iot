@@ -18,12 +18,15 @@ websocket.onmessage = (event) => {
  * @param {{topic: string; message: string}} data 
  */
 const addElement = (data) => {
-    let { topic, host, sensor, message} = JSON.parse(data);
+    console.log(data)
+    let { topic, host, sensor, message, deviceObject, valid} = JSON.parse(data);
     const newDiv = document.createElement("div");
     const newTopic = document.createElement("p")
     const newHost = document.createElement("p")
     const newSensor = document.createElement("p")
     const newMessage = document.createElement("p")
+    const devDiv = document.createElement("div");
+    console.log(deviceObject)
 
     newTopic.appendChild(document.createTextNode(`topic: ${topic}`));
     newHost.appendChild(document.createTextNode(`hostname: ${host}`));
@@ -35,5 +38,8 @@ const addElement = (data) => {
     newDiv.appendChild(newSensor);
     newDiv.appendChild(newMessage);
 
+
     document.getElementById("main_content").prepend(newDiv);
+    document.getElementById("main_content-devices").innerHTML=`device:${deviceObject}; valid:${valid}`;
+
 }

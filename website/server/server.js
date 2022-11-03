@@ -73,15 +73,48 @@ client.on('error', (error) => {
 console.log('MQTT Connection failed:', error)
 })
 
+let devices = []
 
 client.on('message', function (topic, message) {
 // message is Buffer
     console.log(message.toString(), topic)
     let m = JSON.parse(message)
+    let s
+    if (!devices.find(item => item.hostname === m.hostname)){
+       let x = {
+            itemid: m.itemid,
+            hostname: m.hostname,
+            ip: m.ip,
+            message: m.message,
+            event: m.event,
+            device: {
+                valid: m.device.valid,
+                timestamp:m.device.timestamp
+            },
+            sensor: {
+                name: m.sensor.name,
+                timestamp: m.sensor.timestamp,
+            },
+            timestamp: m.timestamp,
+            client: {
+                host:"192.168.11.79",
+                port:1883,
+                keepalive:60}
+            }
+        devices.push(x)
+        s = devices[devices.length]
+    }
+    let k = devices.find(item => item.hostname === m.hostname)
+    if (devices.find(item => item.hostname === m.hostname)){
+        s = devices.indexOf(k)
+    }
+    
     wsServer.clients.forEach(function (item) {
     // client.send("topic="+topic+"message="+message)
         console.log(topic, "message:", m)
-        item.send(`{"topic": "${topic}", "host": "${m.hostname}", "sensor": "${m.sensor.name}", "message": "${m.message}"}`)
+        console.log(s.toString())
+        item.send(`{"topic": "${topic}", "host": "${m.hostname}", "sensor": "${m.sensor.name}", 
+        "message": "${m.message}", "deviceObject": "${devices[s].hostname}", "valid": "${devices[s].device.valid}"}`)
 })
 // client.end()
 })
