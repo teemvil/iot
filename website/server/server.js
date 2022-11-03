@@ -22,10 +22,10 @@ const options = {
 // mqtts Encrypted TCP connection
 // wxs WeChat applet connection
 // alis Alipay applet connection
-const connectUrl = 'mqtt://test.mosquitto.org'
-// const connectUrl = "ws://194.157.71.11:8883/mqtt"
+//const connectUrl = 'mqtt://test.mosquitto.org'
+const connectUrl = "mqtt://192.168.11.79:1883"
 
-const client = mqtt.connect(connectUrl, options)
+const client = mqtt.connect(connectUrl)
 
 
 
@@ -40,9 +40,9 @@ wsServer.on("connection", function(socket) {
         console.log("Received message from client: " + msg);
 
         
-        wsServer.clients.forEach(function (client) {
+        wsServer.clients.forEach(function (item) {
             // client.send("Someone said: " + msg);
-            client.send(`{"topic": "connection", "message": "${msg}"}`)
+            item.send(`{"topic": "connection", "message": "${msg}"}`)
         });
     });
 });
@@ -51,10 +51,16 @@ console.log((new Date()) + " Server is listening on port " + PORT);
 
 console.log("test")
 client.on('connect', function () {
-client.subscribe('test', function (err) {
+//client.subscribe('test', function (err) {
+//    if(!err)  {
+//        console.log("not err")
+        // client.publish('test', "message")
+//    }
+//})
+client.subscribe('management', function (err) {
     if(!err)  {
         console.log("not err")
-        // client.publish('test', "message")
+        //client.publish('management', "message")
     }
 })
 })
@@ -70,10 +76,12 @@ console.log('MQTT Connection failed:', error)
 
 client.on('message', function (topic, message) {
 // message is Buffer
-console.log(message.toString(), topic)
-wsServer.clients.forEach(function (client) {
+    console.log(message.toString(), topic)
+    let m = JSON.parse(message)
+    wsServer.clients.forEach(function (item) {
     // client.send("topic="+topic+"message="+message)
-    client.send(`{"topic": "${topic}", "message": "${message}"}`)
+        console.log(topic, "message:", m)
+        item.send(`{"topic": "${topic}", "host": "${m.hostname}", "sensor": "${m.sensor.name}", "message": "${m.message}"}`)
 })
 // client.end()
 })

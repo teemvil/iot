@@ -18,15 +18,21 @@ websocket.onmessage = (event) => {
  * @param {{topic: string; message: string}} data 
  */
 const addElement = (data) => {
-    let { topic, message} = JSON.parse(data);
+    let { topic, host, sensor, message} = JSON.parse(data);
     const newDiv = document.createElement("div");
     const newTopic = document.createElement("p")
+    const newHost = document.createElement("p")
+    const newSensor = document.createElement("p")
     const newMessage = document.createElement("p")
 
     newTopic.appendChild(document.createTextNode(`topic: ${topic}`));
+    newHost.appendChild(document.createTextNode(`hostname: ${host}`));
+    newSensor.appendChild(document.createTextNode(`sensor: ${sensor}`));
     newMessage.appendChild(document.createTextNode(`message: ${message}`));
 
     newDiv.appendChild(newTopic);
+    newDiv.appendChild(newHost);
+    newDiv.appendChild(newSensor);
     newDiv.appendChild(newMessage);
 
     document.getElementById("main_content").prepend(newDiv);
