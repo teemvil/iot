@@ -40,11 +40,9 @@ class Manager(InitObject):
 
         self.client.publish(f"management", json.dumps(json_object))
 
-    def process_message(self, payload, topic, client):
+    def process_message(self, payload, topic):
         print(topic+" "+str(payload))
         # Funcitonality for restart and reboot comes here
-
-        client.publish("management/iotpi014", json.dumps({"start": "sensor"}))
 
 
     def on_message(self, client, userdata, msg):
@@ -60,11 +58,12 @@ class Manager(InitObject):
                 self.start_devmngr(json_object, client)
 
             if (msg.topic == "management" and json_object["event"] == "validation ok" and json_object["device"]["valid"] == True):
-                x = threading.Thread(target=self.process_message,
-                                     args=(msg.payload, msg.topic, client))
-                x.start()
-                # self.sensor_start(json_object)
+                # x = threading.Thread(target=self.process_message,
+                #                      args=(msg.payload, msg.topic))
+                # x.start()
 
+                client.publish("management/iotpi014", json.dumps({"start": "sensor"}))
+                # self.sensor_start(json_object)
             else:
                 json_object["message"] = "Device validation error"
                 json_object["event"] = "dev_val_error"
