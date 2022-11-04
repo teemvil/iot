@@ -94,22 +94,56 @@ client.on('message', function (topic, message) {
             client: {
                 host:"192.168.11.79",
                 port:1883,
-                keepalive:60}
+                keepalive:60},
+            valdate:""
             }
+        if (m.event==="validation ok"){
+          console.log("eka iffi")
+          x.valdate=m.timestamp
+        }
         devices.push(x)
         s = devices[devices.length]
     }
     let k = devices.find(item => item.hostname === m.hostname)
     if (devices.find(item => item.hostname === m.hostname)){
-        s = devices.indexOf(k)
+      //s = devices[devices.length]
+      s = devices.indexOf(k)
+      devices[s].device.valid=m.device.valid
+      if (m.event==="validation ok"){
+        console.log("toka iffi")
+        console.log(m.timestamp)
+        devices[s].device.valid=m.device.valid
+        console.log(m.device.valid)
+        devices[s].valdate=m.timestamp
+        console.log(devices[s].valdate)
+      }
     }
     
     wsServer.clients.forEach(function (item) {
     // client.send("topic="+topic+"message="+message)
         console.log(topic, "message:", m)
         console.log(s.toString())
-        item.send(`{"topic": "${topic}", "host": "${m.hostname}", "sensor": "${m.sensor.name}", 
-        "message": "${m.message}", "deviceObject": "${devices[s].hostname}", "valid": "${devices[s].device.valid}"}`)
+
+        // let iitemmm =`"god": 
+        //               {
+        //                 "data":
+        //                     {
+        //                       "topic": "${topic}", 
+        //                       "host": "${m.hostname}", 
+        //                       "sensor": "${m.sensor.name}", 
+        //                       "message": "${m.message}", 
+        //                       "deviceObject": "${devices[s].hostname}", 
+        //                       "valid": "${devices[s].device.valid}"
+        //                       }, 
+        //                 "devs": 
+        //                   "${JSON.stringify(...devices)}"
+                        
+        //                 }`
+        let iitemmm =`{"god": {"data": { "hostname": "${m.hostname}", "timestamp": "${m.timestamp}", "sensor": "${m.sensor.name}", "message": "${m.message}", "deviceObject": "${devices[s].hostname}", "valid": "${devices[s].device.valid}"}, "valdate": "${devices[s].valdate}"}}`
+
+                      console.log(iitemmm)
+
+        item.send(iitemmm)
 })
 // client.end()
 })

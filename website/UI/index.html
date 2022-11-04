@@ -9,10 +9,10 @@
   </head>
   <body>
     <header>
-      <p>Header</p>
+      <p>Ultimate system log info</p>
     </header>
     <section class="main">
-      <div class="main_content">
+      <div class="main_content sidebar">
         <h2>Devices connected</h2>
         <hr />
         <div class="main_content-messages" id="main_content-devices"></div>
@@ -20,8 +20,25 @@
       <div class="main_content">
         <h1>Device Status Group</h1>
         <hr />
-        <div class="main_content-messages" id="main_content"></div>
+        <table class="main_content-messages">
+          <tr>
+            <th>hostname</th>
+            <th>sensor</th>
+            <th>message</th>
+            <th>timestamp</th>
+            <tbody id="main_content"></tbody>
+            <!-- <th>hostname</th>
+            <th>hostname</th>
+            <th>hostname</th>
+            <th>hostname</th> -->
+          </tr>
+        </table>
       </div>
+      <!-- <div class="main_content">
+        <h1>Device Status Group</h1>
+        <hr />
+        <div class="main_content-messages" id="main_content"></div>
+      </div> -->
     </section>
     <script src="scripts/index.js"></script>
   </body>

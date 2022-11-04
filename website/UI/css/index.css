@@ -10,11 +10,14 @@ header {
   min-height: 10vh;
   background-color: black;
   color: white;
+  position: sticky;
+  top: 0;
 }
 
 .main {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
   /* align-items: center; */
   min-height: 80vh;
@@ -27,11 +30,16 @@ header {
   align-items: center;
   width: 80%;
   height: 80%;
+  border-radius: 15px;
+  /* height: 40rem; */
+  /* overflow: auto; */
+  /* scroll-behavior: smooth; */
   max-width: 700px;
   /* max-height: 80%; */
   margin: 3rem 20px 3rem 5px;
   word-break: break-all;
   box-shadow: 1px 1px 1px 1px black;
+  background-color: white;
 }
 .main_content-messages {
   display: flex;
@@ -48,6 +56,7 @@ header {
 
 .main_content-messages-message {
   border-bottom: 1px solid black;
+  border: 1px solid black;
 }
 
 hr {
@@ -57,4 +66,125 @@ hr {
   width: 96%;
   background-color: #ff0000;
   height: 1px;
+}
+
+.sidebar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 15vh;
+}
+
+.hero-image {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url("./marc-olivier-jodoin-oThnHPkb3p8-unsplash.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 50vh;
+  color: white;
+}
+
+.hero-image h1 {
+  margin: 0;
+  text-shadow: 2px 2px black;
+}
+
+.active-box {
+  /* background-color: #78e08f; */
+  padding: 10px;
+  margin: 0 0 20px 0;
+  background-color: rgba(26, 243, 178, 0.05);
+  border: 1px solid black;
+}
+
+@keyframes append-animate {
+  0% {
+    /* transform: scale(0); */
+    /* transform: perspective(400px) translate3d(10px, 0, 65px); */
+    transform: translateY(-20px);
+
+    opacity: 0.7;
+  }
+  20% {
+    opacity: 0.8;
+    transform: translateY(-15px);
+
+    /* transform: perspective(300px) translate3d(10px, 5px, 30px); */
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateY(-5px);
+  }
+  100% {
+    /* transform: scale(1); */
+    transform: translateY(0);
+    /* transform: translate3d(0, 0, 0); */
+    opacity: 1;
+    /* background-color: rgba(88, 16, 16, 0.2); */
+  }
+}
+
+.new-box {
+  animation: append-animate 0.4s linear;
+}
+
+.new-new-box {
+  background-color: #e4dcdc;
+}
+
+@media screen and (max-width: 600px) {
+  .hero-image h1 {
+    font-size: 1rem;
+  }
+}
+@media screen and (max-width: 1450px) {
+  header {
+    position: inherit;
+  }
+
+  .main_content {
+    margin-left: 0;
+    margin-right: 0;
+    /* overflow: auto;
+    scroll-behavior: smooth; */
+  }
+
+  .sidebar {
+    position: sticky;
+    /* width: 100%; */
+    /* top: 0; */
+    top: 18vh;
+    margin: 3rem 0 0 0;
+    overflow: auto;
+  }
+}
+
+/* table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #f80000;
+} */
+
+td {
+  border-bottom: 1px solid black;
+  width: 10rem;
+}
+/* tr {
+  border-bottom: 1px solid black;
+} */
+th {
+  width: 10rem;
+  border-bottom: 1px solid black;
+  text-align: left;
 }
