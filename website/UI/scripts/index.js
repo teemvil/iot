@@ -77,12 +77,13 @@ const addElement = async (data) => {
   const newMessage = document.createElement("td");
   console.log(deviceObject);
 
-  if (!devices.find((item) => item.hostname === deviceObject)) {
+  if (!devices.find(item => item.hostname === deviceObject)){
     let x = {
         hostname: deviceObject,
         valid: valid,
          
-        valdate:""
+        valdate:"",
+        sensor:""
          }
      //if (m.event==="validation ok"){
      //  x.valdate=m.timestamp
@@ -97,6 +98,7 @@ const addElement = async (data) => {
     s = devices.indexOf(k)
     devices[s].valdate=valdate
     devices[s].valid=valid
+    devices[s].sensor=sensor
     console.log("valdate: " + devices[s].valdate)
   }
   //  s.valdate=m.timestamp
@@ -129,16 +131,75 @@ const addElement = async (data) => {
     message,
   });
 
-  for (let i = 0; i < devices.length; i++) {
+  for (let i = 0; i < devices.length; i++){
     let elem = document.createElement("div");
-    let node = document.createTextNode("hostname: " + devices[i].hostname + " --- valid: " + devices[i].valid + " --- validated on: " + devices[i].valdate);
+    let elem2 = document.createElement("div");
+    console.log(devices[s].valid)
+    if (devices[i].valid === "true"){
+      elem2.classList.add("valid")
+    }else{
+      elem2.classList.add("notvalid")
+    }
+    let elem3 = document.createElement("div");
+    let elem4 = document.createElement("div");
+    let elem5 = document.createElement("div");
+    let node = document.createTextNode("Name: " + devices[i].hostname )// + " --- valid: " + devices[i].valid + " --- validated on: " + devices[i].valdate);
+    let node5 = document.createTextNode("Sensor(s) running: " + devices[i].sensor)
+    let node2 = document.createTextNode("Valid: " + devices[i].valid)
+    let node3 = document.createTextNode("Last validated on: " + devices[i].valdate)
+    let node4 = document.createTextNode("----- ")
     elem.appendChild(node);
+    elem5.appendChild(node5);
+    elem2.appendChild(node2);
+    elem3.appendChild(node3);
+    elem4.appendChild(node4);
     document.getElementById(
       "main_content-devices"
     ).appendChild(elem) // = `device:${deviceObject}; valid:${valid}`;
+    document.getElementById(
+      "main_content-devices"
+    ).appendChild(elem2)
+    document.getElementById(
+      "main_content-devices"
+    ).appendChild(elem3)
+    document.getElementById(
+      "main_content-devices"
+    ).appendChild(elem5)
+    document.getElementById(
+      "main_content-devices"
+    ).appendChild(elem4)
+  }
+  const mainContent = document.getElementById("main_content");
+
+  console.log(mainContent.lastChild.innerHTML);
+  if (mainContent.childElementCount > 50) {
+    while (mainContent.childElementCount > 30) {
+      mainContent.removeChild(mainContent.lastChild);
+    }
   }
 };
 
+const hideButton = document.getElementById("hide-button");
+const logViewerHideButton = document.getElementById("log-viewer-hide-button");
+
+const logViewerContainer = document.getElementById("log-viewer-container");
+const hideDiv = document.getElementById("hide-div");
+const hideLogViewer = async () => {
+  if (!logViewerContainer.classList.contains("hidden")) {
+    logViewerContainer.classList.add("hidden");
+    hideDiv.classList.add("hidden");
+    console.log("test", logElement);
+    while (logElement.childElementCount) {
+      console.log("logElement");
+      logElement.removeChild(logElement.lastChild);
+    }
+    search.value = "";
+  } else {
+    logViewerContainer.classList.remove("hidden");
+    hideDiv.classList.remove("hidden");
+    logViewer();
+  }
+};
 hideDiv.addEventListener("click", hideLogViewer);
 
 const logElement = document.getElementById("log-viewer");

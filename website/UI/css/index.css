@@ -166,13 +166,11 @@ hr {
   border-collapse: collapse;
   width: 100%;
 }
-
 th,
 td {
   text-align: left;
   padding: 8px;
 }
-
 tr:nth-child(even) {
   background-color: #f80000;
 } */
@@ -190,12 +188,6 @@ th {
   text-align: left;
 }
 
-.valid{
-  color: green
-}
-.notvalid{
-  color: red
-}
 .log-viewer-container {
   display: flex;
   flex-direction: column;
@@ -257,4 +249,11 @@ th {
 .log-viewer-container-view {
   display: flex;
   flex-direction: row;
+}
+
+.valid{
+  color: green
+}
+.notvalid{
+  color: red
 }
