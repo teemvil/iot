@@ -79,7 +79,8 @@ const addElement = async (data) => {
         hostname: deviceObject,
         valid: valid,
          
-        valdate:""
+        valdate:"",
+        sensor:""
          }
      //if (m.event==="validation ok"){
      //  x.valdate=m.timestamp
@@ -94,6 +95,7 @@ const addElement = async (data) => {
     s = devices.indexOf(k)
     devices[s].valdate=valdate
     devices[s].valid=valid
+    devices[s].sensor=sensor
     console.log("valdate: " + devices[s].valdate)
   }
     //  s.valdate=m.timestamp
@@ -122,10 +124,40 @@ const addElement = async (data) => {
 
   for (let i = 0; i < devices.length; i++){
     let elem = document.createElement("div");
-    let node = document.createTextNode("hostname: " + devices[i].hostname + " --- valid: " + devices[i].valid + " --- validated on: " + devices[i].valdate);
+    let elem2 = document.createElement("div");
+    console.log(devices[s].valid)
+    if (devices[i].valid === "true"){
+      elem2.classList.add("valid")
+    }else{
+      elem2.classList.add("notvalid")
+    }
+    let elem3 = document.createElement("div");
+    let elem4 = document.createElement("div");
+    let elem5 = document.createElement("div");
+    let node = document.createTextNode("Name: " + devices[i].hostname )// + " --- valid: " + devices[i].valid + " --- validated on: " + devices[i].valdate);
+    let node5 = document.createTextNode("Sensor(s) running: " + devices[i].sensor)
+    let node2 = document.createTextNode("Valid: " + devices[i].valid)
+    let node3 = document.createTextNode("Last validated on: " + devices[i].valdate)
+    let node4 = document.createTextNode("----- ")
     elem.appendChild(node);
+    elem5.appendChild(node5);
+    elem2.appendChild(node2);
+    elem3.appendChild(node3);
+    elem4.appendChild(node4);
     document.getElementById(
       "main_content-devices"
     ).appendChild(elem) // = `device:${deviceObject}; valid:${valid}`;
+    document.getElementById(
+      "main_content-devices"
+    ).appendChild(elem2)
+    document.getElementById(
+      "main_content-devices"
+    ).appendChild(elem3)
+    document.getElementById(
+      "main_content-devices"
+    ).appendChild(elem5)
+    document.getElementById(
+      "main_content-devices"
+    ).appendChild(elem4)
   }
 };
