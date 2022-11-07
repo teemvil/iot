@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/index.css" />
   </head>
   <body>
+    <div class="hide-div hidden" id="hide-div"></div>
     <header>
       <p>Ultimate system log info</p>
     </header>
@@ -19,6 +20,7 @@
       </div>
       <div class="main_content">
         <h1>Device Status Group</h1>
+        <button id="hide-button">Show Full History</button>
         <hr />
         <table class="main_content-messages">
           <tr>
@@ -34,11 +36,27 @@
           </tr>
         </table>
       </div>
-      <!-- <div class="main_content">
-        <h1>Device Status Group</h1>
-        <hr />
-        <div class="main_content-messages" id="main_content"></div>
-      </div> -->
+      <div class="log-viewer-container hidden" id="log-viewer-container">
+        <div class="log-viewer-container-control">
+          <button class="log-viewer-hide-button" id="log-viewer-hide-button">
+            X
+          </button>
+        </div>
+        <h2>History</h2>
+        <div class="log-viewer-container-view">
+          <input type="text" placeholder="search" id="log-viewer-search" />
+          <button
+            class="log-viewer-search-button"
+            id="log-viewer-search-button"
+          >
+            search
+          </button>
+        </div>
+        <button class="log-viewer-sort-button" id="log-viewer-sort-button">
+          sort by time
+        </button>
+        <section id="log-viewer" class="log-viewer"></section>
+      </div>
     </section>
     <script src="scripts/index.js"></script>
   </body>
