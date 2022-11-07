@@ -22,7 +22,6 @@ const options = {
 // alis Alipay applet connection
 //const connectUrl = 'mqtt://test.mosquitto.org'
 const connectUrl = "mqtt://192.168.11.79:1883";
-// const connectUrl = "mqtt://127.0.0.1:1883";
 
 const client = mqtt.connect(connectUrl);
 
