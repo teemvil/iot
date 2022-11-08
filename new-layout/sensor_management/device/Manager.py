@@ -8,8 +8,9 @@ import socket
 
 
 class Manager(InitObject):
-    def __init__(self):
+    def __init__(self, sensor):
         super().__init__()
+        self.sensor = sensor
 
     def start_devmngr(self, json_update, client):
         json_object = json_update
@@ -62,8 +63,9 @@ class Manager(InitObject):
                 #                      args=(msg.payload, msg.topic))
                 # x.start()
 
-                client.publish("management/iotpi014", json.dumps({"start": "sensor"}))
+                # client.publish("management/iotpi014", json.dumps({"start": "sensor"}))
                 # self.sensor_start(json_object)
+                self.sensor.start()
             else:
                 json_object["message"] = "Device validation error"
                 json_object["event"] = "dev_val_error"
