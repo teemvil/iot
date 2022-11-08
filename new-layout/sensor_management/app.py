@@ -1,21 +1,21 @@
 from multiprocessing.dummy import Manager
 
-from device.sensors.ConcreteSensor import ConcreteSensor
 from device.Device import Device
 from device.sensors.Sensor import Sensor
+from device.sensors.RngSensor import RngSensor
 from device.Manager import Manager
 import threading
 import json
+import sys
 
 
 def start():
-    m = Manager()
-    s = Sensor()
+    s = RngSensor()
+    m = Manager(s)
 
-    t1 = threading.Thread(target=m.run)
-    t2 = threading.Thread(target=s.start_up)
-    t1.start()
-    t2.start()
+    m.run()
+
+
 
 
 if __name__ == '__main__':
