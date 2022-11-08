@@ -4,18 +4,12 @@ import paho.mqtt.client as mqtt
 import json
 import threading
 from datetime import datetime
-import busio
-import board
-import adafruit_tsl2561
-import math
-import time
 
-class LuxSensor(InitObject):
+
+class NewSensor(InitObject):
     
     def __init__(self):
         super().__init__()
-        i2c = busio.I2C(board.SCL, board.SDA)
-        tsl = adafruit_tsl2561.TSL2561(i2c)
         payload = self.config
         IP = self.config["client"]["host"]
         PORT = self.config["client"]["port"]    
@@ -29,26 +23,24 @@ class LuxSensor(InitObject):
         payload["message"]= "New sensor started on device"
         payload["event"]="sensoronline"
         payload["sensor"]["timestamp"]=self.get_time_stamp()
-        payload["sensor"]["name"]="LuxSensor"
+        payload["sensor"]["name"]="NewSensor"
         self.send_message(payload)
         self.measure_stuff(payload)
     
     def measure_stuff(self, json_object):
         payload=json_object
-        payload["message"]= "Lux sensor sensor running on device"
+        payload["message"]= "New Sensor sensor running on device"
         payload["event"]="sensorrunning"
         self.send_message(payload)  
-        payload["message"]="Lux Sensor sensor trasmitting data"
+        payload["message"]="New Sensor sensor trasmitting data"
         payload["event"]="sensortrasmitting"
         self.send_message(payload) 
 		
         ## Write your sensor's measurement code here!!
 
-        while True:
-            print("sensor/lux: " + str(math.floor(self.tsl.lux)))
-
-            self.client.publish("data/iotpi015/sensor/lux", payload=math.floor(self.tsl.lux))
-            time.sleep(2)       
+        ##  while True:
+        ## 	  self.client.publish("random", payload=(random.random())
+        ## 		time.sleep(1)        
 
     def send_message(self, json_object):
         payload=json_object
