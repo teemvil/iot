@@ -77,37 +77,39 @@ client.on("message", function (topic, message) {
   let s;
   if (!devices.find((item) => item.hostname === m.hostname)) {
     try{
-      let x = {
-        itemid: m.itemid,
-        hostname: m.hostname,
-        ip: m.ip,
-        message: m.message,
-        event: m.event,
-        device: {
-          valid: m.device.valid,
-          timestamp: m.device.timestamp,
-        },
-        sensor: {
-          name: m.sensor.name,
-          timestamp: m.sensor.timestamp,
-        },
-        timestamp: m.timestamp,
-        client: {
-          host: "192.168.11.79",
-          port: 1883,
-          keepalive: 60,
-        },
-        valdate: "",
-      };
-      if (m.event === "validation ok") {
-        console.log("eka iffi");
-        x.valdate = m.timestamp;
-      }
+    let x = {
+      itemid: m.itemid,
+      hostname: m.hostname,
+      ip: m.ip,
+      message: m.message,
+      event: m.event,
+      device: {
+        valid: m.device.valid,
+        timestamp: m.device.timestamp,
+      },
+      sensor: {
+        name: m.sensor.name,
+        timestamp: m.sensor.timestamp,
+      },
+      timestamp: m.timestamp,
+      client: {
+        host: "192.168.11.79",
+        port: 1883,
+        keepalive: 60,
+      },
+      valdate: "",
+    };
+    if (m.event === "validation ok") {
+      console.log("eka iffi");
+      x.valdate = m.timestamp;
+    }
+
+    devices.push(x);
+    s = devices[devices.length];
+  
   }catch{
     console.log("Something went wrog with putting data into array")
   }
-    devices.push(x);
-    s = devices[devices.length];
   }
   let k = devices.find((item) => item.hostname === m.hostname);
   if (devices.find((item) => item.hostname === m.hostname)) {
