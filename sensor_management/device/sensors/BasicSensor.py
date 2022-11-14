@@ -13,7 +13,11 @@ class BasicSensor(IoTElement):
         self.config["event"] = "Sensor starting"
         self.config["message"] = f"Sensor {self.sensor_name} started on {self.config['hostname']}"
         self.client.publish("management", json.dumps(self.config))
+        self.attest()
 
     def publish_data(self, data):
         topic = "data/"+self.config["hostname"]+"/sensor/"+self.sensor_name
         self.client.publish(topic, payload=data)
+
+    def attest(self):
+        self.client.publish('management/verify', json.dumps(self.config))
