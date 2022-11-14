@@ -1,9 +1,10 @@
-from device.InitObject import InitObject
+from IoTElement import IoTElement
 import json
 import time
 
-
-class Device(InitObject):
+# Is this thing here needed?
+# Change inheritance.
+class Device(IoTElement):
     def __init__(self):
         super().__init__()
 

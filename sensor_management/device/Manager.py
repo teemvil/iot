@@ -6,7 +6,8 @@ import os
 import json
 import socket
 
-
+# What about this.
+# TODO: change the inherited object.
 class Manager(InitObject):
     def __init__(self):
         super().__init__()
