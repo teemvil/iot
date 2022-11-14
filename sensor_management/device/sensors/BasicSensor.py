@@ -1,4 +1,4 @@
-from IoTElement import IoTElement
+from device.IoTElement import IoTElement
 import json
 import threading
 import random
