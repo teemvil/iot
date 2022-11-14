@@ -1,12 +1,11 @@
-from device.sensors.TofSensor import ToFSensor
+from device.sensors.RngSensor import RngSensor
 import threading
 import json
 
 
 def start():
-    s = ToFSensor(1, "tof")
-    s.measure_stuff()
-
+    x = RngSensor('rngsensor')
+    x.run()
 
 if __name__ == '__main__':
     start()
