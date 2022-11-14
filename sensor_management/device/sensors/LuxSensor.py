@@ -1,3 +1,4 @@
+from device.sensors.BasicSensor import BasicSensor
 import time
 import busio
 import board
