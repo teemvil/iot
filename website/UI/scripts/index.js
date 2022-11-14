@@ -146,7 +146,8 @@ const addElement = async (data) => {
     let node = document.createTextNode("Name: " + devices[i].hostname )// + " --- valid: " + devices[i].valid + " --- validated on: " + devices[i].valdate);
     let node5 = document.createTextNode("Sensor(s) running: " + devices[i].sensor)
     let node2 = document.createTextNode("Valid: " + devices[i].valid)
-    let node3 = document.createTextNode("Last validated on: " + devices[i].valdate)
+    let tim = new Date(devices[i].valdate)
+    let node3 = document.createTextNode("Last validated on: " + tim)
     let node4 = document.createTextNode("----- ")
     elem.appendChild(node);
     elem5.appendChild(node5);
