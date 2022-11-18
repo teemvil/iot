@@ -3,8 +3,6 @@ import time
 import board
 import busio
 import adafruit_vl53l0x
-import json
-
 
 class ToFSensor(BasicSensor):
     # Sensor specific variables
@@ -16,12 +14,14 @@ class ToFSensor(BasicSensor):
         super().__init__(n)
         self.frequency = f
 
-    def measure_stuff(self):       
+    def measure_stuff(self):
+        # Topic end must be declared here:
+        topic_end="tof"      
         with self.vl53.continuous_mode():
             while True:
                 if (self.vl53.data_ready):
                     time.sleep(self.frequency)
                     if (self.vl53.range < 1000):
-                        self.publish_data(self.vl53.range)
+                        self.publish_data(self.vl53.range, topic_end)
     
 
