@@ -20,47 +20,10 @@ websocket.onmessage = (event) => {
  * Creates a div with paragraphs to main_content div with data from the server.
  * @param {{topic: string; message: string}} data
  */
-/*const addElement = (data) => {
-    console.log(data)
-    console.log(data)
-    let o = JSON.parse(data)
-    //let test = o.god.data
-    // let i = JSON.parse(o)
-    let { topic, host, sensor, message, deviceObject, valid} = o.god.data;
-    const newDiv = document.createElement("div");
-    const newTopic = document.createElement("p")
-    const newHost = document.createElement("p")
-    const newSensor = document.createElement("p")
-    const newMessage = document.createElement("p")
-    const devDiv = document.createElement("div");
-    console.log(deviceObject)
 
-    newDiv.className="main_content-messages-message"
-    newTopic.appendChild(document.createTextNode(`topic: ${topic}`));
-    newHost.appendChild(document.createTextNode(`hostname: ${host}`));
-    newSensor.appendChild(document.createTextNode(`sensor: ${sensor}`));
-    newMessage.appendChild(document.createTextNode(`message: ${message}`));
-
-    newDiv.appendChild(newTopic);
-    newDiv.appendChild(newHost);
-    newDiv.appendChild(newSensor);
-    newDiv.appendChild(newMessage);
-
-
-    if (!devices.find(item => item === deviceObject)){
-        devices.push(deviceObject)
-        devDiv.appendChild(document.createTextNode(`device:${deviceObject}; valid:${valid}`));
-    }
-    if (devices.find(item => item === deviceObject)){
-        document.getElementById("main_content-devices").innerHTML=`device:${deviceObject}; valid:${valid}`;
-    }
-
-    document.getElementById("main_content").prepend(newDiv);
-    document.getElementById("main_content-devices").innerHTML=`device:${deviceObject}; valid:${valid}`;
-
-}*/
 let history = [];
 let devices = [];
+let sensors = [];
 let count = 0;
 const addElement = async (data) => {
   console.log(data);
@@ -85,27 +48,36 @@ const addElement = async (data) => {
         valdate:"",
         sensor:""
          }
-     //if (m.event==="validation ok"){
-     //  x.valdate=m.timestamp
-     //}
-     devices.push(x)
-     s = devices[devices.length]
+
+    let y = {
+      hostname: deviceObject,
+      sensor: sensor
+    }
+    sensors.push(y)
+    //if (m.event==="validation ok"){
+    //  x.valdate=m.timestamp
+    //}
+    devices.push(x)
+    s = devices[devices.length]
  }
  let k = devices.find(item => item.hostname === deviceObject)
  if (devices.find(item => item.hostname === deviceObject)){
-    //s = devices[devices.length]
     console.log("komlmas iffi"+valdate)
+    let y = {
+      hostname: deviceObject,
+      sensor: sensor
+    }
     s = devices.indexOf(k)
     devices[s].valdate=valdate
     devices[s].valid=valid
-    devices[s].sensor=sensor
+    if (sensors.find(item => item.hostname === deviceObject)){
+      if (!sensors.find(item => item.sensor === sensor)){
+        sensors.push(y)
+      }
+    }
     console.log("valdate: " + devices[s].valdate)
   }
-  //  s.valdate=m.timestamp
-  //}
-  //}
-
-  //   newDiv.className = "main_content-messages-message";
+  
   newTimestamp.appendChild(document.createTextNode(`${timestamp}`));
   newHost.appendChild(document.createTextNode(`${hostname}`));
   newSensor.appendChild(document.createTextNode(`${sensor}`));
@@ -142,20 +114,33 @@ const addElement = async (data) => {
     }
     let elem3 = document.createElement("div");
     let elem4 = document.createElement("div");
-    let elem5 = document.createElement("div");
-    let node = document.createTextNode("Name: " + devices[i].hostname )// + " --- valid: " + devices[i].valid + " --- validated on: " + devices[i].valdate);
-    let node5 = document.createTextNode("Sensor(s) running: " + devices[i].sensor)
+    let node = document.createTextNode("Name: " + devices[i].hostname )
+    let elleem = document.createElement("div");
+    let noode
+    let count =0
+    for (let d = 0; d < sensors.length; d++){ 
+      if (sensors[d].hostname === devices[i].hostname){
+        count++
+        if (count === 1){
+          noode = document.createTextNode("Sensor(s) running: " + sensors[d].sensor)
+          elleem.appendChild(noode)
+        }else{
+          let noode = document.createTextNode(" & " + sensors[d].sensor)
+          elleem.appendChild(noode)
+        }  
+      }
+      
+    }
     let node2 = document.createTextNode("Valid: " + devices[i].valid)
     let node3 = document.createTextNode("Last validated on: " + devices[i].valdate)
     let node4 = document.createTextNode("----- ")
     elem.appendChild(node);
-    elem5.appendChild(node5);
     elem2.appendChild(node2);
     elem3.appendChild(node3);
     elem4.appendChild(node4);
     document.getElementById(
       "main_content-devices"
-    ).appendChild(elem) // = `device:${deviceObject}; valid:${valid}`;
+    ).appendChild(elem) 
     document.getElementById(
       "main_content-devices"
     ).appendChild(elem2)
@@ -164,7 +149,7 @@ const addElement = async (data) => {
     ).appendChild(elem3)
     document.getElementById(
       "main_content-devices"
-    ).appendChild(elem5)
+    ).appendChild(elleem)
     document.getElementById(
       "main_content-devices"
     ).appendChild(elem4)
