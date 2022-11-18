@@ -15,42 +15,45 @@ json_file = {
     "event": "",
     "device": {
         "valid": False,
-        "timestamp":""
+        "timestamp": ""
     },
     "sensor": {
-        "name":"",
-        "timestamp":""
+        "name": "",
+        "timestamp": ""
     },
     "timestamp": "",
     "client": {
-        "host":"192.168.11.79",
-        "port":1883,
-        "keepalive":60
+        "host": "192.168.11.79",
+        "port": 1883,
+        "keepalive": 60
     }
 
 }
 
-def create_json ():
-    json_file["hostname"]=socket.gethostname()
-    json_file["ip"]=get_ip_address()
+
+def create_json():
+    json_file["hostname"] = socket.gethostname()
+    json_file["ip"] = get_ip_address()
 
     now = datetime.now()
     date_time = now.strftime("%d.%m.%Y, %H:%M:%S")
 
-    #print("date and time:",date_time)	
+    #print("date and time:",date_time)
 
     #json_file["timestamp"]= date_time
     save_to_device()
 
+
 def get_ip_address():
-    ip_address = '';
+    ip_address = ''
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8",80))
+    s.connect(("8.8.8.8", 80))
     ip_address = s.getsockname()[0]
     s.close()
     return ip_address
 
-def save_to_device ():
+
+def save_to_device():
     json_object = json.dumps(json_file, indent=4)
     if os.path.isdir(data_folder) == False:
         os.mkdir(data_folder)
@@ -62,9 +65,10 @@ def save_to_device ():
         print("The directory exist")
         file_to_write = data_folder / "data_packet.json"
         with open(file_to_write, "w") as outfile:
-            outfile.write(json_object)    
+            outfile.write(json_object)
 
-# For testing purposes to check for the file existence       
+
+# For testing purposes to check for the file existence
 """
 def open_json():
     with open(file_to_open, 'r') as openfile:    
@@ -72,8 +76,9 @@ def open_json():
         #print(json_object)
         #print(type(json_object))
     return json_object
-"""       
+"""
 create_json()
 print(json_file)
 print(json_file["device"]["valid"])
 print(json_file["client"]["host"])
+
