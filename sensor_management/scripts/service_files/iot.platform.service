@@ -1,0 +1,10 @@
+[Unit]
+Description=Fire MQTT startup message
+Requires=iot.devices.service
+
+[Service]
+ExecStart=python3 /usr/local/bin/send_device_start_up_message.py
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
