@@ -1,46 +1,46 @@
 # Intro
 
-This is repository of a innovation project done for Nokia. The idea here is to create a system which gathers data from various different sensors. The sensor could ultimately be anything. The data aquisiton functionality is being abstracted so that the system doesn't need to know what kind of a sensor has been attached to it.
+This is repository of a innovation project done for Nokia. The idea is to build a framework which allows rapid development of different kinds of sensor management systems. The sensor could ultimately be anything. 
 
-![process diagram](./documentation/pics/process_diagram.drawio.png)
+The data aquisiton functionality is being abstracted so that the system doesn't need to know what kind of a sensor has been attached to it.
 
-Above we can see the process diagram of the system. Currently there are three sensors which compose the data acquisition layer. 
+The system handles all communication via MQTT messages. 
 
-The second layer is the data handling / controller layer where the data is gathered and verified. 
+## Design
 
-The UI layer does what you would expect, it shows some pretty graphs and information gathered from the sensors.
+The system is build so that every class inherits a MQTT client from the IoTElement class. There is also a configuration file located in xxx which has all the necessary options to connect to the MQTT broker and send correct types of messages.
 
-## Process
+![device class diagram](documentation/pics/insidedevice.JPG)
 
-The plan is to build a system which checks if a person is in the proximity of the webcam. If this is true, the webcam takes a picture. This is done with the general purpose system do demonstrate it's capabilities.
+## Data flow
 
-![process flow](./documentation/pics/process_flow.drawio.png)
+When the system starts up it sends various MQTT messages to notify the broker about the state of the various subsystems. Firstly the validity of the device running the sensor script is checked. The sensor startup doesn't depend on the validity check. We can just see if the device is valid or not. 
 
-The data is gathered from the sensors in the controller layer. The data aggreagtion process gets the data from the sensor every `n` minutes. 
+![sequence diagram](documentation/pics/devicesequence.JPG)
 
-TODO: 
-* create a UML class diagram...
-* global thread safe object to store the data from mqtt.
-  * queue?
-
-![sequence diagram](documentation/pics/sequence_diagram.png)
-
-## MQTT topic naming conventions
+### MQTT topic naming conventions
 
 Sensors are named as `sensor/webcam`, `sensor/ir`, `sensor/lux`, `sensor/tof`.
 
-### Management channel
+#### Management channel
 ```
 management/
 ```
 
-### Alert channel
+#### Alert channel
 ```
 alert/
 ```
 
-### Data channels
+#### Data channels
 ```
 data/<hostname>/<sensor>/<measurement>
 ```
 Measurement here means the measured data. This could be array of pixels, temperature, distance etc
+
+
+Most important payload fields:
+itemid and event
+
+Document the different events:
+"device start up", "sensor start up", "platform? start up", etc...
