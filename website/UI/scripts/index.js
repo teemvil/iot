@@ -121,15 +121,16 @@ const addElement = async (data) => {
     for (let d = 0; d < sensors.length; d++){ 
       if (sensors[d].hostname === devices[i].hostname){
         count++
-        if (count === 1){
-          noode = document.createTextNode("Sensor(s) running: " + sensors[d].sensor)
-          elleem.appendChild(noode)
-        }else{
-          let noode = document.createTextNode(" & " + sensors[d].sensor)
-          elleem.appendChild(noode)
-        }  
+        if (sensors[d].sensor != ""){
+          if (count === 1){
+            noode = document.createTextNode("Sensor(s) running: " + sensors[d].sensor)
+            elleem.appendChild(noode)
+          }else{
+            let noode = document.createTextNode(" & " + sensors[d].sensor)
+            elleem.appendChild(noode)
+          }  
       }
-      
+    }
     }
     let node2 = document.createTextNode("Valid: " + devices[i].valid)
     let node3 = document.createTextNode("Last validated on: " + devices[i].valdate)
