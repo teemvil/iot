@@ -1,7 +1,5 @@
 [Unit]
 Description=Start IoT device
-Requires=iot.sensors.service
-After=iot.platform.service
 
 [Service]
 ExecStart=python3 /usr/local/bin/start_iot_device.py
