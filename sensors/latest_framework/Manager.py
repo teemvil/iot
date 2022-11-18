@@ -2,8 +2,6 @@ from IoTElement import IoTElement
 from datetime import datetime
 import json
 
-
-
 class Manager(IoTElement):
     def __init__(self):
         super().__init__()
@@ -11,9 +9,9 @@ class Manager(IoTElement):
         self.client.on_connect = self.__on_connect
         self.client.on_message = self.__on_message
         self.client.loop_forever()
-        self.__start_manager(self.config)
 
     def __attest_validate(self, json_update):
+        # Attest validate needs to be determined how we do it
         json_object = json_update
         json_object["event"] = "validating device"
         json_object["message"] = "Device validation in process"
@@ -35,15 +33,19 @@ class Manager(IoTElement):
 
         if msg.topic == "management" and json_object["hostname"] == "iotpi012":
             print("iotpi12 functionality")
+            # Here comes the specific functions for validation and all other necessary things like reset etc.
 
         if msg.topic == "management" and json_object["hostname"] == "iotpi014":
             print("iotpi14 functionality")
+            # Here comes the specific functions for validation and all other necessary things like reset etc.
 
         if msg.topic == "management" and json_object["hostname"] == "iotpi015":
             print("iotpi15 functionality")
+            # Here comes the specific functions for validation and all other necessary things like reset etc.
 
         if msg.topic == "management" and json_object["hostname"] == "iotpi016":
             print("iotpi16 functionality")
+            # Here comes the specific functions for validation and all other necessary things like reset etc.
 
     def __get_time_stamp(self):
         now = datetime.now()
@@ -53,5 +55,6 @@ class Manager(IoTElement):
     def run(self):
         print("manager run")
 
-    def publish_datat(self, json_update):
-        self.client.publish("management", "astddfsa")
+    def __publish_datat(self, json_update):
+        # Publish called when necessary
+        self.client.publish("management", json_update)
