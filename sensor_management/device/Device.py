@@ -1,6 +1,7 @@
 from .IoTElement import IoTElement
 import json
 import time
+import datetime
 
 
 class Device(IoTElement):
@@ -9,8 +10,13 @@ class Device(IoTElement):
 
         self.device_config = self.read_config_file("device_config.json")
         self.itemid = self.device_config["itemid"]
-        self.hostname = self.device_config["hostname"]
-        self.address = self.device_config["address"]
+        self.hostname = self.device_config["device"]["hostname"]
+        self.address = self.device_config["device"]["address"]
+
+        self.message["device"]["itemid"] = self.itemid
+        self.message["device"]["hostname"] = self.hostname
+        self.message["device"]["address"] = self.address
+
 
         self.startup()
 
@@ -25,12 +31,20 @@ class Device(IoTElement):
             self.client.disconnect()
 
     def startup(self):
+        self.message["device"]["starttimestamp"] = self.__get_time_stamp()
+        self.message["event"] = "device startup"
+        self.message["message"] = f"hello world. i'm {self.hostname}"
+
         self.client.subscribe("management")
         self.client.on_message = self.on_message
         self.client.loop_start()
-        self.client.publish('management', json.dumps({"itemid": self.itemid, "address": self.address,
-                            "hostname": self.hostname, "event": "startup", 'message': "Hello world", "timestamp": time.localtime()}))
+        self.client.publish('management', json.dumps(self.message))
 
     def on_message(self, client, nonetype, msg):
         print(
             f"Received message with topic: '{msg.topic}' and message: '{msg.payload.decode()}'")
+
+    def __get_time_stamp(self):
+        now = datetime.now()
+        date_time = now.strftime("%d.%m.%Y, %H:%M:%S")
+        return date_time
