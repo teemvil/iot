@@ -120,8 +120,9 @@ const addElement = async (data) => {
     let count =0
     for (let d = 0; d < sensors.length; d++){ 
       if (sensors[d].hostname === devices[i].hostname){
-        count++
+        
         if (sensors[d].sensor != ""){
+          count++
           if (count === 1){
             noode = document.createTextNode("Sensor(s) running: " + sensors[d].sensor)
             elleem.appendChild(noode)
