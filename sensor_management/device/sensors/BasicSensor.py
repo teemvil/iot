@@ -1,7 +1,6 @@
-from device.IoTElement import IoTElement
+from IoTElement import IoTElement
+from datetime import datetime
 import json
-import threading
-import random
 
 
 class BasicSensor(IoTElement):
@@ -11,13 +10,28 @@ class BasicSensor(IoTElement):
         self.sensor_name = n
         self.config["sensor"]["name"] = self.sensor_name
         self.config["event"] = "Sensor starting"
-        self.config["message"] = f"Sensor {self.sensor_name} started on {self.config['hostname']}"
+        self.config["message"] = "Sensor " + self.sensor_name + \
+            " started on "+self.config["hostname"]
+        self.config["sensor"]["timestamp"] = self.__get_time_stamp()
+        self.config["timestamp"] = self.__get_time_stamp()
         self.client.publish("management", json.dumps(self.config))
-        self.attest()
+        self.__attest_validate(self.config)
 
-    def publish_data(self, data):
-        topic = "data/"+self.config["hostname"]+"/sensor/"+self.sensor_name
+    def publish_data(self, data, topic_end):
+        topic = "data/"+self.config["hostname"]+"/sensor/"+topic_end
         self.client.publish(topic, payload=data)
 
-    def attest(self):
-        self.client.publish('management/verify', json.dumps(self.config))
+    def __attest_validate(self, json_update):
+        json_object = json_update
+        # Needs to specify the event type
+        json_object["event"] = "validateSensor"
+        json_object["message"] = "Sensor validation request"
+        json_object["timestamp"] = self.__get_time_stamp()
+        print(json_object)
+        # Publish to manager for validation
+        self.client.publish(f"management", json.dumps(json_object))
+
+    def __get_time_stamp(self):
+        now = datetime.now()
+        date_time = now.strftime("%d.%m.%Y, %H:%M:%S")
+        return date_time

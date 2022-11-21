@@ -4,44 +4,43 @@ import os
 from datetime import datetime
 from pathlib import Path
 
-data_folder = Path("/etc/iotDevice/")
-file_to_open = data_folder / "data_packet.json"
+data_folder = Path("/etc/iotDevice/")  # Location needs to be declared
 
-json_file = {
-    "itemid": "",
-    "hostname": "",
-    "ip": "",
-    "message": "",
-    "event": "",
-    "device": {
-        "valid": False,
-        "timestamp": ""
-    },
-    "sensor": {
-        "name": "",
-        "timestamp": ""
-    },
-    "timestamp": "",
-    "client": {
-        "host": "192.168.11.79",
+
+def create_device_json():
+    # Structure of the device.json
+    json_file = {
+        "itemid": "",
+        "hostname": socket.gethostname(),
+        "event": "",
+        "message": "",
+        "timestamp": "",
+        "address": get_ip_address(),
+        "device": {
+            "valid": False,
+            "timestamp": ""
+        },
+        "sensor": {
+            "name": "",
+            "timestamp": "",
+            "valid": False,
+            "validtimestamp": ""
+        }
+    }
+
+    file_name = "device.json"
+    save_to_device(file_name, json_file)
+
+
+def create_client_json():
+    # Structure of the config.json
+    client_file = {
+        "host": "192.168.0.24",
         "port": 1883,
         "keepalive": 60
     }
-
-}
-
-
-def create_json():
-    json_file["hostname"] = socket.gethostname()
-    json_file["ip"] = get_ip_address()
-
-    now = datetime.now()
-    date_time = now.strftime("%d.%m.%Y, %H:%M:%S")
-
-    #print("date and time:",date_time)
-
-    #json_file["timestamp"]= date_time
-    save_to_device()
+    file_name = "config.json"
+    save_to_device(file_name, client_file)
 
 
 def get_ip_address():
@@ -53,32 +52,31 @@ def get_ip_address():
     return ip_address
 
 
-def save_to_device():
-    json_object = json.dumps(json_file, indent=4)
+def save_to_device(write_to_file, file_to_be_written):
+    json_object = json.dumps(file_to_be_written, indent=4)
     if os.path.isdir(data_folder) == False:
         os.mkdir(data_folder)
         print("Directory created")
-        file_to_write = data_folder / "data_packet.json"
+        file_to_write = data_folder / write_to_file
         with open(file_to_write, "w") as outfile:
             outfile.write(json_object)
     else:
         print("The directory exist")
-        file_to_write = data_folder / "data_packet.json"
+        file_to_write = data_folder / write_to_file
         with open(file_to_write, "w") as outfile:
             outfile.write(json_object)
 
-
 # For testing purposes to check for the file existence
-"""
-def open_json():
-    with open(file_to_open, 'r') as openfile:    
-        json_object = json.load(openfile)    
-        #print(json_object)
-        #print(type(json_object))
-    return json_object
-"""
-create_json()
-print(json_file)
-print(json_file["device"]["valid"])
-print(json_file["client"]["host"])
 
+
+def open_json(file_to_open):
+    with open(data_folder / file_to_open, 'r') as openfile:
+        json_object = json.load(openfile)
+        print(json_object)
+    return json_object
+
+
+create_device_json()
+create_client_json()
+open_json("device.json")
+open_json("config.json")

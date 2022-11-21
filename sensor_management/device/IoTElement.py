@@ -1,23 +1,25 @@
 import paho.mqtt.client as mqtt
 import json
-import os
 
 
 class IoTElement:
 
     def __init__(self):
         self.client = mqtt.Client()
-        self.config = self.read_config("config.json")
-        self.ip = self.config["client"]["host"]
-        self.port = self.config["client"]["port"]
-        self.client.connect(self.ip, self.port, 60)
+        self.config = self.__read_data()
+        self.client_config = self.__read_config()
+        self.ip = self.client_config["host"]
+        self.port = self.client_config["port"]
+        self.keepalive = self.client_config["keepalive"]
+        self.client.connect(self.ip, self.port, self.keepalive)
 
-    def read_config(self, filename):
-        here = os.path.dirname(os.path.abspath(__file__))
-        file_name = os.path.join(here, filename)
+    def __read_config(self):
+        with open('/etc/iotDevice/config.json', 'r') as f:
+            return json.loads(f.read())
 
-        with open(file_name, 'r') as f:
-            return json.load(f)
+    def __read_data(self):
+        with open('/etc/iotDevice/device.json', 'r') as f:
+            return json.loads(f.read())
 
     def run(self):
         print("IoTElement RUN")
