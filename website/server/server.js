@@ -75,34 +75,31 @@ client.on("message", function (topic, message) {
   console.log(message.toString(), topic);
   let m = JSON.parse(message);
   let s;
-  if (!devices.find((item) => item.hostname === m.hostname)) {
+  if (!devices.find((item) => item.device.hostname === m.device.hostname)) {
     try{
-    let x = {
-      itemid: m.itemid,
-      hostname: m.hostname,
-      ip: m.ip,
-      message: m.message,
-      event: m.event,
-      device: {
-        valid: m.device.valid,
-        timestamp: m.device.timestamp,
-      },
-      sensor: {
-        name: m.sensor.name,
-        timestamp: m.sensor.timestamp,
-      },
-      timestamp: m.timestamp,
-      client: {
-        host: "192.168.11.79",
-        port: 1883,
-        keepalive: 60,
-      },
-      valdate: "",
-    };
-    if (m.event === "validation ok") {
-      console.log("eka iffi");
-      x.valdate = m.timestamp;
-    }
+    let x = {    
+        event: m.event,
+        message: m.message,
+        messagetimestamp: m.messagetimestamp,
+        device: {
+            itemid: m.device.itemid,
+            hostname: m.device.hostname,
+            address: m.device.address,
+            starttimestamp: m.device.starttimestamp,
+            valid: m.device.valid,
+            validtimestamp: m.device.validtimestamp
+        },
+        sensor: {
+            name: m.sensor.name,
+            starttimestamp: m.sensor.starttimestamp,
+            valid: m.sensor.valid,
+            validtimestamp: m.sensor.validtimestamp
+        }
+      };
+    //if (m.event === "validation ok") {
+    //  console.log("eka iffi");
+    //  x.valdate = m.timestamp;
+    //}
 
     devices.push(x);
     s = devices[devices.length];
@@ -111,25 +108,25 @@ client.on("message", function (topic, message) {
     console.log("Something went wrog with putting data into array")
   }
   }
-  let k = devices.find((item) => item.hostname === m.hostname);
-  if (devices.find((item) => item.hostname === m.hostname)) {
+  let k = devices.find((item) => item.device.hostname === m.device.hostname);
+  if (devices.find((item) => item.device.hostname === m.device.hostname)) {
     //s = devices[devices.length]
     s = devices.indexOf(k);
     devices[s].device.valid = m.device.valid;
-    if (m.event === "validation ok") {
+    if (m.event === "device validation ok") {
       console.log("toka iffi");
       console.log(m.timestamp);
       devices[s].device.valid = m.device.valid;
       console.log(m.device.valid);
-      devices[s].valdate = m.timestamp;
-      console.log(devices[s].valdate);
+      devices[s].device.validtimestamp = m.messagetimestamp;
+      console.log(devices[s].device.validtimestamp);
     }
   }
 
   wsServer.clients.forEach(function (item) {
     // client.send("topic="+topic+"message="+message)
     console.log(topic, "message:", m);
-    console.log(s.toString());
+    //console.log(s.toString());
 
     // let iitemmm =`"god":
     //               {
@@ -146,7 +143,7 @@ client.on("message", function (topic, message) {
     //                   "${JSON.stringify(...devices)}"
 
     //                 }`
-    let iitemmm = `{"god": {"data": { "hostname": "${m.hostname}", "timestamp": "${m.timestamp}", "sensor": "${m.sensor.name}", "message": "${m.message}", "deviceObject": "${devices[s].hostname}", "valid": "${devices[s].device.valid}"}, "valdate": "${devices[s].valdate}"}}`;
+    let iitemmm = `{"god": {"data": { "hostname": "${m.device.hostname}", "timestamp": "${m.messagetimestamp}", "sensor": "${m.sensor.name}", "message": "${m.message}", "deviceObject": "${devices[s].device.hostname}", "valid": "${devices[s].device.valid}"}, "valdate": "${devices[s].device.validtimestamp}"}}`;
 
     console.log(iitemmm);
 
