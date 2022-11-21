@@ -1,5 +1,6 @@
 from IoTElement import IoTElement
 from datetime import datetime
+import controller.attest as att
 import json
 import threading
 
@@ -43,6 +44,8 @@ class Manager(IoTElement):
 
         if json_object["hostname"] == "iotpi016":
             print("iotpi16 functionality")
+            obj = att.check_validity(json_object)
+            print(obj)
             # Here comes the specific functions for validation and all other necessary things like reset etc.
 
     def __get_time_stamp(self):
