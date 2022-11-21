@@ -1,9 +1,14 @@
-from device.sensors.BasicSensor import BasicSensor
+from BasicSensor import BasicSensor
+from pathlib import Path
+import json
 import time
+# Import your sensor dependencies
 import board
 import busio
 import adafruit_vl53l0x
-import json
+
+# Path must be declared correctly on each device
+data_folder = Path("/home/metropolia/rangetest/")
 
 
 class ToFSensor(BasicSensor):
@@ -12,16 +17,20 @@ class ToFSensor(BasicSensor):
     vl53 = adafruit_vl53l0x.VL53L0X(i2c)
     vl53.measurement_timing_budget = 33000
 
-    def __init__(self, f, n) -> None:
-        super().__init__(n)
-        self.frequency = f
+    def __init__(self) -> None:
+        # Fetching name, frequency and topic ending from sensor_config.json
+        super().__init__()
 
-    def measure_stuff(self):       
+        
+
+    def measure_stuff(self):
+        # Write your code here inside a while-loop etc.
         with self.vl53.continuous_mode():
             while True:
                 if (self.vl53.data_ready):
                     time.sleep(self.frequency)
                     if (self.vl53.range < 1000):
-                        self.publish_data(self.vl53.range)
-    
+                        # This method publishes the data to the UI
+                        self.publish_data(self.vl53.range, self.topic_end)
+
 

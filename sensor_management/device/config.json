@@ -14,7 +14,7 @@
   },
   "timestamp": "",
   "client": {
-    "host": "192.168.11.79",
+    "host": "192.168.0.24",
     "port": 1883,
     "keepalive": 60
   }
