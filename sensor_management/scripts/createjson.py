@@ -15,7 +15,7 @@ def create_device_config():
         "address": get_ip_address(),
     }
 
-    file_name = "device.json"
+    file_name = "device_config.json"
     save_to_device(file_name, json_file)
 
 
@@ -27,7 +27,7 @@ def create_client_config():
         "keepalive": 60
     }
 
-    file_name = "config.json"
+    file_name = "client_config.json"
     save_to_device(file_name, client_file)
 
 

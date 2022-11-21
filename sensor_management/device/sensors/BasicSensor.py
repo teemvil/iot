@@ -1,14 +1,16 @@
-from IoTElement import IoTElement
+from device.IoTElement import IoTElement
 from datetime import datetime
 import json
+import pathlib
 
 
 class BasicSensor(IoTElement):
 
     def __init__(self):
         super().__init__()
+        path = pathlib.Path(__file__).resolve().parent
         self.sensor_config = self.read_config_file(
-            f"{__path__}/sensor_config.json")
+            f"{path}/sensor_config.json")
         self.sensor_name = self.sensor_config["name"]
         self.frequency = self.sensor_config["frequency"]
         self.topic_end = self.sensor_config["topic_end"]
@@ -16,7 +18,7 @@ class BasicSensor(IoTElement):
         self.message["sensor"]["name"] = self.sensor_name
         self.message["event"] = "Sensor starting"
         self.message["message"] = "Sensor " + self.sensor_name + \
-            " started on "+self.message["hostname"]
+            " started on "+self.message["device"]["hostname"]
         self.message["sensor"]["timestamp"] = self.__get_time_stamp()
         self.message["timestamp"] = self.__get_time_stamp()
         self.client.publish("management", json.dumps(self.message))

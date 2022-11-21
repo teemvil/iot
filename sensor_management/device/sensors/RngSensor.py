@@ -4,8 +4,8 @@ import random
 import time
 
 class RngSensor(BasicSensor):
-    def __init__(self, n):
-        super().__init__(n)
+    def __init__(self):
+        super().__init__()
 
     def run(self):
         while True:
