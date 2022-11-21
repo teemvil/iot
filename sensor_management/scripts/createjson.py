@@ -7,38 +7,26 @@ from pathlib import Path
 data_folder = Path("/etc/iotDevice/")  # Location needs to be declared
 
 
-def create_device_json():
+def create_device_config():
     # Structure of the device.json
     json_file = {
         "itemid": "",
         "hostname": socket.gethostname(),
-        "event": "",
-        "message": "",
-        "timestamp": "",
         "address": get_ip_address(),
-        "device": {
-            "valid": False,
-            "timestamp": ""
-        },
-        "sensor": {
-            "name": "",
-            "timestamp": "",
-            "valid": False,
-            "validtimestamp": ""
-        }
     }
 
     file_name = "device.json"
     save_to_device(file_name, json_file)
 
 
-def create_client_json():
+def create_client_config():
     # Structure of the config.json
     client_file = {
         "host": "192.168.0.24",
         "port": 1883,
         "keepalive": 60
     }
+
     file_name = "config.json"
     save_to_device(file_name, client_file)
 
@@ -61,7 +49,7 @@ def save_to_device(write_to_file, file_to_be_written):
         with open(file_to_write, "w") as outfile:
             outfile.write(json_object)
     else:
-        print("The directory exist")
+        print("The directory exists")
         file_to_write = data_folder / write_to_file
         with open(file_to_write, "w") as outfile:
             outfile.write(json_object)
@@ -76,7 +64,6 @@ def open_json(file_to_open):
     return json_object
 
 
-create_device_json()
-create_client_json()
-open_json("device.json")
-open_json("config.json")
+if __name__ == "__main__":
+    create_device_config()
+    create_client_config()

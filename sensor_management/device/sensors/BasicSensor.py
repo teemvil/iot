@@ -5,20 +5,25 @@ import json
 
 class BasicSensor(IoTElement):
 
-    def __init__(self, n):
+    def __init__(self):
         super().__init__()
-        self.sensor_name = n
-        self.config["sensor"]["name"] = self.sensor_name
-        self.config["event"] = "Sensor starting"
-        self.config["message"] = "Sensor " + self.sensor_name + \
-            " started on "+self.config["hostname"]
-        self.config["sensor"]["timestamp"] = self.__get_time_stamp()
-        self.config["timestamp"] = self.__get_time_stamp()
-        self.client.publish("management", json.dumps(self.config))
-        self.__attest_validate(self.config)
+        self.sensor_config = self.read_config_file(
+            f"{__path__}/sensor_config.json")
+        self.sensor_name = self.sensor_config["name"]
+        self.frequency = self.sensor_config["frequency"]
+        self.topic_end = self.sensor_config["topic_end"]
+
+        self.message["sensor"]["name"] = self.sensor_name
+        self.message["event"] = "Sensor starting"
+        self.message["message"] = "Sensor " + self.sensor_name + \
+            " started on "+self.message["hostname"]
+        self.message["sensor"]["timestamp"] = self.__get_time_stamp()
+        self.message["timestamp"] = self.__get_time_stamp()
+        self.client.publish("management", json.dumps(self.message))
+        self.__attest_validate(self.message)
 
     def publish_data(self, data, topic_end):
-        topic = "data/"+self.config["hostname"]+"/sensor/"+topic_end
+        topic = "data/"+self.message["hostname"]+"/sensor/"+topic_end
         self.client.publish(topic, payload=data)
 
     def __attest_validate(self, json_update):

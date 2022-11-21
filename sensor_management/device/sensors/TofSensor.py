@@ -19,11 +19,9 @@ class ToFSensor(BasicSensor):
 
     def __init__(self) -> None:
         # Fetching name, frequency and topic ending from sensor_config.json
-        json_object = self.open_json()
-        self.name = json_object["name"]
-        self.frequency = json_object["frequency"]
-        self.topic_end = json_object["topic_end"]
-        super().__init__(self.name)
+        super().__init__()
+
+        
 
     def measure_stuff(self):
         # Write your code here inside a while-loop etc.
@@ -35,7 +33,4 @@ class ToFSensor(BasicSensor):
                         # This method publishes the data to the UI
                         self.publish_data(self.vl53.range, self.topic_end)
 
-    def open_json(self):
-        with open(data_folder / "sensor_config.json", 'r') as openfile:
-            json_object = json.load(openfile)
-        return json_object
+

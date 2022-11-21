@@ -1,5 +1,5 @@
 {
     "name": "Time of Flight",
     "frequency" : 1,
-    "topic_end" : "tof"
+    "data_topic_end" : "tof"
 }

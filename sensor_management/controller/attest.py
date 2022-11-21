@@ -204,10 +204,10 @@ def check_validity(payload: dict):
     payload.update({"message": "validation successful"})
     payload["timestamp"] = datetime.now().strftime("%d.%m.%Y, %H:%M:%S")
 
-
     print(payload)
 
-    client.publish(MQTT_TOPIC, json.dumps(payload))
+    # client.publish(MQTT_TOPIC, json.dumps(payload))
+    return payload
 
 
 def run():
@@ -229,5 +229,3 @@ def run():
     client.loop_forever()
 
 
-if __name__ == '__main__':
-    run()
