@@ -1,4 +1,4 @@
-from BasicSensor import BasicSensor
+from device.sensors.BasicSensor import BasicSensor
 from pathlib import Path
 import json
 import time
