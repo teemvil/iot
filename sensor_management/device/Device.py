@@ -25,6 +25,7 @@ class Device(IoTElement):
                 #self.client.publish("management", json.dumps({'message': 'doing stuff'}))
                 print("doing stuff")
                 time.sleep(1)
+        # TODO: Specify an exception class to catch or reraise the exception...
         except:
             print("Exception during while loop, exiting...")
             self.client.loop_stop()
