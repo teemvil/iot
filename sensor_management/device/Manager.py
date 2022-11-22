@@ -1,4 +1,4 @@
-from IoTElement import IoTElement
+from device.IoTElement import IoTElement
 from datetime import datetime
 import controller.attest as att
 import json

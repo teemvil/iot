@@ -42,4 +42,4 @@ class IoTElement:
             with open(path, 'r') as f:
                 return json.loads(f.read())
         except:
-        print("file opening not succesfull")
+            print("file opening not succesfull")
