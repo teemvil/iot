@@ -18,7 +18,7 @@ class Manager(IoTElement):
 
     def __on_connect(self, client, userdata, flags, rc):
         print("devmanager connected with result code " + str(rc))
-        json_object = self.config
+        json_object = self.message
         json_object["message"] = "Sensor manager running"
         json_object["event"] = "starting sensor manager"
         json_object["timestamp"] = self.__get_time_stamp()
@@ -30,19 +30,19 @@ class Manager(IoTElement):
         json_object = json.loads(decoded_message)
         # print(json_object)
 
-        if json_object["hostname"] == "iotpi012":
+        if json_object["device"]["hostname"] == "iotpi012":
             print("iotpi12 functionality")
             # Here comes the specific functions for validation and all other necessary things like reset etc.
 
-        if json_object["hostname"] == "iotpi014":
+        if json_object["device"]["hostname"] == "iotpi014":
             print("iotpi14 functionality")
             # Here comes the specific functions for validation and all other necessary things like reset etc.
 
-        if json_object["hostname"] == "iotpi015":
+        if json_object["device"]["hostname"] == "iotpi015":
             print("iotpi15 functionality")
             # Here comes the specific functions for validation and all other necessary things like reset etc.
 
-        if json_object["hostname"] == "iotpi016":
+        if json_object["device"]["hostname"] == "iotpi016":
             print("iotpi16 functionality")
             obj = att.check_validity(json_object)
             print(obj)
@@ -55,7 +55,7 @@ class Manager(IoTElement):
 
     def on_message(self, client, userdata, msg):
         x = threading.Thread(
-            target=self.handle_management_message, args=(msg.payload, msg.topic))
+            target=self.handle_management_message(client, userdata, msg))
         x.start()
 
     def run(self):
