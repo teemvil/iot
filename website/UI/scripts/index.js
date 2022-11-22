@@ -206,73 +206,70 @@ const hideViewButton = async () => {
 hideButton.addEventListener("click", hideViewButton);
 logViewerHideButton.addEventListener("click", hideViewButton);
 
+const filterfunc = (checkValue, searchValue) => {
+  const { value } = checkValue;
+  switch (value.toLowerCase()) {
+    case "sensor":
+      console.log("sensor");
+      return history.filter((node) => {
+        let lowercasedNodeSensor = node.sensor.toLowerCase();
+        return lowercasedNodeSensor.includes(searchValue.toLowerCase());
+      });
+    case "hostname":
+      console.log("hostname");
+      return history.filter((node) => {
+        let lowercasedNodeHostname = node.hostname.toLowerCase();
+        return lowercasedNodeHostname.includes(searchValue.toLowerCase());
+      });
+    case "message":
+      console.log("message");
+      return history.filter((node) => {
+        let lowercasedNodeMessage = node.message.toLowerCase();
+        return lowercasedNodeMessage.includes(searchValue.toLowerCase());
+      });
+    case "timestamp":
+      console.log("timestamp");
+      return history.filter((node) => {
+        let lowercasedNodeTimestamp = node.timestamp.toLowerCase();
+        return lowercasedNodeTimestamp.includes(searchValue.toLowerCase());
+      });
+    default:
+      console.log("default case");
+      return history;
+  }
+};
+
 const search = document.getElementById("log-viewer-search");
 
-search.addEventListener("keypress", async (event) => {
-  const { code } = event;
-  if (code === "Enter") {
-    let test = [];
-    let tempval = search.value.toLowerCase();
-
-    if (tempval.includes("sensor")) {
-      test = history.filter((node) => {
-        console.log("filter node = ", node, " search value = ", search.value);
-        return node.sensor.includes(tempval.split(":")[1]);
-      });
-    } else if (tempval.includes("hostname")) {
-      test = history.filter((node) => {
-        console.log("filter node = ", node, " search value = ", search.value);
-        return node.hostname.includes(tempval.split(":")[1]);
-      });
-    } else if (tempval.includes("message")) {
-      test = history.filter((node) => {
-        console.log("filter node = ", node, " search value = ", search.value);
-        return node.message.includes(tempval.split(":")[1]);
-      });
-    } else if (tempval.includes("timestamp")) {
-      test = history.filter((node) => {
-        console.log("filter node = ", node, " search value = ", search.value);
-        return node.timestamp.includes(tempval.split(":")[1]);
-      });
-    } else {
-      test = history;
+search.addEventListener("input", async (event) => {
+  let test = [];
+  let radio = document.getElementsByName("filter");
+  let foundChecked;
+  radio.forEach((item) => {
+    if (item.checked) {
+      foundChecked = item;
     }
-    const ultdiv = document.createElement("div");
-    while (logElement.childElementCount) {
-      console.log("logElement");
-      logElement.removeChild(logElement.lastChild);
-    }
-    test.forEach((item) => {
-      const cont = document.createElement("p");
-      cont.innerText = `Hostname: ${item.hostname}, Sensor: ${item.sensor}, Message: ${item.message}, Timestamp: ${item.timestamp}`;
-      ultdiv.appendChild(cont);
-      logElement.prepend(ultdiv);
-    });
-    console.log(" ", test);
+  });
+  try {
+    test = filterfunc(foundChecked, search.value);
+    console.log("test = ", test);
+  } catch (error) {
+    test = history;
+    console.log("incorrect format");
   }
-  if (code === "KeyP") {
-    const sorted = history.sort((a, b) => {
-      let d1 = new Date(a.timestamp);
-      let d2 = new Date(b.timestamp);
 
-      console.log(d1, " and ", d2);
-      if (a.timestamp) return a.timestamp - b.timestamp;
-    });
-
-    const ultdiv = document.createElement("div");
-    while (logElement.childElementCount) {
-      console.log("logElement");
-      logElement.removeChild(logElement.lastChild);
-    }
-    sorted.forEach((item) => {
-      const cont = document.createElement("p");
-      cont.innerText = `Hostname: ${item.hostname}, Sensor: ${item.sensor}, Message: ${item.message}, Timestamp: ${item.timestamp}`;
-      ultdiv.appendChild(cont);
-      logElement.prepend(ultdiv);
-    });
-
-    console.log("history = ", history);
+  const ultdiv = document.createElement("div");
+  while (logElement.childElementCount) {
+    console.log("logElement");
+    logElement.removeChild(logElement.lastChild);
   }
+  test.forEach((item) => {
+    const cont = document.createElement("p");
+    cont.innerText = `Hostname: ${item.hostname}, Sensor: ${item.sensor}, Message: ${item.message}, Timestamp: ${item.timestamp}`;
+    ultdiv.appendChild(cont);
+    logElement.prepend(ultdiv);
+  });
+  console.log(" ", test);
 });
 
 const logViewerSortButton = document.getElementById("log-viewer-sort-button");
