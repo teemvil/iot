@@ -10,7 +10,7 @@ class TempHumSensor(BasicSensor):
 	tsl = adafruit_si7021.SI7021(board.I2C())
 	
 	def __init__(self) -> None:
-		super.__init__()
+		super().__init__()
 		
 	def measure_stuff(self):
 		while True:
@@ -22,4 +22,4 @@ class TempHumSensor(BasicSensor):
 			self.publish_data(self.tsl.temperature, "temp")
 			self.publish_data(self.tsl.relative_humidity, "hum")
       
-      time.sleep(self.frequency)
+      			time.sleep(self.frequency)
