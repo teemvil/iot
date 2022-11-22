@@ -25,7 +25,7 @@ class BasicSensor(IoTElement):
         self.__attest_validate(self.message)
 
     def publish_data(self, data, topic_end):
-        topic = "data/"+self.message["hostname"]+"/sensor/"+data_topic_end
+        topic = "data/"+self.message["hostname"]+"/sensor/"+topic_end
         self.client.publish(topic, payload=data)
 
     def __attest_validate(self, json_update):
