@@ -11,11 +11,10 @@ class IoTElement:
         self.client_config = self.read_config_file(
             '/etc/iotDevice/client_config.json')
 
-        self.ip = self.client_config["host"]
-        self.port = self.client_config["port"]
-        self.keepalive = self.client_config["keepalive"]
-        self.client.connect(self.ip, self.port, self.keepalive)
+        self.connect_to_mqtt_client()
 
+        # This is just a a structure for the payload sent from different
+        # parts of the program.
         self.message = {
             "event": "",
             "message": "",
@@ -33,13 +32,22 @@ class IoTElement:
                 "starttimestamp": "",
                 "valid": False,
                 "validtimestamp": ""
-
             }
         }
+
+    def connect_to_mqtt_client(self):
+        try:
+            self.client.connect(
+                self.client_config["host"],
+                self.client_config["port"],
+                self.client_config["keepalive"]
+            )
+        except ValueError:
+            print("Cannot connect to MQTT broker.")
 
     def read_config_file(self, path):
         try:
             with open(path, 'r') as f:
                 return json.loads(f.read())
-        except:
+        except IOError:
             print("file opening not succesfull")
