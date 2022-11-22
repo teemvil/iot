@@ -31,6 +31,6 @@ class ToFSensor(BasicSensor):
                     time.sleep(self.frequency)
                     if (self.vl53.range < 1000):
                         # This method publishes the data to the UI
-                        self.publish_data(self.vl53.range, self.topic_end)
+                        self.publish_data(self.vl53.range, self.data_topic_end)
 
 
