@@ -22,7 +22,7 @@ class IoTElement:
             "messagetimestamp": "",
             "device": {
                 "itemid": "",
-                "hostname": "",
+                "hostname": self.device_config["hostname"],
                 "address": "",
                 "starttimestamp": "",
                 "valid": False,
