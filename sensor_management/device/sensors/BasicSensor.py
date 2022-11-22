@@ -13,7 +13,7 @@ class BasicSensor(IoTElement):
             f"{path}/sensor_config.json")
         self.sensor_name = self.sensor_config["name"]
         self.frequency = self.sensor_config["frequency"]
-        self.topic_end = self.sensor_config["topic_end"]
+        self.data_topic_end = self.sensor_config["data_topic_end"]
 
         self.message["sensor"]["name"] = self.sensor_name
         self.message["event"] = "Sensor starting"
@@ -25,7 +25,7 @@ class BasicSensor(IoTElement):
         self.__attest_validate(self.message)
 
     def publish_data(self, data, topic_end):
-        topic = "data/"+self.message["hostname"]+"/sensor/"+topic_end
+        topic = "data/"+self.message["device"]["hostname"]+"/sensor/"+topic_end
         self.client.publish(topic, payload=data)
 
     def __attest_validate(self, json_update):

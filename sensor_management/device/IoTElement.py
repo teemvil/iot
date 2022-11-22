@@ -21,9 +21,9 @@ class IoTElement:
             "message": "",
             "messagetimestamp": "",
             "device": {
-                "itemid": "",
+                "itemid": self.device_config["itemid"],
                 "hostname": self.device_config["hostname"],
-                "address": "",
+                "address": self.device_config["address"],
                 "starttimestamp": "",
                 "valid": False,
                 "validtimestamp": ""
@@ -38,5 +38,8 @@ class IoTElement:
         }
 
     def read_config_file(self, path):
-        with open(path, 'r') as f:
-            return json.loads(f.read())
+        try:
+            with open(path, 'r') as f:
+                return json.loads(f.read())
+        except:
+        print("file opening not succesfull")
