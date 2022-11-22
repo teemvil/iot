@@ -20,7 +20,7 @@ class BasicSensor(IoTElement):
         self.message["message"] = "Sensor " + self.sensor_name + \
             " started on "+self.message["device"]["hostname"]
         self.message["sensor"]["starttimestamp"] = self.__get_time_stamp()
-        self.message["sensortimestamp"] = self.__get_time_stamp()
+        self.message["messagetimestamp"] = self.__get_time_stamp()
         self.client.publish("management", json.dumps(self.message))
         self.__attest_validate(self.message)
 
@@ -33,7 +33,7 @@ class BasicSensor(IoTElement):
         # Needs to specify the event type
         json_object["event"] = "validateSensor"
         json_object["message"] = "Sensor validation request"
-        json_object["timestamp"] = self.__get_time_stamp()
+        json_object["messagetimestamp"] = self.__get_time_stamp()
         print(json_object)
         # Publish to manager for validation
         self.client.publish(f"management", json.dumps(json_object))
