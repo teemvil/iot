@@ -19,8 +19,8 @@ class BasicSensor(IoTElement):
         self.message["event"] = "Sensor starting"
         self.message["message"] = "Sensor " + self.sensor_name + \
             " started on "+self.message["device"]["hostname"]
-        self.message["sensor"]["timestamp"] = self.__get_time_stamp()
-        self.message["timestamp"] = self.__get_time_stamp()
+        self.message["sensor"]["starttimestamp"] = self.__get_time_stamp()
+        self.message["sensortimestamp"] = self.__get_time_stamp()
         self.client.publish("management", json.dumps(self.message))
         self.__attest_validate(self.message)
 
