@@ -4,7 +4,7 @@ Device and client configuration files are stored in the `/etc/iotDevice` directo
 
 Device configuration file is as follows:
 
-```json
+```python
 device_config = {
   "itemid": "",
   "hostname": socket.gethostname(),
@@ -14,7 +14,7 @@ device_config = {
 
 MQTT client configuration is as follows:
 
-```json
+```python
 client_config = {
   "host": "192.168.0.24",
   "port": 1883,
@@ -26,7 +26,7 @@ These two are built using a separate script which still needs some error handlin
 
 Management message payload is created in the IoTElement class and the structure is:
 
-```json
+```python
 message = {
   "event": "",
   "message": "",
