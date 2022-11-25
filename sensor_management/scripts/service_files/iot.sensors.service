@@ -3,7 +3,7 @@ Description=Start sensor
 Requires=iot.devices.service
 
 [Service]
-ExecStart=python3 /opt/iot_management/start_iot_sensor.py
+ExecStart=python3 /opt/Innovationproject2022/IoTLibrary/IotDeviceStartup.py
 Type=simple
 
 [Install]

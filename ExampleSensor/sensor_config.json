@@ -1,0 +1,5 @@
+{
+  "name": "RNGsensor",
+  "frequency": 1,
+  "data_topic_end": "rng"
+}
