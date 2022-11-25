@@ -7,15 +7,14 @@ import paho.mqtt.client as mqtt
 import json
 import math
 
-class IrSensor(BasicSensor):
+class IR_cam(BasicSensor):
     # Sensor specific variables
     i2c = busio.I2C(board.SCL, board.SDA)
     amg = adafruit_amg88xx.AMG88XX(i2c)
 
 
-    def __init__(self, f, n) -> None:
-       super().__init__(n)
-       self.frequency = f
+    def __init__(self) -> None:
+       super().__init__()
 
     def measure_stuff(self):       
          while True:
@@ -23,6 +22,6 @@ class IrSensor(BasicSensor):
             for column in self.amg.pixels:
                 mean = sum(column) / len(self.amg.pixels)
 
-            self.publish_data(math.floor(payload=math.floor(mean)))
+            self.publish_data(round(mean, 2), self.data_topic_end)
             time.sleep(self.frequency)
 
