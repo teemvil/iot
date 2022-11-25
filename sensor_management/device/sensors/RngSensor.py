@@ -1,5 +1,4 @@
 from device.sensors.BasicSensor import BasicSensor
-import json
 import random
 import time
 

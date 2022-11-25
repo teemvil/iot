@@ -2,7 +2,7 @@
 Description=Start IoT device
 
 [Service]
-ExecStart=python3 /usr/local/bin/start_iot_device.py
+ExecStart=python3 /opt/iot/IoTlibrary/IotDeviceStartup.py
 Type=simple
 
 [Install]

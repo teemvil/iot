@@ -3,9 +3,6 @@ import time
 import busio
 import board
 import adafruit_amg88xx
-import paho.mqtt.client as mqtt
-import json
-import math
 
 class IR_cam(BasicSensor):
     # Sensor specific variables
@@ -16,7 +13,7 @@ class IR_cam(BasicSensor):
     def __init__(self) -> None:
        super().__init__()
 
-    def measure_stuff(self):       
+    def run(self):       
          while True:
             mean = 0
             for column in self.amg.pixels:
