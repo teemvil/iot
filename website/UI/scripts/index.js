@@ -274,30 +274,46 @@ search.addEventListener("input", async (event) => {
 
 const logViewerSortButton = document.getElementById("log-viewer-sort-button");
 let asc = true;
-logViewerSortButton.addEventListener("click", () => {
-  console.log("asc ", asc);
-  let sorted = [];
-  if (asc) {
-    sorted = history.sort((a, b) => {
-      if (a.timestamp) return a.timestamp - b.timestamp;
-    });
-    asc = false;
-  } else {
-    sorted = history.sort((a, b) => {
-      if (a.timestamp) return b.timestamp - a.timestamp;
-    });
-    asc = true;
-  }
+// logViewerSortButton.addEventListener("click", () => {
+//   console.log("asc ", asc);
+//   let sorted = [];
+//   if (asc) {
+//     sorted = history.sort((a, b) => {
+//       let reversedA = a.timestamp.split(",")[0].split(".").reverse();
+//       let reversedB = b.timestamp.split(",")[0].split(".").reverse();
+//       let astr =
+//         reversedA.toString().split(",").join("-") +
+//         "T" +
+//         a.timestamp.split(",")[1].replace(" ", "");
+//       // a.timestamp = a.timestamp.split(".").join("-").replace(", ", "T");
+//       // b.timestamp = b.timestamp.split(".").join("-").replace(", ", "T");
+//       console.log(astr);
+//       console.log(
+//         "timestamp",
+//         Date.parse(a.timestamp),
+//         " b = ",
+//         Date.parse(b.timestamp)
+//       );
+//       console.log("a-b = ", a.timestamp - b.timestamp);
+//       if (a.timestamp) return a.timestamp - b.timestamp;
+//     });
+//     asc = false;
+//   } else {
+//     sorted = history.sort((a, b) => {
+//       if (a.timestamp) return b.timestamp - a.timestamp;
+//     });
+//     asc = true;
+//   }
 
-  const ultdiv = document.createElement("div");
-  while (logElement.childElementCount) {
-    console.log("logElement");
-    logElement.removeChild(logElement.lastChild);
-  }
-  sorted.forEach((item) => {
-    const cont = document.createElement("p");
-    cont.innerText = `Hostname: ${item.hostname}, Sensor: ${item.sensor}, Message: ${item.message}, Timestamp: ${item.timestamp}`;
-    ultdiv.appendChild(document.createElement("p").appendChild(cont));
-    logElement.prepend(ultdiv);
-  });
-});
+//   const ultdiv = document.createElement("div");
+//   while (logElement.childElementCount) {
+//     console.log("logElement");
+//     logElement.removeChild(logElement.lastChild);
+//   }
+//   sorted.forEach((item) => {
+//     const cont = document.createElement("p");
+//     cont.innerText = `Hostname: ${item.hostname}, Sensor: ${item.sensor}, Message: ${item.message}, Timestamp: ${item.timestamp}`;
+//     ultdiv.appendChild(document.createElement("p").appendChild(cont));
+//     logElement.prepend(ultdiv);
+//   });
+// });
