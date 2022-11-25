@@ -1,6 +1,5 @@
 from device.sensors.BasicSensor import BasicSensor
 from pathlib import Path
-import json
 import time
 # Import your sensor dependencies
 import board
@@ -23,7 +22,7 @@ class ToFSensor(BasicSensor):
 
         
 
-    def measure_stuff(self):
+    def run(self):
         # Write your code here inside a while-loop etc.
         with self.vl53.continuous_mode():
             while True:

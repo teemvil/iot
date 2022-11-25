@@ -1,0 +1,18 @@
+{
+  "itemid": "",
+  "hostname": "socket.gethostname()",
+  "event": "",
+  "message": "",
+  "timestamp": "",
+  "address": "get_ip_address()",
+  "device": {
+    "valid": false,
+    "timestamp": ""
+  },
+  "sensor": {
+    "name": "",
+    "timestamp": "",
+    "valid": false,
+    "validtimestamp": ""
+  }
+}

@@ -1,8 +1,6 @@
 from device.sensors.BasicSensor import BasicSensor
 import time
-import busio
 import board
-import math
 import adafruit_si7021
 
 class TempHumSensor(BasicSensor):
@@ -12,7 +10,7 @@ class TempHumSensor(BasicSensor):
 	def __init__(self) -> None:
 		super().__init__()
 		
-	def measure_stuff(self):
+	def run(self):
 		while True:
 			print("temperature: " + str(self.tsl.temperature))
 			print("humidity: " + str(self.tsl.relative_humidity))
@@ -21,5 +19,4 @@ class TempHumSensor(BasicSensor):
 			# because the sensor delivers two separate values 
 			self.publish_data(self.tsl.temperature, "temp")
 			self.publish_data(self.tsl.relative_humidity, "hum")
-      
-      			time.sleep(self.frequency)
+			time.sleep(self.frequency)
