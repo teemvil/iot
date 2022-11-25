@@ -1,0 +1,9 @@
+[Unit]
+Description=Start IoT device
+
+[Service]
+ExecStart=python3 /opt/iot_management/start_iot_device.py
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

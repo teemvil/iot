@@ -1,0 +1,21 @@
+{
+  "itemid": "",
+  "hostname": "iotpi014",
+  "ip": "",
+  "message": "",
+  "event": "startup",
+  "device": {
+    "valid": "False",
+    "timestamp": ""
+  },
+  "sensor": {
+    "name": "",
+    "timestamp": ""
+  },
+  "timestamp": "",
+  "client": {
+    "host": "192.168.0.24",
+    "port": 1883,
+    "keepalive": 60
+  }
+}
