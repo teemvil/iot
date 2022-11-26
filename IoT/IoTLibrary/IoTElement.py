@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 import json
+from datetime import datetime
 
 
 class IoTElement:
@@ -51,3 +52,8 @@ class IoTElement:
                 return json.loads(f.read())
         except IOError:
             print("file opening not succesfull")
+
+    def get_time_stamp(self):
+        now = datetime.now()
+        date_time = now.strftime("%d.%m.%Y, %H:%M:%S")
+        return date_time

@@ -1,5 +1,4 @@
 from IoTLibrary.BasicSensor import BasicSensor
-import json
 import random
 import time
 

@@ -2,7 +2,7 @@
 Description=Start IoT device
 
 [Service]
-ExecStart=python3 /opt/iot_management/start_iot_device.py
+ExecStart=python3 /opt/Innovationproject2022/IoT/IotDeviceStartup.py
 Type=simple
 
 [Install]
