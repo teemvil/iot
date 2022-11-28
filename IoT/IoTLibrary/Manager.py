@@ -56,3 +56,8 @@ class Manager(IoTElement):
     def __publish_datat(self, json_update):
         # Publish called when necessary
         self.client.publish("management", json_update)
+
+
+if __name__ == "__main__":
+    m = Manager()
+    m.run()
