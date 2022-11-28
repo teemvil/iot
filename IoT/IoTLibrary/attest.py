@@ -204,7 +204,7 @@ def check_validity(payload: dict):
     payload.update({"itemid": o.get("eid")})
     payload.update({"event": "device validation ok"})
     payload.update({"message": "validation successful"})
-    payload["timestamp"] = datetime.now().strftime("%d.%m.%Y, %H:%M:%S")
+    # payload["timestamp"] = datetime.now().strftime("%d.%m.%Y, %H:%M:%S")
 
     print(payload)
 
