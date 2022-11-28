@@ -6,7 +6,7 @@ import argparse
 class BasicSensor(IoTElement):
 
     def __init__(self, config):
-        super().__init__(config)
+        super().__init__()
 
         self.sensor_config = config
 
