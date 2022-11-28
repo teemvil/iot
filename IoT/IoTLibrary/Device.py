@@ -14,7 +14,7 @@ class Device(IoTElement):
     def startup(self):
         self.message["device"]["starttimestamp"] = self.get_time_stamp()
         self.message["event"] = "device startup"
-        self.message["message"] = f"hello world. i'm {self.hostname}"
+        self.message["message"] = f"hello world. i'm {self.device_config['hostname']}"
 
         self.client.subscribe("management")
         self.client.on_message = self.on_message

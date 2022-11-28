@@ -1,5 +1,6 @@
 from ExampleSensor.RngSensor import RngSensor
 import argparse
+import json
 
 
 def read_config_from_argument():
@@ -8,11 +9,10 @@ def read_config_from_argument():
                           help="Config file to be used.")
 
     args = vars(all_args.parse_args())
-    return args["config"].read()
+    return json.loads(args["config"].read())
 
 
 if __name__ == '__main__':
     config = read_config_from_argument()
-    print(config)
-    x = RngSensor()
+    x = RngSensor(config)
     x.run()
