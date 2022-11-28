@@ -1,18 +1,21 @@
 import json
 import socket
 import os
+import shutil
 from pathlib import Path
+
 
 def create_device_config():
     # Structure of the device_config.json
     device_config = {
-        "itemid": "",
+        "itemid": "CHANGE THIS TO A CORRECT ONE",
         "hostname": socket.gethostname(),
         "address": get_ip_address(),
     }
-    data_folder = Path("/etc/iotDevice/") 
+    data_folder = Path("/etc/iotDevice/")
     file_name = "device_config.json"
     save_to_device(data_folder, file_name, device_config)
+
 
 def create_client_config():
     # Structure of the client_config.json
@@ -21,16 +24,20 @@ def create_client_config():
         "port": 1883,
         "keepalive": 60
     }
-    data_folder = Path("/etc/iotDevice/") 
+    data_folder = Path("/etc/iotDevice/")
     file_name = "client_config.json"
     save_to_device(data_folder, file_name, client_config)
 
-def move_service_files():
-    # Service files moved under systemd
-    Path("/opt/iot/install/service_files/iot.devices.service").rename("/etc/systemd/system/iot.devices.service")
-    print("devices.service creted in systemd")
-    Path("/opt/iot/install/service_files/iot.sensors.service").rename("/etc/systemd/system/iot.sensors.service")
-    print("sensors.service creted in systemd")
+
+def copy_service_files():
+    # Service files copied under systemd
+    source = f"{os.path.dirname(os.path.abspath(__file__))}/service_files/"
+    destination = "/etc/systemd/system/"
+    files = os.listdir(source)
+
+    for f in files:
+        shutil.copy(source+f, destination)
+
 
 def get_ip_address():
     ip_address = ''
@@ -39,6 +46,7 @@ def get_ip_address():
     ip_address = s.getsockname()[0]
     s.close()
     return ip_address
+
 
 def save_to_device(data_path, write_to_file, file_to_be_written):
     json_object = json.dumps(file_to_be_written, indent=4)
@@ -56,7 +64,8 @@ def save_to_device(data_path, write_to_file, file_to_be_written):
             outfile.write(json_object)
         print("Config created")
 
+
 if __name__ == "__main__":
-    move_service_files()
+    copy_service_files()
     create_device_config()
     create_client_config()

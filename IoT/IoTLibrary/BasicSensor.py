@@ -12,7 +12,6 @@ class BasicSensor(IoTElement):
 
         self.sensor_name = self.sensor_config["name"]
         self.frequency = self.sensor_config["frequency"]
-        self.data_topic_end = self.sensor_config["data_topic_end"]
 
         self.message["sensor"]["name"] = self.sensor_name
         self.message["event"] = "Sensor starting"
