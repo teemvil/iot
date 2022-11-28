@@ -166,7 +166,7 @@ def check_validity(payload: dict):
     o = create_dict(payload, sid)
 
     if not o:
-        payload.update({"event": "validerror"})
+        payload.update({"event": "device validation failed"})
         # payload.update({"valid": False})
         payload["device"]["valid"] = False
         payload.update({"message": "object creation failed"})
@@ -176,7 +176,7 @@ def check_validity(payload: dict):
     cid = attest(o)
 
     if not cid:
-        payload.update({"event": "validerror"})
+        payload.update({"event": "device validation failed"})
         # payload.update({"valid": False})
         payload["device"]["valid"] = False
         payload.update({"message": "attestation failed"})
@@ -202,7 +202,7 @@ def check_validity(payload: dict):
     # payload.update({"valid": True})
     payload["device"]["valid"] = True
     payload.update({"itemid": o.get("eid")})
-    payload.update({"event": "validation ok"})
+    payload.update({"event": "device validation ok"})
     payload.update({"message": "validation successful"})
     payload["timestamp"] = datetime.now().strftime("%d.%m.%Y, %H:%M:%S")
 
