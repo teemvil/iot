@@ -2,6 +2,7 @@
 Description=Start IoT device
 
 [Service]
+ExecStartPre=/bin/sh -c 'until ping -c1 google.com; do sleep 1; done;'
 ExecStart=python3 /opt/Innovationproject2022/IoT/IotDeviceStartup.py
 Type=simple
 
