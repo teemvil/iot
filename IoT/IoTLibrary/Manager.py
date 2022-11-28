@@ -1,5 +1,4 @@
 from IoTElement import IoTElement
-from datetime import datetime
 import attest as att
 import json
 import threading
