@@ -4,8 +4,8 @@ import json
 
 
 def start():
-    x = RngSensor('rngsensor')
-    x.run()
+    x = RngSensor()
+    x.measure_stuff()
 
 if __name__ == '__main__':
     start()
