@@ -16,9 +16,6 @@ class Device(IoTElement):
         self.message["event"] = "device startup"
         self.message["message"] = f"hello world. i'm {self.device_config['hostname']}"
 
-        self.client.subscribe("management")
-        self.client.on_message = self.on_message
-        self.client.loop_start()
         self.client.publish('management', json.dumps(self.message))
 
     """
