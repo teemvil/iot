@@ -4,7 +4,7 @@ Requires=iot.devices.service
 
 [Service]
 ExecStartPre=/bin/sh -c 'until ping -c1 google.com; do sleep 1; done;'
-ExecStart=python3 /opt/Innovationproject2022/IoT/IotSensorStartup.py
+ExecStart=python3 /opt/iot/IoT/IotSensorStartup.py -f /opt/iot/IoT/ExampleSensor/sensor_config.py
 Type=simple
 
 [Install]
