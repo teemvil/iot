@@ -19,6 +19,6 @@ class IR_cam(BasicSensor):
             for column in self.amg.pixels:
                 mean = sum(column) / len(self.amg.pixels)
 
-            self.publish_data(round(mean, 2), self.data_topic_end)
+            self.publish_data(round(mean, 2), self.prefix)
             time.sleep(self.frequency)
-
+			
