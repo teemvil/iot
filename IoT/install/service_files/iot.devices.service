@@ -1,5 +1,6 @@
 [Unit]
 Description=Start IoT device
+Wants=measure.eltt2.service
 
 [Service]
 ExecStartPre=/bin/sh -c 'until ping -c1 google.com; do sleep 1; done;'
