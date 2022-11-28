@@ -1,9 +1,0 @@
-[Unit]
-Description=Start IoT device
-
-[Service]
-ExecStart=python3 /opt/Innovationproject2022/IoTLibrary/IotDeviceStartup.py
-Type=simple
-
-[Install]
-WantedBy=multi-user.target
