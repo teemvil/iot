@@ -15,6 +15,7 @@ class Device(IoTElement):
         self.message["device"]["starttimestamp"] = self.get_time_stamp()
         self.message["event"] = "device startup"
         self.message["message"] = f"hello world. i'm {self.device_config['hostname']}"
+        self.message["messagetimestamp"] = self.get_time_stamp()
 
         self.client.publish('management', json.dumps(self.message))
 

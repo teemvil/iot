@@ -20,7 +20,7 @@ class BasicSensor(IoTElement):
         self.message["sensor"]["starttimestamp"] = self.get_time_stamp()
         self.message["messagetimestamp"] = self.get_time_stamp()
         self.client.publish("management", json.dumps(self.message))
-        self.attest_validate(self.message)
+        # self.attest_validate(self.message)
 
     def publish_data(self, data, topic_end):
         topic = f"data/{self.sensor_config['prefix']}/sensor/{topic_end}"
