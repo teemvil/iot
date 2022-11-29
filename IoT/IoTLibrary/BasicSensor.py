@@ -5,10 +5,10 @@ import argparse
 
 class BasicSensor(IoTElement):
 
-    def __init__(self, config):
+    def __init__(self):
         super().__init__()
 
-        self.sensor_config = config
+        self.sensor_config = self.read_config_from_argument()
 
         self.sensor_name = self.sensor_config["name"]
         self.frequency = self.sensor_config["frequency"]
@@ -38,3 +38,11 @@ class BasicSensor(IoTElement):
         print(json_object)
         # Publish to manager for validation
         self.client.publish(f"management", json.dumps(json_object))
+
+    def read_config_from_argument(self):
+        all_args = argparse.ArgumentParser()
+        all_args.add_argument("-f", "--config", type=argparse.FileType("r"),  required=True,
+                              help="Config file to be used.")
+
+        args = vars(all_args.parse_args())
+        return json.loads(args["config"].read())
