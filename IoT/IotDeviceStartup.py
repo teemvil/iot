@@ -1,5 +1,4 @@
 from IoTLibrary.Device import Device
-import paho.mqtt.client as mqtt
 
 
 def start():
