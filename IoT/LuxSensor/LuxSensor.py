@@ -16,5 +16,5 @@ class LuxSensor(BasicSensor):
 
     def run(self):
         while True:
-            self.publish_data(round(self.tsl.lux, 1), self.prefix)
+            self.publish_data(round(self.tsl.lux, 1), "lux")
             time.sleep(self.frequency)
