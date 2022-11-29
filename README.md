@@ -12,7 +12,7 @@ The system handles all communication via MQTT messages.
 
     b) Clone the repository using git: `sudo git clone https://github.com/teemvil/iot.git`. This downloads all the necessary library files.
     
-    c) cd to the install folder `cd iot/install` and run the installation script: 
+    c) cd to the install folder `cd iot/IoT/install` and run the installation script: 
     ```
     sudo python3 install.py
     ```
