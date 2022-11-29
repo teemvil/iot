@@ -5,7 +5,7 @@ import board
 import adafruit_amg88xx
 
 
-class IR_cam(BasicSensor):
+class IRSensor(BasicSensor):
     # Sensor specific variables
     i2c = busio.I2C(board.SCL, board.SDA)
     amg = adafruit_amg88xx.AMG88XX(i2c)
