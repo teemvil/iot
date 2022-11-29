@@ -1,18 +1,12 @@
 import paho.mqtt.client as mqtt
-import socket
 import json
 import requests
-import threading
-from datetime import datetime
 
 IP = "192.168.0.24"
 PORT = 8520
 MQTT_BROKER_PORT = 1883
 BASE_URL = f"http://{IP}:{PORT}"
 MQTT_TOPIC = "management"
-
-# client = mqtt.Client()
-# client.connect(IP, MQTT_BROKER_PORT, 60)
 
 
 def open_session() -> str:
@@ -159,28 +153,22 @@ def check_validity(payload: dict):
     payload : dict
         this is currently unused.
     """
-    # These still need to have error handling implemented.
-    # MQTT error messages to be sent.
     sid = open_session()
 
     o = create_dict(payload, sid)
 
     if not o:
         payload.update({"event": "device validation fail"})
-        # payload.update({"valid": False})
         payload["device"]["valid"] = False
         payload.update({"message": "object creation failed"})
-        # client.publish(MQTT_TOPIC, json.dumps(payload))
         return payload
 
     cid = attest(o)
 
     if not cid:
         payload.update({"event": "device validation fail"})
-        # payload.update({"valid": False})
         payload["device"]["valid"] = False
         payload.update({"message": "attestation failed"})
-        # client.publish(MQTT_TOPIC, json.dumps(payload))
         return json.dumps(payload)
 
     rul = ["tpm2rules/TPM2CredentialVerify", {}]
@@ -199,33 +187,9 @@ def check_validity(payload: dict):
 
     close_session(sid)
 
-    # payload.update({"valid": True})
     payload["device"]["valid"] = True
     payload.update({"itemid": o.get("eid")})
     payload.update({"event": "device validation ok"})
     payload.update({"message": "validation successful"})
-    # payload["timestamp"] = datetime.now().strftime("%d.%m.%Y, %H:%M:%S")
 
-    print(payload)
-
-    # client.publish(MQTT_TOPIC, json.dumps(payload))
     return payload
-
-
-def run():
-    """
-    Runs all the things. Set the MQTT client to listen on the management channel.
-    When message is received, start a new thread which does the attestation and
-    verification. 
-    """
-#    def on_connect(client, userdata, flags, rc):
-#        client.subscribe("management/verify")
-#
-#    def on_message(client, userdata, msg):
-#        print(msg.payload)
-#        x = threading.Thread(target=check_validity(json.loads(msg.payload)))
-#        x.start()
-
-    # client.on_message = on_message
-    # client.on_connect = on_connect
-    # client.loop_forever()
