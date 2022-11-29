@@ -1,5 +1,10 @@
 {
-    "name": "Time of Flight",
-    "frequency" : 1,
-    "data_topic_end" : "tof"
+	# the name of the sensor
+	"name": "RNGsensor",
+	
+	# the interval time between sending data values, in seconds
+	"frequency": 1,
+	
+	# sensor indentifying code for the MQTT data channel
+	"prefix": "sensor1" 
 }
