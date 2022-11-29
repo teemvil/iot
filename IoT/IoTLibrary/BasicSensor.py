@@ -1,6 +1,8 @@
 from IoTLibrary.IoTElement import IoTElement
 import json
 import argparse
+import pathlib
+import inspect
 
 
 class BasicSensor(IoTElement):
@@ -8,7 +10,7 @@ class BasicSensor(IoTElement):
     def __init__(self):
         super().__init__()
 
-        self.sensor_config = self.read_config_from_argument()
+        self.sensor_config = self.get_sensor_config()
 
         self.sensor_name = self.sensor_config["name"]
         self.frequency = self.sensor_config["frequency"]
@@ -39,10 +41,21 @@ class BasicSensor(IoTElement):
         # Publish to manager for validation
         self.client.publish(f"management", json.dumps(json_object))
 
-    def read_config_from_argument(self):
+    def get_sensor_config(self):
         all_args = argparse.ArgumentParser()
-        all_args.add_argument("-f", "--config", type=argparse.FileType("r"),  required=True,
+        all_args.add_argument("-f", "--config", type=argparse.FileType("r"),
                               help="Config file to be used.")
 
         args = vars(all_args.parse_args())
+
+        if args["config"] is None:
+            path_to_parent = pathlib.Path(inspect.getfile(
+                self.__class__)).parent.absolute()
+
+            config_path = pathlib.Path(path_to_parent / "sensor_config.json")
+
+            config = self.read_config_file(config_path)
+
+            return config
+
         return json.loads(args["config"].read())
