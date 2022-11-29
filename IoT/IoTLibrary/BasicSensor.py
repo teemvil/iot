@@ -23,7 +23,7 @@ class BasicSensor(IoTElement):
         # self.attest_validate(self.message)
 
     def publish_data(self, data, topic_end):
-        topic = f"data/{self.sensor_config['prefix']}/sensor/{topic_end}"
+        topic = f"{self.sensor_config['prefix']}/{topic_end}"
         self.client.publish(topic, payload=data)
 
     def run(self):
