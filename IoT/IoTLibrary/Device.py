@@ -1,7 +1,5 @@
 from IoTLibrary.IoTElement import IoTElement
 import json
-import time
-import datetime
 
 
 class Device(IoTElement):
