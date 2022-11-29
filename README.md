@@ -10,11 +10,11 @@ The system handles all communication via MQTT messages.
 
 1.  a) Go to the folder /opt/ on the terminal
 
-    b) Clone the repository using git: `git clone https://github.com/teemvil/iot.git`. This downloads all the necessary library files.
+    b) Clone the repository using git: `sudo git clone https://github.com/teemvil/iot.git`. This downloads all the necessary library files.
     
     c) cd to the install folder `cd iot/install` and run the installation script: 
     ```
-    python3 install.py
+    sudo python3 install.py
     ```
 
     The script creates iot.devices.service and iot.sensors.service files to etc/systemd/system. The script also creates two config files to `etc/iotDevice/` these are used as MQTT client configuration and as a specific device configuration. The device configuration file should contain the itemid of the pi on which the scripts are running on.
