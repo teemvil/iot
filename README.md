@@ -8,11 +8,11 @@ The system handles all communication via MQTT messages.
 
 # Installation
 
-1.  a) Create a folder called  /opt/iot and go there on the terminal
+1.  a) Go to the folder /opt/ on the terminal
 
-    b) Clone the repository using git: `git clone https://github.com/teemvil/Innovationproject2022.git`. This downloads all the necessary library files.
+    b) Clone the repository using git: `git clone https://github.com/teemvil/iot.git`. This downloads all the necessary library files.
     
-    c) cd to the install folder `cd Innovationproject2022/install` and run the installation script: 
+    c) cd to the install folder `cd iot/install` and run the installation script: 
     ```
     python3 install.py
     ```
