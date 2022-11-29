@@ -33,13 +33,24 @@ The system handles all communication via MQTT messages.
 
 2. Create sensor/implementations 
 
+    To install IoTLibrary as a package, run `pip3 install .` in the secure_sensor_management_system folder.
+
     a) Create a new folder for the sensor under /opt/iot/    
 
-    b) Copy our SensorTemplate.py and sensor_config_template.json files there    
+    b) Create new sensor script. Most important thing is to inherit the BasicSensor from IoTLibrary. 
 
-    c) Change the templates to fit your specific sensor needs    
+    c) Create configuration file for the sensor and name it as `sensor_config.json`. The file should look like this:
+    ```json
+    {
+        "name": "EXAMPLE RNGsensor",
+        "frequency": 1,
+        "prefix": "EXAMPLE"
+    } 
+    ```
 
-    d) Add your new sensor to IotSensorStartup.py so that it can be started
+    d) Change the templates to fit your specific sensor needs    
+
+    e) Add your new sensor to IotSensorStartup.py so that it can be started
 
         # from YourNewSensor import YouNewSensor
         # x = YourNewSensor()
