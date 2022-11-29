@@ -12,3 +12,8 @@ class RngSensor(BasicSensor):
             r = random.randint(1, 10)
             self.client.publish('alert', r)
             time.sleep(4)
+
+
+if __name__ == '__main__':
+    x = RngSensor()
+    x.run()
