@@ -1,4 +1,4 @@
-from IoTLibrary.BasicSensor import BasicSensor
+from SensorManagementSystem.BasicSensor import BasicSensor
 import time
 import board
 import adafruit_si7021

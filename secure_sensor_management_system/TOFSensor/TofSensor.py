@@ -1,4 +1,4 @@
-from IoTLibrary.BasicSensor import BasicSensor
+from SensorManagementSystem.BasicSensor import BasicSensor
 import time
 # Import your sensor dependencies
 import board

@@ -1,4 +1,4 @@
-from IoTLibrary.BasicSensor import BasicSensor
+from SensorManagementLibrary.BasicSensor import BasicSensor
 import random
 import time
 

@@ -1,4 +1,4 @@
-from IoTLibrary.IoTElement import IoTElement
+from SensorManagementLibrary.IoTElement import IoTElement
 import json
 import argparse
 import pathlib

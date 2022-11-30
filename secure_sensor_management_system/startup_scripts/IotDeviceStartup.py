@@ -1,4 +1,4 @@
-from IoTLibrary.Device import Device
+from SensorManagementLibrary import Device
 
 
 def start():
