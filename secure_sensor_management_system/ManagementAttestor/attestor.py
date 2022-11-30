@@ -1,8 +1,16 @@
 import json
 import requests
+from pathlib import Path
 
-IP = "192.168.0.24"
-PORT = 8520
+
+def read_config():
+    p = Path(__file__).with_name('config.json')
+    with p.open('r') as f:
+        return json.loads(f.read())
+
+
+IP = read_config()["ip"]
+PORT = read_config()["port"]
 BASE_URL = f"http://{IP}:{PORT}"
 
 
@@ -16,6 +24,7 @@ def open_session() -> str:
         session as a JSON string.  """
     response = requests.post(f"{BASE_URL}/v2/sessions/open")
     if response.ok:
+        print("New session created successfully")
         return response.json()
     else:
         return ''
@@ -34,6 +43,7 @@ def close_session(id):
 
     # TODO: change this to return something when successful.
     close = requests.delete(f"{BASE_URL}/v2/session/{id}")
+    print("New session closed")
     return close
 
 
@@ -50,6 +60,7 @@ def get_policy_id() -> str:
         f"{BASE_URL}/v2/policy/name/TPMIdentityAttestation")
 
     if response.ok:
+        print("Policy id retrieved")
         return response.json()['itemid']
     else:
         return ''
@@ -191,3 +202,7 @@ def check_validity(payload: dict):
     print(payload)
 
     return payload
+
+
+if __name__ == "__main__":
+    print(BASE_URL)

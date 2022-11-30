@@ -9,18 +9,16 @@ class Manager(IoTElement):
         super().__init__()
 
     def __on_connect(self, client, userdata, flags, rc):
-        print("devmanager connected with result code " + str(rc))
+        print("devmanager connected to MQTT broker with result code " + str(rc))
         json_object = self.message
         json_object["message"] = "Manager running"
         json_object["event"] = "manager startup"
         json_object["messagetimestamp"] = self.get_time_stamp()
         self.client.publish("management", json.dumps(json_object))
-        # print(json_object)
 
     def handle_management_message(self, client, userdata, msg):
         decoded_message = str(msg.payload.decode("utf-8"))
         json_object = json.loads(decoded_message)
-        # print(json_object)
         if (json_object["event"] == "device startup"):
             json_object["event"] = "device validation startup"
             json_object["message"] = "device validation startup"
@@ -35,12 +33,10 @@ class Manager(IoTElement):
                 self.publish_data(json.dumps(valid_object))
             else:
                 json_object["event"] = "device validation fail"
-                # json_object["message"] = "Validation unsuccesfull"
                 json_object["messagetimestamp"] = self.get_time_stamp()
                 self.publish_data(json.dumps(json_object))
 
         if (json_object["event"] == "sensor startup"):
-            # att.check_sensor_validity(json_object)
             print("Sensor validation")
 
     def on_message(self, client, userdata, msg):
@@ -55,7 +51,6 @@ class Manager(IoTElement):
         self.client.loop_forever()
 
     def publish_data(self, json_update):
-        # Publish called when necessary
         self.client.publish("management", json_update)
 
 
