@@ -1,4 +1,4 @@
-from SensorManagementLibrary import Device
+from SensorManagementLibrary.Device import Device
 
 
 def start():
