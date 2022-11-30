@@ -21,3 +21,8 @@ class TempHumSensor(BasicSensor):
             self.publish_data(self.tsl.temperature, "temp")
             self.publish_data(self.tsl.relative_humidity, "hum")
             time.sleep(self.frequency)
+
+
+if __name__ == "__main__":
+    x = TempHumSensor()
+    x.run()

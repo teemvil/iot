@@ -18,3 +18,8 @@ class LuxSensor(BasicSensor):
         while True:
             self.publish_data(round(self.tsl.lux, 1), "lux")
             time.sleep(self.frequency)
+
+
+if __name__ == "__main__":
+    x = LuxSensor()
+    x.run()

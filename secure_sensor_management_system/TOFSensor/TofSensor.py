@@ -24,3 +24,8 @@ class ToFSensor(BasicSensor):
                     if (self.vl53.range < 1000):
                         # This method publishes the data to the UI
                         self.publish_data(self.vl53.range, "tof")
+
+
+if __name__ == "__main__":
+    x = ToFSensor()
+    x.run()

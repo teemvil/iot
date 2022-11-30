@@ -21,3 +21,8 @@ class IRSensor(BasicSensor):
 
             self.publish_data(round(mean, 2), "pixels")
             time.sleep(self.frequency)
+
+
+if __name__ == "__main__":
+    x = IRSensor()
+    x.run()
