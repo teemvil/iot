@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/static", express.static("public"));
 app.get("/", (req, res) => {
   res.render("index", {
-    pageTitle: "Search Hacker News",
+    pageTitle: "System log info",
   });
 });
 

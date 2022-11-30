@@ -12,11 +12,69 @@ html(lang="en")
         header 
             p Ultimate system log info 
         section(class="main")
-            div(class="main_content sidebar")
+            div(class="main_content-sidebar sidebar")
                 div(class="main_content-navbar")
                     h2 Connected devices 
                     hr
-                div(class="main_content-messages", id="main_content-devices")
+                table(class="main_content-sidebar-messages", id="main_content-devices")
+                    tr 
+                        th Name: 
+                        td iotpi016
+                    tr 
+                        th(class="notvalid") Valid: 
+                        td(class="notvalid") false
+                    tr 
+                        th Last validated on: 
+                        td 1669730619746
+                    tr
+                        th Sensor(s) running:
+                        td testSensor & newSensor & thirdSensor & anotherSensor
+                table(class="main_content-sidebar-messages", id="main_content-devices")
+                    tr 
+                        th Name: 
+                        td iotpi016
+                    tr 
+                        th(class="notvalid") Valid: 
+                        td(class="notvalid") false
+                    tr 
+                        th Last validated on: 
+                        td 1669730619746
+                    tr
+                        th Sensor(s) running:
+                        td testSensor & newSensor
+
+                //- table(class="main_content-sidebar-messages")
+                //-     tr
+                //-         th Name
+                //-         th Valid
+                //-         th Last validated on
+                //-         th Sensor(s) running 
+                //-     //- tbody(id="main_content")
+                //-     div(id="main_content")
+                //-         tr(class="active-box new-box", style="background-color:lightgreen;")
+                //-             td iotpi016 
+                //-             td newSensor
+                //-             td validation has failed 
+                //-             td 1669730620851
+                //-         tr(class="active-box new-box new-new-box", style="background-color:darkred; color:white")
+                //-             td iotpi016 
+                //-             td testSensor
+                //-             td validation has succeeded 
+                //-             td 1669730620746
+                
+                //- div(class="main_content-sidebar-messages", id="main_content-devices")
+                //-     div(style="display:flex; flex-direction:row;justify-content: space-between")
+                //-         div Name: 
+                //-         div iotpi016 
+                //-     div(class="notvalid") Valid: false
+                //-     div Last validated on: 1669730619746
+                //-     div Sensor(s) running: testSensor & newSensor
+                //- div(class="main_content-sidebar-messages", id="main_content-devices")
+                //-     div Name: iotpi016 
+                //-     div(class="notvalid") Valid: false
+                //-     div Last validated on: 1669730619746
+                //-     div Sensor(s) running: testSensor & newSensor
+
             div(class="main_content")
                 div(class="main_content-navbar")
                     h1 Device Management Log 
@@ -28,7 +86,18 @@ html(lang="en")
                         th sensor
                         th message
                         th timestamp 
-                        tbody(id="main_content")
+                    //- tbody(id="main_content")
+                    div(id="main_content")
+                        tr(class="active-box new-box")
+                            td iotpi016 
+                            td newSensor
+                            td validation has failed 
+                            td 1669730620851
+                        tr(class="active-box new-box new-new-box")
+                            td iotpi016 
+                            td testSensor
+                            td validation has succeeded 
+                            td 1669730620746
             div(class="log-viewer-container hidden", id="log-viewer-container")
                 div(class="log-viewer-container-control")
                     button(class="log-viewer-hide-button", id="log-viewer-hide-button") X

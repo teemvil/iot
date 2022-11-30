@@ -27,9 +27,27 @@ header {
 .main_content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   width: 80%;
+  /* height: 80%; */
+  border-radius: 15px;
+  height: 79vh;
+  overflow: auto;
+  scroll-behavior: smooth;
+  max-width: 900px;
+  /* max-height: 80%; */
+  margin: 3rem 20px 3rem 5px;
+  word-break: break-all;
+  box-shadow: 1px 1px 1px 1px black;
+  background-color: white;
+}
+.main_content-sidebar {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  width: 30%;
   /* height: 80%; */
   border-radius: 15px;
   height: 79vh;
@@ -54,16 +72,53 @@ header {
 }
 
 .main_content-messages {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  width: 80%;
-  height: 80%;
-  max-width: 700px;
+  justify-content: flex-start; */
+  display: table;
+  width: 100%;
+  /* height: 80%; */
+  /* max-width: 700px; */
   /* max-height: 80%; */
   margin: 1rem 0 1rem 0;
+  padding: 0 1rem;
+  align-items: center;
   word-break: break-all;
   /* box-shadow: 1px 1px 1px 1px black; */
+}
+
+.main_content-messages hr {
+  border-bottom: 1px solid black;
+
+  text-align: left;
+}
+
+.main_content-messages td {
+  border-bottom: 1px solid black;
+  width: 10rem;
+}
+
+.main_content-sidebar-messages {
+  /* display: flex;
+  flex-direction: column;
+  justify-content: flex-start; */
+  display: table;
+  width: 80%;
+  border: 2px solid black;
+  /* height: 80%; */
+  max-width: 700px;
+  /* max-height: 80%; */
+  /* margin: 1rem 0 1rem 0; */
+  margin: 1rem 0 0 0;
+  padding: 0 1rem 0 1rem;
+  word-break: break-all;
+  /* box-shadow: 1px 1px 1px 1px black; */
+}
+
+.main_content-sidebar-messages th,
+td {
+  border-bottom: 1px dashed black;
+  text-align: left;
 }
 
 .main_content-messages-message {
@@ -186,18 +241,17 @@ tr:nth-child(even) {
   background-color: #f80000;
 } */
 
-td {
-  border-bottom: 1px solid black;
-  width: 10rem;
-}
 /* tr {
   border-bottom: 1px solid black;
 } */
-th {
-  width: 10rem;
-  border-bottom: 1px solid black;
-  text-align: left;
+
+tbody {
+  width: 100%;
 }
+
+/* tr {
+  width: 100%;
+} */
 
 .log-viewer-container {
   display: flex;
