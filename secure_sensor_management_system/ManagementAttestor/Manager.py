@@ -1,4 +1,4 @@
-from SensorManagementSystem.IoTElement import IoTElement
+from SensorManagementLibrary.IoTElement import IoTElement
 import attest as att
 import json
 import threading
