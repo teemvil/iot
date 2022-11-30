@@ -1,5 +1,5 @@
 from SensorManagementLibrary.IoTElement import IoTElement
-import attest as att
+import attestor as att
 import json
 import threading
 
@@ -29,7 +29,7 @@ class Manager(IoTElement):
                 self.publish_data(json.dumps(valid_object))
             else:
                 json_object["event"] = "device validation fail"
-                json_object["message"] = "Validation unsuccesfull"
+                # json_object["message"] = "Validation unsuccesfull"
                 json_object["messagetimestamp"] = self.get_time_stamp()
                 self.publish_data(json.dumps(json_object))
 
