@@ -99,26 +99,35 @@ header {
 }
 
 .main_content-sidebar-messages {
-  /* display: flex;
+  display: flex;
   flex-direction: column;
-  justify-content: flex-start; */
-  display: table;
-  width: 80%;
-  border: 2px solid black;
+  justify-content: flex-start;
+  align-items: center;
+  /* border: 2px solid black; */
   /* height: 80%; */
+  width:100%;
   max-width: 700px;
   /* max-height: 80%; */
   /* margin: 1rem 0 1rem 0; */
-  margin: 1rem 0 0 0;
-  padding: 0 1rem 0 1rem;
+  /* margin: 1rem 0 0 0; */
+  /* padding: 0 1rem 0 1rem; */
   word-break: break-all;
   /* box-shadow: 1px 1px 1px 1px black; */
+}
+
+.main_content-sidebar-messages-table {
+  display: table;
+  width: 80%;
+  border: 2px solid black;
+  margin: 1rem 0 0 0;
+  
 }
 
 .main_content-sidebar-messages th,
 td {
   border-bottom: 1px dashed black;
   text-align: left;
+  width: 50%;
 }
 
 .main_content-messages-message {
