@@ -26,6 +26,8 @@ class Manager(IoTElement):
             json_object["message"] = "device validation startup"
             json_object["messagetimestamp"] = self.get_time_stamp()
 
+            self.publish_data(json.dumps(json_object))
+
             valid_object = att.check_validity(json_object)
             if (valid_object["event"] == "device validation ok"):
                 valid_object["device"]["validtimestamp"] = self.get_time_stamp()
