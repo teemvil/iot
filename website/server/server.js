@@ -1,6 +1,37 @@
 const mqtt = require("mqtt");
 // import mqtt from 'mqtt'
 WebSocket = require("ws");
+const path = require("path");
+const express = require("express");
+const bodyParser = require("body-parser");
+const app = express();
+const router = express.Router();
+const port = 3000;
+
+app.set("view engine", "pug");
+app.set("views", "views");
+// const index = require("")
+app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(express.static(path.join(__dirname, "public")));
+app.use("/static", express.static("public"));
+app.get("/", (req, res) => {
+  res.render("index", {
+    pageTitle: "Search Hacker News",
+  });
+});
+
+// app.get("/", (req, res) => {
+//   res.send("Hello World!");
+// });
+
+// router.get("/", (req, res, next) => {
+//   console.log("here");
+//   res.render("index");
+// });
+
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
 
 const options = {
   // clean: true, // retain session
@@ -76,37 +107,36 @@ client.on("message", function (topic, message) {
   let m = JSON.parse(message);
   let s;
   if (!devices.find((item) => item.device.hostname === m.device.hostname)) {
-    try{
-    let x = {    
+    try {
+      let x = {
         event: m.event,
         message: m.message,
         messagetimestamp: m.messagetimestamp,
         device: {
-            itemid: m.device.itemid,
-            hostname: m.device.hostname,
-            address: m.device.address,
-            starttimestamp: m.device.starttimestamp,
-            valid: m.device.valid,
-            validtimestamp: m.device.validtimestamp
+          itemid: m.device.itemid,
+          hostname: m.device.hostname,
+          address: m.device.address,
+          starttimestamp: m.device.starttimestamp,
+          valid: m.device.valid,
+          validtimestamp: m.device.validtimestamp,
         },
         sensor: {
-            name: m.sensor.name,
-            starttimestamp: m.sensor.starttimestamp,
-            valid: m.sensor.valid,
-            validtimestamp: m.sensor.validtimestamp
-        }
+          name: m.sensor.name,
+          starttimestamp: m.sensor.starttimestamp,
+          valid: m.sensor.valid,
+          validtimestamp: m.sensor.validtimestamp,
+        },
       };
-    //if (m.event === "validation ok") {
-    //  console.log("eka iffi");
-    //  x.valdate = m.timestamp;
-    //}
+      //if (m.event === "validation ok") {
+      //  console.log("eka iffi");
+      //  x.valdate = m.timestamp;
+      //}
 
-    devices.push(x);
-    s = devices[devices.length];
-  
-  }catch{
-    console.log("Something went wrog with putting data into array")
-  }
+      devices.push(x);
+      s = devices[devices.length];
+    } catch {
+      console.log("Something went wrog with putting data into array");
+    }
   }
   let k = devices.find((item) => item.device.hostname === m.device.hostname);
   if (devices.find((item) => item.device.hostname === m.device.hostname)) {
