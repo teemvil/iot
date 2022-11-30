@@ -3,7 +3,7 @@ import requests
 
 IP = "192.168.0.24"
 PORT = 8520
-BASE_URL = f"http://{IP}/{PORT}"
+BASE_URL = f"http://{IP}:{PORT}"
 
 
 def open_session() -> str:
