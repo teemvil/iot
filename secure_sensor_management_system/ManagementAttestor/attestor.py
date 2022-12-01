@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 def read_config():
-    p = Path(__file__).with_name('config.json')
+    p = Path(__file__).with_name('manager_config.json')
     with p.open('r') as f:
         return json.loads(f.read())
 
