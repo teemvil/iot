@@ -62,7 +62,6 @@ let obj = JSON.parse(datae)
 console.log(obj)
 
 const connectUrl = "mqtt://"+ obj.host +":" +obj.port;
-const connectUrl = "mqtt://192.168.0.24:1883";
 
 const client = mqtt.connect(connectUrl);
 
