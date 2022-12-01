@@ -56,11 +56,12 @@ The system handles all communication via MQTT messages.
 
     d) Change the templates to fit your specific sensor needs    
 
-    e) Add your new sensor to IotSensorStartup.py so that it can be started as the pi starts up.
-
-        # from YourNewSensor import YourNewSensor
-        # x = YourNewSensor()
-        # x.run()
+    e) To get the sensor started at pi startup, add the sensor to the file IotSensorStartup.py in the folder `/secure_sensor_management_system/startup_scripts/`.
+    ```python
+        from YourNewSensor import YourNewSensor
+        x = YourNewSensor()
+        x.run()
+    ```
 
 3. Run the newly created script:
 
@@ -68,7 +69,7 @@ The system handles all communication via MQTT messages.
 python3 YourNewSensor.py
 ```
 
-4. To get the Manager working you need to first give correct ip and port addresses. This is done by modifying the config.json file which is in the ManagementAttestor folder. Then just run `python3 Manager.py`
+4. To get the Manager working you need to first give correct ip and port addresses. This is done by modifying the config.json file which is in the folder `/secure_sensor_management_system/ManagementAttestor`. Then just run `python3 Manager.py`
 
 
 # Design
