@@ -17,7 +17,7 @@ The system handles all communication via MQTT messages.
     sudo python3 install.py
     ```
 
-    The script creates iot.devices.service and iot.sensors.service files to etc/systemd/system. The script also creates two config files to `etc/iotDevice/` these are used as MQTT client configuration and as a specific device configuration. The device configuration file should contain the itemid of the pi on which the scripts are running on.
+    The script creates iot.devices.service and iot.sensors.service files to etc/systemd/system. The script also creates two config files to `/etc/iotDevice/` these are used as MQTT client configuration and as a specific device configuration. The device configuration file should contain the itemid of the pi on which the scripts are running on.
     
     d) Enable the services using systemd:
 
@@ -35,9 +35,13 @@ The system handles all communication via MQTT messages.
 
     To install IoTLibrary as a package, run `pip3 install .` in the secure_sensor_management_system folder.
 
-    a) Create a new folder for the sensor under /opt/iot/    
+    a) Create a new folder for the sensor under `/opt/iot/secure_sensor_management_system/`    
 
-    b) Create new sensor script. Most important thing is to inherit the BasicSensor from IoTLibrary. 
+    b) Create new sensor script. Most important thing is to inherit the BasicSensor from SensorManagementLibrary.
+    
+    ```python
+    from SensorManagementLibrary.BasicSensor import BasicSensor
+    ```
 
     c) Create configuration file for the sensor and name it as `sensor_config.json`. The file should look like this:
     ```json
@@ -47,16 +51,22 @@ The system handles all communication via MQTT messages.
         "prefix": "EXAMPLE"
     } 
     ```
+    
+    Store it in the same folder as the sensor python file.
 
     d) Change the templates to fit your specific sensor needs    
 
-    e) Add your new sensor to IotSensorStartup.py so that it can be started
+    e) Add your new sensor to IotSensorStartup.py so that it can be started as the pi starts up.
 
-        # from YourNewSensor import YouNewSensor
+        # from YourNewSensor import YourNewSensor
         # x = YourNewSensor()
         # x.run()
 
-3. Reboot your machine OR run the IotSensorStartup.py script on a terminal to get the sensor operating
+3. Run the newly created script:
+
+```bash
+python3 YourNewSensor.py
+```
 
 4. To get the Manager working you need to first give correct ip and port addresses. This is done by modifying the config.json file which is in the ManagementAttestor folder. Then just run `python3 Manager.py`
 
