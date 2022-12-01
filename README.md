@@ -58,6 +58,8 @@ The system handles all communication via MQTT messages.
 
 3. Reboot your machine OR run the IotSensorStartup.py script on a terminal to get the sensor operating
 
+4. To get the Manager working you need to first give correct ip and port addresses. This is done by modifying the config.json file which is in the ManagementAttestor folder. Then just run `python3 Manager.py`
+
 
 # Design
 
