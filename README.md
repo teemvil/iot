@@ -50,6 +50,8 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
     ```python
     from SensorManagementLibrary.BasicSensor import BasicSensor
     ```
+    The easiest way to do this is to use a template sensor file from `opt/iot/secure_sensor_management_system/ExampleSensor/`
+
 
     d) Create configuration file for the sensor and name it as `sensor_config.json`. This file should be stored in the same folder as your sensor script. The file should include three fields like this:
     ```json
