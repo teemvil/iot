@@ -66,7 +66,7 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 	prefix: The sensor's indentifying code for the MQTT data channel 
 	```
     
-    	Fill the values in according to your sensor's needs.
+    Fill the values in according to your sensor's needs.
 
 
 3. Run the newly created script:
