@@ -86,7 +86,7 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 
 ## 2. Installing and running the ManagementAttestor part
 
-1.  a) Go to the folder /opt/ on the terminal
+    a) Go to the folder /opt/ on the terminal
 
     b) Clone the repository using git: `sudo git clone https://github.com/teemvil/iot.git`. This downloads all the necessary library files.
 	
@@ -106,11 +106,13 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 
 ## 3. Installing and running the Management UI part
 
-1.  a) Go to the folder /opt/ on the terminal
+    a) Go to the folder /opt/ on the terminal
 
     b) Clone the repository using git: `sudo git clone https://github.com/teemvil/iot.git`. This downloads all the necessary library files.
 	
-	c) Navigate your way to the website folder at `/opt/iot/secure_sensor_management_system/website/` and start the server using the command `npm start` 
+	c) Check the MQTT configuration by going to the folder `/opt/iot/website/server`, where you will find a file named `server_config.json`. MAKE SURE THIS FILE HAS THE CORRECT MQTT CLIENT INFO!!
+	
+	c) Then navigate your way back to the website folder at `/opt/iot/website/` and start the server using the command `npm start` 
 	
 	IF THIS DOES NOT WORK, MAKE SURE YOU HAVE NPM INSTALLED ON YOUR SYSTEM. You can install it with the command `sudo apt install npm nodejs` 
 	
