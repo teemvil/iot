@@ -41,7 +41,7 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 
 2. Create sensor/implementations 
 
-1.  a) To install IoTLibrary as a package, go to the folder `/opt/iot/secure_sensor_management_system/` and run the command `pip3 install .` 
+    a) To install IoTLibrary as a package, go to the folder `/opt/iot/secure_sensor_management_system/` and run the command `pip3 install .` 
 
     b) Create a new folder for the sensor under `/opt/iot/secure_sensor_management_system/`
 
@@ -106,7 +106,7 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 
 ## 3. Installing and running the Management UI part
 
-    a) Go to the folder /opt/ on the terminal
+1.  a) Go to the folder /opt/ on the terminal
 
     b) Clone the repository using git: `sudo git clone https://github.com/teemvil/iot.git`. This downloads all the necessary library files.
 	
