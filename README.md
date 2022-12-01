@@ -111,6 +111,7 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
     b) Clone the repository using git: `sudo git clone https://github.com/teemvil/iot.git`. This downloads all the necessary library files.
 	
 	c) Navigate your way to the website folder at `/opt/iot/secure_sensor_management_system/website/` and start the server using the command `npm start` 
+	
 	IF THIS DOES NOT WORK, MAKE SURE YOU HAVE NPM INSTALLED ON YOUR SYSTEM. You can install it with the command `sudo apt install npm nodejs` 
 	
 	d) You should now be able to access the management UI by going to the address `https://localhost:3000`
