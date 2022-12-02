@@ -15,7 +15,6 @@ let obj = JSON.parse(datae);
 console.log(obj);
 
 const restPort = obj.RESTport;
-
 app.set("view engine", "pug");
 app.set("views", "views");
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -50,14 +49,17 @@ const options = {
 // alis Alipay applet connection
 //const connectUrl = 'mqtt://test.mosquitto.org'
 
-const connectUrl = "mqtt://" + obj.host + ":" + obj.MQTTport;
+const connectUrl = "mqtt://" + obj.MQTThost + ":" + obj.MQTTport;
 
 const client = mqtt.connect(connectUrl);
 
 const WEBSOCKETport = obj.WEBSOCKETport;
 
-const wsServer = new WebSocket.Server({ port: WEBSOCKETport });
-
+const wsServer = new WebSocket.Server({
+  host: obj.WEBSOCKEThost,
+  port: WEBSOCKETport,
+});
+console.log("ws ip address", wsServer.options.host);
 wsServer.on("connection", function (socket) {
   console.log("A client just connected");
 
