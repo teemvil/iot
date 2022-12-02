@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const router = express.Router();
 const port = 3000;
+const fs = require('fs');
 
 app.set("view engine", "pug");
 app.set("views", "views");
@@ -52,8 +53,16 @@ const options = {
 // wxs WeChat applet connection
 // alis Alipay applet connection
 //const connectUrl = 'mqtt://test.mosquitto.org'
-const connectUrl = "mqtt://192.168.0.24:1883";
 
+
+const datae = fs.readFileSync(path.resolve(__dirname, 'server_config.json'), 'utf8');
+console.log(datae);
+
+let obj = JSON.parse(datae)
+console.log(obj)
+
+const connectUrl = "mqtt://"+ obj.host +":" +obj.port;
+console.log(connectUrl)
 const client = mqtt.connect(connectUrl);
 
 const PORT = 5000;
