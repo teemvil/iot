@@ -36,7 +36,7 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 
 2. Create sensor/implementations 
 
-    a) To install IoTLibrary as a package, go to the folder `/opt/iot/secure_sensor_management_system/` and run the command `pip3 install .` 
+    a) To install IoTLibrary as a package, go to the folder `/opt/iot/secure_sensor_management_system/` and run the command `sudo pip3 install .` 
 
     b) Create a new folder for the sensor under `/opt/iot/secure_sensor_management_system/`
 
@@ -99,7 +99,7 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 
     The script creates two config files, `client_config.json` and `device_config.json` to the folder `/etc/iotDevice/`.These are used as MQTT client configuration and as a specific device configuration. MAKE SURE TO CHECK THAT THE MQTT CLIENT INFO IS CORRECT IN THE client_config.json FILE ONCE IT IS CREATED!!
 	
-	d) To install IoTLibrary as a package, go to the folder `/opt/iot/secure_sensor_management_system/` and run the command `pip3 install .`
+	d) To install IoTLibrary as a package, go to the folder `/opt/iot/secure_sensor_management_system/` and run the command `sudo pip3 install .`
 	
 	e) Navigate your way to the ManagementAttestor folder at `/opt/iot/secure_sensor_management_system/ManagementAttestor/` and add the correct ip and port addresses the file `manager_config.json`. The ip and port that you want to put there are the ones used by the attestation engine, which you should already have running somewhere.
 	
