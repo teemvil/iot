@@ -12,11 +12,13 @@ html(lang="en")
         header 
             p Ultimate system log info 
         section(class="main")
-            div(class="main_content sidebar")
+            div(class="main_content-sidebar sidebar")
                 div(class="main_content-navbar")
                     h2 Connected devices 
                     hr
-                div(class="main_content-messages", id="main_content-devices")
+                div(class="main_content-sidebar-messages", id="main_content-devices")
+                
+
             div(class="main_content")
                 div(class="main_content-navbar")
                     h1 Device Management Log 
@@ -28,7 +30,10 @@ html(lang="en")
                         th sensor
                         th message
                         th timestamp 
-                        tbody(id="main_content")
+                    //- tbody(id="main_content")
+                    //- div(id="main_content")
+                    tbody(id="main_content")
+                        
             div(class="log-viewer-container hidden", id="log-viewer-container")
                 div(class="log-viewer-container-control")
                     button(class="log-viewer-hide-button", id="log-viewer-hide-button") X
