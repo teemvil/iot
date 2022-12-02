@@ -27,16 +27,11 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 	
 	The install script also creates two config files, `client_config.json` and `device_config.json`, to the folder `/etc/iotDevice/`. These config files are used as MQTT client configuration and as a specific device configuration. The device configuration file should contain the itemid of the pi on which the scripts are running on. MAKE SURE TO CHECK THAT THE MQTT CLIENT INFO AND THE ITEMID OF THE PI ARE CORRECT IN THESE FILES ONCE THEY ARE CREATED!!
     
-    d) Enable the services using systemd:
+    d) Enable the devices service using systemd:
 
     ```
     sudo systemctl enable iot.devices.service
     sudo systemctl start iot.devices.service
-    ```
-
-    ```
-    sudo systemctl enable iot.sensors.service
-    sudo systemctl start iot.sensors.service
     ```
 
 2. Create sensor/implementations 
@@ -84,6 +79,11 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
         from YourNewSensor import YourNewSensor
         x = YourNewSensor()
         x.run()
+    ```
+    Finally enable the sensors service using systemd:
+    ```
+    sudo systemctl enable iot.sensors.service
+    sudo systemctl start iot.sensors.service
     ```
 
 ## 2. Installing and running the ManagementAttestor part
