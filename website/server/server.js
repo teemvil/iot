@@ -1,37 +1,33 @@
 const mqtt = require("mqtt");
-// import mqtt from 'mqtt'
 WebSocket = require("ws");
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const router = express.Router();
-const port = 3000;
-const fs = require('fs');
+const fs = require("fs");
+
+const datae = fs.readFileSync(
+  path.resolve(__dirname, "server_config.json"),
+  "utf8"
+);
+
+let obj = JSON.parse(datae);
+console.log(obj);
+
+const restPort = obj.RESTport;
 
 app.set("view engine", "pug");
 app.set("views", "views");
-// const index = require("")
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(express.static(path.join(__dirname, "public")));
 app.use("/static", express.static("public"));
 app.get("/", (req, res) => {
   res.render("index", {
-    pageTitle: "Search Hacker News",
+    pageTitle: "System log info",
   });
 });
 
-// app.get("/", (req, res) => {
-//   res.send("Hello World!");
-// });
-
-// router.get("/", (req, res, next) => {
-//   console.log("here");
-//   res.render("index");
-// });
-
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+app.listen(restPort, () => {
+  console.log(`Rest api listening on port ${restPort}`);
 });
 
 const options = {
@@ -54,20 +50,13 @@ const options = {
 // alis Alipay applet connection
 //const connectUrl = 'mqtt://test.mosquitto.org'
 
-
-const datae = fs.readFileSync(path.resolve(__dirname, 'server_config.json'), 'utf8');
-console.log(datae);
-
-let obj = JSON.parse(datae)
-console.log(obj)
-
-const connectUrl = "mqtt://"+ obj.host +":" +obj.port;
+const connectUrl = "mqtt://" + obj.host + ":" + obj.MQTTport;
 
 const client = mqtt.connect(connectUrl);
 
-const PORT = 5000;
+const WEBSOCKETport = obj.WEBSOCKETport;
 
-const wsServer = new WebSocket.Server({ port: PORT });
+const wsServer = new WebSocket.Server({ port: WEBSOCKETport });
 
 wsServer.on("connection", function (socket) {
   console.log("A client just connected");
@@ -76,26 +65,23 @@ wsServer.on("connection", function (socket) {
     console.log("Received message from client: " + msg);
 
     wsServer.clients.forEach(function (item) {
-      // client.send("Someone said: " + msg);
       item.send(`{"topic": "connection", "message": "${msg}"}`);
     });
   });
 });
 
-console.log(new Date() + " Server is listening on port " + PORT);
+console.log(
+  new Date() +
+    " Server is listening for websocket clients on port " +
+    WEBSOCKETport
+);
 
-console.log("test");
 client.on("connect", function () {
-  //client.subscribe('test', function (err) {
-  //    if(!err)  {
-  //        console.log("not err")
-  // client.publish('test', "message")
-  //    }
-  //})
   client.subscribe("management", function (err) {
     if (!err) {
-      console.log("not err");
-      //client.publish('management', "message")
+      console.log("Successfully subscribed to management channel.");
+    } else {
+      console.log("Failed to subscribe to the management channel.", err);
     }
   });
 });
@@ -112,7 +98,11 @@ let devices = [];
 
 client.on("message", function (topic, message) {
   // message is Buffer
-  console.log(message.toString(), topic);
+  try {
+    console.log(message.toString(), topic);
+  } catch (error) {
+    console.log("Message in wrong format at topic: ", topic);
+  }
   let m = JSON.parse(message);
   let s;
   if (!devices.find((item) => item.device.hostname === m.device.hostname)) {
@@ -136,15 +126,11 @@ client.on("message", function (topic, message) {
           validtimestamp: m.sensor.validtimestamp,
         },
       };
-      //if (m.event === "validation ok") {
-      //  console.log("eka iffi");
-      //  x.valdate = m.timestamp;
-      //}
 
       devices.push(x);
       s = devices[devices.length];
     } catch {
-      console.log("Something went wrog with putting data into array");
+      console.log("Something went wrong with putting data into array");
     }
   }
   let k = devices.find((item) => item.device.hostname === m.device.hostname);
@@ -153,40 +139,19 @@ client.on("message", function (topic, message) {
     s = devices.indexOf(k);
     devices[s].device.valid = m.device.valid;
     if (m.event === "device validation ok") {
-      console.log("toka iffi");
-      console.log(m.timestamp);
+      console.log("Device validation ok");
       devices[s].device.valid = m.device.valid;
-      console.log(m.device.valid);
       devices[s].device.validtimestamp = m.messagetimestamp;
-      console.log(devices[s].device.validtimestamp);
     }
   }
 
   wsServer.clients.forEach(function (item) {
-    // client.send("topic="+topic+"message="+message)
     console.log(topic, "message:", m);
-    //console.log(s.toString());
 
-    // let iitemmm =`"god":
-    //               {
-    //                 "data":
-    //                     {
-    //                       "topic": "${topic}",
-    //                       "host": "${m.hostname}",
-    //                       "sensor": "${m.sensor.name}",
-    //                       "message": "${m.message}",
-    //                       "deviceObject": "${devices[s].hostname}",
-    //                       "valid": "${devices[s].device.valid}"
-    //                       },
-    //                 "devs":
-    //                   "${JSON.stringify(...devices)}"
-
-    //                 }`
     let iitemmm = `{"god": {"data": { "hostname": "${m.device.hostname}", "timestamp": "${m.messagetimestamp}", "sensor": "${m.sensor.name}", "message": "${m.message}", "deviceObject": "${devices[s].device.hostname}", "valid": "${devices[s].device.valid}"}, "valdate": "${devices[s].device.validtimestamp}"}}`;
 
     console.log(iitemmm);
 
     item.send(iitemmm);
   });
-  // client.end()
 });
