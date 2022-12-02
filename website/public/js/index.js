@@ -1,14 +1,4 @@
-const datae = fs.readFileSync(
-  path.resolve(__dirname, "server_config.json"),
-  "utf8"
-);
-
-let obj = JSON.parse(datae);
-
-let websocket = new WebSocket(
-  `ws://${obj.port}:${obj.WEBSOCKETport}`,
-  "protocol"
-);
+let websocket = new WebSocket(`ws://${wshost}:${wsport}`, "protocol");
 
 websocket.onopen = (event) => {
   websocket.send("onopen is successful");

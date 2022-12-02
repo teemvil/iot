@@ -59,4 +59,10 @@ html(lang="en")
                     br
                 button(class="log-viewer-sort-button", id="log-viewer-sort-button") sort by time
                 section(id="log-viewer", class="log-viewer")
-        script(type='text/javascript', src='/static/js/index.js')
+    //- script.
+    //-     WEBSOCKEThost = #{WEBSOCKEThost};
+    //-     WEBSOCKETport = #{WEBSOCKETport};
+    script.
+        const wshost = !{jsStringify(wshost)};
+        const wsport = !{jsStringify(wsport)};
+    script(type='text/javascript', src='/static/js/index.js')

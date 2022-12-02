@@ -5,6 +5,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const fs = require("fs");
+const jsStringify = require("js-stringify");
 
 const datae = fs.readFileSync(
   path.resolve(__dirname, "server_config.json"),
@@ -19,8 +20,14 @@ app.set("view engine", "pug");
 app.set("views", "views");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/static", express.static("public"));
+const wshost = obj.WEBSOCKEThost;
+const wsport = obj.WEBSOCKETport;
+
 app.get("/", (req, res) => {
   res.render("index", {
+    jsStringify,
+    wshost: wshost,
+    wsport: wsport,
     pageTitle: "System log info",
   });
 });
