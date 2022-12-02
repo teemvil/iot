@@ -84,11 +84,12 @@ def create_dict(payload, sid) -> dict:
     """
     print("starting create_dict method")
     if payload["device"]["hostname"]:
-        hostname = payload["device"]["hostname"]
+        # hostname = payload["device"]["hostname"]
+        itemid = payload["device"]["itemid"]
     else:
         print("create_dict payload hostname error")
         return {}
-    response = requests.get(f"{BASE_URL}/v2/element/name/{hostname}")
+    response = requests.get(f"{BASE_URL}/v2/element/{itemid}")
 
     if not response.ok:
         print("create_dict response not ok")
