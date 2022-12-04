@@ -28,4 +28,4 @@ class Device(IoTElement):
 
 if __name__ == "__main__":
     x = Device()
-    x.run()
+    x.startup()
