@@ -73,12 +73,10 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 	python3 YourNewSensor.py
 	```
     
-	To make the sensor start at device startup, add the sensor to the file `IotSensorStartup.py` in the folder `/opt/iot/secure_sensor_management_system/startup_scripts/`.	
-	Like thus:
-    ```python
-        from YourNewSensor import YourNewSensor
-        x = YourNewSensor()
-        x.run()
+	To make the sensor start at device startup, add the sensor's path to the sensor service file `iot.sensors.service` in the folder `/etc/systemd/system/`	
+	to the line where it asks for ExecStart:
+    ```
+        ExecStart=python3 /opt/iot/secure_sensor_management_system/ExampleSensor/RNGSensor.py
     ```
     Finally enable the sensors service using systemd:
     ```
