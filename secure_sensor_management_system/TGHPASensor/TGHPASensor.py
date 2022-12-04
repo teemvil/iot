@@ -20,7 +20,7 @@ class tghpaSensor(BasicSensor):
             self.publish_data(round(temperature, 1), "temperature")
             #print("\nTemperature: %0.1f C" % (self.bme680.temperature + self.temperature_offset))
             gas = self.bme680.gas
-            self.publish_data(round(gas, 1), "gas")
+            self.publish_data(round((gas/1000), 1), "gas")
             #print("Gas: %d ohm" % self.bme680.gas)
             humidity = self.bme680.relative_humidity
             self.publish_data(round(humidity, 1), "humidity")
@@ -32,3 +32,7 @@ class tghpaSensor(BasicSensor):
             self.publish_data(round(altitude, 1), "altitude")
             #print("Altitude = %0.2f meters" % self.bme680.altitude)
             time.sleep(self.frequency)
+
+if __name__ == "__main__":
+    x = tghpaSensor()
+    x.run()
