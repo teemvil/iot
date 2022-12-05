@@ -20,12 +20,12 @@ def create_device_config():
 def create_client_config():
     # Structure of the client_config.json
     client_config = {
-        "host": "192.168.0.24",
-        "port": 1883,
-        "keepalive": 60
+        "mqtt_host": "192.168.0.24",
+        "mqtt_port": 1883,
+        "mqtt_keepalive": 60
     }
     data_folder = Path("/etc/iotDevice/")
-    file_name = "client_config.json"
+    file_name = "mqtt_client_config.json"
     save_to_device(data_folder, file_name, client_config)
 
 
@@ -37,6 +37,7 @@ def copy_service_files():
 
     for f in files:
         shutil.copy(source+f, destination)
+    print("install.py: Files copied")
 
 
 def get_ip_address():
@@ -52,18 +53,23 @@ def save_to_device(data_path, write_to_file, file_to_be_written):
     json_object = json.dumps(file_to_be_written, indent=4)
     if os.path.isdir(data_path) == False:
         os.mkdir(data_path)
-        print("Directory created")
+        print("install.py: Directory created")
         file_to_write = data_path / write_to_file
-        with open(file_to_write, "w") as outfile:
-            outfile.write(json_object)
-        print("Config created")
+        try:
+            with open(file_to_write, "w") as outfile:
+                outfile.write(json_object)
+                print("install.py: Config created: ", write_to_file)
+        except IOError:
+            print("install.py: Congfi creation erro: ", write_to_file)
     else:
         print("Directory already exists")
         file_to_write = data_path / write_to_file
-        with open(file_to_write, "w") as outfile:
-            outfile.write(json_object)
-        print("Config created")
-
+        try:
+            with open(file_to_write, "w") as outfile:
+                outfile.write(json_object)
+                print("install.py: Config created: ", write_to_file)
+        except IOError:
+            print("install.py: Congfi creation erro: ", write_to_file)
 
 if __name__ == "__main__":
     copy_service_files()
