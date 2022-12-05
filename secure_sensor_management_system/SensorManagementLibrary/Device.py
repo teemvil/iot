@@ -25,3 +25,7 @@ class Device(IoTElement):
     def on_message(self, client, nonetype, msg):
         print(
             f"Received message with topic: '{msg.topic}' and message: '{msg.payload.decode()}'")
+
+if __name__ == "__main__":
+    x = Device()
+    x.startup()

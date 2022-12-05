@@ -1,7 +1,4 @@
-let host = "127.0.0.1";
-let port = 5000;
-
-let websocket = new WebSocket("ws://127.0.0.1:5000", "protocol");
+let websocket = new WebSocket(`ws://${wshost}:${wsport}`, "protocol");
 
 websocket.onopen = (event) => {
   websocket.send("onopen is successful");
@@ -113,42 +110,95 @@ const addElement = async (data) => {
       } else {
         elem2.classList.add("notvalid");
       }
-      let elem3 = document.createElement("div");
-      let elem4 = document.createElement("div");
-      let node = document.createTextNode("Name: " + devices[i].hostname);
-      let elleem = document.createElement("div");
-      let noode;
+
+      // name creation
+      let tr = document.createElement("tr");
+      let th = document.createElement("th");
+      let td = document.createElement("td");
+      th.appendChild(document.createTextNode("Name:"));
+      td.appendChild(document.createTextNode("" + devices[i].hostname));
+      tr.appendChild(th);
+      tr.appendChild(td);
+
+      // let elem3 = document.createElement("div");
+      // let elem4 = document.createElement("div");
+      // let node = document.createTextNode("Name: " + devices[i].hostname);
+      // let elleem = document.createElement("div");
+
+      // table.appendChild(sensortr)
+      // valid
+      let validtr = document.createElement("tr");
+      let validth = document.createElement("th");
+      let validtd = document.createElement("td");
+      validth.classList.add(devices[i].valid === "true" ? "valid" : "notvalid");
+      validth.appendChild(document.createTextNode("Valid:"));
+      validtd.classList.add(devices[i].valid === "true" ? "valid" : "notvalid");
+      validtd.appendChild(document.createTextNode(devices[i].valid));
+      validtr.appendChild(validth);
+      validtr.appendChild(validtd);
+      // table.appendChild(validtr)
+      // last validated on
+      let lastValidatedtr = document.createElement("tr");
+      let lastValidatedth = document.createElement("th");
+      let lastValidatedtd = document.createElement("td");
+      lastValidatedth.appendChild(
+        document.createTextNode("Last validated on:")
+      );
+      lastValidatedtd.appendChild(document.createTextNode(devices[i].valdate));
+      lastValidatedtr.appendChild(lastValidatedth);
+      lastValidatedtr.appendChild(lastValidatedtd);
+      // table.appendChild(lastValidatedtr)
+
+      let noode = "";
       let count = 0;
       for (let d = 0; d < sensors.length; d++) {
         if (sensors[d].hostname === devices[i].hostname) {
           if (sensors[d].sensor != "") {
             count++;
             if (count === 1) {
-              noode = document.createTextNode(
-                "Sensor(s) running: " + sensors[d].sensor
-              );
-              elleem.appendChild(noode);
+              noode = sensors[d].sensor;
+              //elleem.appendChild(noode);
             } else {
-              let noode = document.createTextNode(" & " + sensors[d].sensor);
-              elleem.appendChild(noode);
+              noode = noode.concat(" & " + sensors[d].sensor);
+              //elleem.appendChild(noode);
             }
           }
         }
       }
+
+      //sensor creation
+      let sensortr = document.createElement("tr");
+      let sensorth = document.createElement("th");
+      let sensortd = document.createElement("td");
+      sensorth.appendChild(document.createTextNode("Sensor(s) running:"));
+      sensortd.appendChild(document.createTextNode(noode));
+      sensortr.appendChild(sensorth);
+      sensortr.appendChild(sensortd);
+
       let node2 = document.createTextNode("Valid: " + devices[i].valid);
       let node3 = document.createTextNode(
         "Last validated on: " + devices[i].valdate
       );
-      let node4 = document.createTextNode("----- ");
-      elem.appendChild(node);
-      elem2.appendChild(node2);
-      elem3.appendChild(node3);
-      elem4.appendChild(node4);
-      document.getElementById("main_content-devices").appendChild(elem);
-      document.getElementById("main_content-devices").appendChild(elem2);
-      document.getElementById("main_content-devices").appendChild(elem3);
-      document.getElementById("main_content-devices").appendChild(elleem);
-      document.getElementById("main_content-devices").appendChild(elem4);
+      // let node4 = document.createTextNode("----- ");
+      // elem.appendChild(node);
+      // elem2.appendChild(node2);
+      // elem3.appendChild(node3);
+      // elem4.appendChild(node4);
+
+      // document.getElementById("main_content-devices").appendChild(elem);
+      // document.getElementById("main_content-devices").appendChild(elem2);
+      // document.getElementById("main_content-devices").appendChild(elem3);
+      // document.getElementById("main_content-devices").appendChild(elleem);
+      // document.getElementById("main_content-devices").appendChild(elem4);
+      console.log("test");
+      let table = document.createElement("table");
+      table.classList.add("main_content-sidebar-messages-table");
+      table.appendChild(tr);
+      table.appendChild(validtr);
+      table.appendChild(lastValidatedtr);
+      table.appendChild(sensortr);
+      document.getElementById("main_content-devices").appendChild(table);
+      // document.getElementById("main_content-devices").appendChild(elem4);
     }
   }
   const mainContent = document.getElementById("main_content");

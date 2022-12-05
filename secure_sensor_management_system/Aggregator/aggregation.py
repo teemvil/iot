@@ -10,9 +10,19 @@ import csv
 from datetime import datetime
 import math
 import requests
+from pathlib import Path
 
-IP="192.168.11.79"
-PORT=1883
+
+# Read config file
+def read_config():
+    p = Path(__file__).with_name('aggregation_config.json')
+    with p.open('r') as f:
+        return json.loads(f.read())
+
+
+IP = read_config()["MQTThost"]
+PORT = read_config()["MQTTport"]
+url = read_config()["PicRestPath"]
 
 # Starts listening to changes in the topic given to the client.subscribe() function.
 def on_connect(client, userdata, flags, rc):
@@ -20,10 +30,10 @@ def on_connect(client, userdata, flags, rc):
 
     client.subscribe("alert")
     client.subscribe("management")
-    client.subscribe("data/iotpi015/sensor/lux")
-    client.subscribe("data/iotpi014/sensor/ir/temperature")
-    client.subscribe("data/iotpi014/sensor/ir/pixels")
-    client.subscribe("data/iotpi016/sensor/tof")
+    client.subscribe("LuxSensor/lux")
+    client.subscribe("IRSsensor/temperature")
+    client.subscribe("IRSensor/pixels")
+    client.subscribe("TofSensor/tof")
 
 ap = argparse.ArgumentParser(description='Displays the log file in real-time')
 args = ap.parse_args()
@@ -53,9 +63,9 @@ createNewFile(filename)
 
 # Takes a picture if it is light enough(lux_status), warm enough(ir_status), and someone is close(tof_status) 
 def takePicture():
+    global url
     works = False
     if lux_status and ir_status and tof_status:
-        url = "http://192.168.11.79:1880/foo"
         response = requests.get(url)
         print(response)
         client.publish("alert", payload=("PICTURE TAKEN!"))
@@ -96,7 +106,7 @@ def handleData(topic, payload):
         dataSaveFq = 5
 
     # Handle data and put the data in appropriate queue
-    if topic == "data/iotpi015/sensor/lux":
+    if topic == "LuxSensor/lux":
         lux_q.put(payload, "lux")
 
         # Check the status if it's light or not and compare to previous status
@@ -120,7 +130,7 @@ def handleData(topic, payload):
     if topic == "data/iotpi014/sensor/ir/temperature":
         temp_q.put(payload, "temp")
     
-    if topic == "data/iotpi014/sensor/ir/pixels":
+    if topic == "IRSensor/pixels":
         pix_q.put(payload, "pix")    
 
         # Check the status if it's warm or not and compare to previous status
@@ -141,7 +151,7 @@ def handleData(topic, payload):
         
         ir_status=status
 
-    if topic == "data/iotpi016/sensor/tof":
+    if topic == "TofSensor/tof":
         tof_q.put(payload, "tof")
 
         # Check the status if there's someone close or not and compare to previous status
