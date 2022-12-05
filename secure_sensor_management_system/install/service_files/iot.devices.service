@@ -1,9 +1,9 @@
 [Unit]
 Description=Start IoT device
 Wants=measure.eltt2.service
+After=multi-user.target
 
 [Service]
-ExecStartPre=/bin/sh -c 'until ping -c1 google.com; do sleep 1; done;'
 ExecStart=python3 /opt/iot/secure_sensor_management_system/SensorManagementLibrary/Device.py
 Type=simple
 
