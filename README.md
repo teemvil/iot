@@ -149,3 +149,5 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 
     f) You should now be able to access the management UI by going to the address `http://localhost:3000`, if you are running the server on localhost. If the server is running on a separate device with a specific ip address then use `http://<ip_address>:3000`. If you want to change the port, go to `/opt/iot/website/server/server_config.json` and change the RESTport value.
 
+
+By: [Joonas Soininen](https://github.com/Joonas88), [Jani Peltonen](https://github.com/Reldin), [Teemu Viljanen](https://github.com/teemvil) and [Matias Vainio](https://github.com/matiasvainio)
