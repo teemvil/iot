@@ -9,8 +9,8 @@ class IoTElement:
         self.client = mqtt.Client()
         self.device_config = self.read_config_file(
             '/etc/iotDevice/device_config.json')
-        self.client_config = self.read_config_file(
-            '/etc/iotDevice/client_config.json')
+        self.mqtt_client_config = self.read_config_file(
+            '/etc/iotDevice/mqtt_client_config.json')
 
         self.connect_to_mqtt_client()
 
@@ -39,19 +39,21 @@ class IoTElement:
     def connect_to_mqtt_client(self):
         try:
             self.client.connect(
-                self.client_config["host"],
-                self.client_config["port"],
-                self.client_config["keepalive"]
+                self.mqtt_client_config["mqtt_host"],
+                self.mqtt_client_config["mqtt_port"],
+                self.mqtt_client_config["mqtt_keepalive"]
             )
+            print("IoTElement method: Connect succesfull")
         except ValueError:
-            print("Cannot connect to MQTT broker.")
+            print("IoTElement method: Cannot connect to MQTT broker.")
 
     def read_config_file(self, path):
         try:
             with open(path, 'r') as f:
+                print("IoTElement: File opened")
                 return json.loads(f.read())
         except IOError:
-            print("file opening not succesfull")
+            print("IoTElement: File opening not succesfull")
 
     def get_time_stamp(self):
         now = datetime.now()

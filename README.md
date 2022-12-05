@@ -6,6 +6,8 @@ The data aquisiton functionality is being abstracted so that the system doesn't 
 
 The system handles all communication via MQTT messages.
 
+Below are the installation and use instructions. For detailed documentation about the structure etc. please see the documentation folder.
+
 # Installation
 
 The system consists of three parts: 1) Device and Sensor part 2) ManagementAttestor part 3) Management UI part. Each part can be run on separete devices. In fact, it is NOT recommended to run sensors and ManagementAttestor on the same device. The only requirement is that each part is using the same MQTT broker, so that they can communicate with each other.
@@ -144,57 +146,6 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 
     IF THIS DOES NOT WORK, MAKE SURE YOU HAVE NPM INSTALLED ON YOUR SYSTEM. You can install it with the command `sudo apt install npm nodejs`
 
-    f) You should now be able to access the management UI by going to the address `http://localhost:3000` or if you changed the RESTport value in the `server_config.json`, then `http://localhost:<RESTport>`.
 
-# Design
+    f) You should now be able to access the management UI by going to the address `http://localhost:3000`, if you are running the server on localhost. If the server is running on a separate device with a specific ip address then use `http://<ip_address>:3000`. If you want to change the port, go to `/opt/iot/website/server/server_config.json` and change the RESTport value.
 
-The system is build so that every class inherits a MQTT client from the IoTElement class. There is also a configuration file located in xxx which has all the necessary options to connect to the MQTT broker and send correct types of messages.
-
-![device class diagram](documentation/pics/insidedevice.JPG)
-
-# Data flow
-
-When the system starts up it sends various MQTT messages to notify the broker about the state of the various subsystems. Firstly the validity of the device running the sensor script is checked. The sensor startup doesn't depend on the validity check. We can just see if the device is valid or not.
-
-![sequence diagram](documentation/pics/devicesequence.JPG)
-
-## MQTT topic naming conventions
-
-Sensors are named as `sensor/webcam`, `sensor/ir`, `sensor/lux`, `sensor/tof`.
-
-### Management channel
-
-```
-management/
-```
-
-### Alert channel
-
-```
-alert/
-```
-
-### Data channels
-
-```
-prefix/<measurementtype>
-```
-
-Measurementtype here means the type of measured data. This could be array of pixels, temperature, distance etc
-
-Most important payload fields:
-itemid and event
-
-How to name different events:
-
-device startup
-
-device validation start
-
-device validation ok
-
-device validation fail
-
-sensor startup
-
-manager startup
