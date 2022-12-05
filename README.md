@@ -144,7 +144,11 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 
     IF THIS DOES NOT WORK, MAKE SURE YOU HAVE NPM INSTALLED ON YOUR SYSTEM. You can install it with the command `sudo apt install npm nodejs`
 
+<<<<<<< HEAD
     f) You should now be able to access the management UI by going to the address `http://localhost:3000` or if you changed the RESTport value in the `server_config.json`, then `http://localhost:<RESTport>`.
+=======
+    d) You should now be able to access the management UI by going to the address `http://localhost:3000`, if you are running the server on localhost. If the server is running on a separate device with a specific ip address then use `http://<ip_address>:3000`. If you want to change the port, go to `/opt/iot/website/server/server_config.json` and change the RESTport value.
+>>>>>>> fix/readme
 
 # Design
 
