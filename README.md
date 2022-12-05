@@ -46,7 +46,7 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 
     a) To install IoTLibrary as a package, go to the folder `/opt/iot/secure_sensor_management_system/` and run the command `sudo pip3 install .`
 
-    b) Create a new folder for the sensor under `/opt/iot/secure_sensor_management_system/`
+    b) Create a new folder for the sensor under `/opt/iot/secure_sensor_management_system/apps/sensors/`
 
     c) Create new sensor script. Most important thing is to inherit the BasicSensor from SensorManagementLibrary.
 
@@ -54,7 +54,7 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
     from SensorManagementLibrary.BasicSensor import BasicSensor
     ```
 
-    The easiest way to do this is to use a template sensor file from `opt/iot/secure_sensor_management_system/ExampleSensor/`
+    The easiest way to do this is to use a template sensor file from `opt/iot/secure_sensor_management_system/apps/sensors/ExampleSensor/`
 
     d) Create configuration file for the sensor and name it as `sensor_config.json`. This file should be stored in the same folder as your sensor script. The file should include three fields like this:
 
@@ -88,7 +88,7 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
     Change the line where it asks for ExecStart:
 
     ```
-        ExecStart=python3 /opt/iot/secure_sensor_management_system/ExampleSensor/RNGSensor.py
+        ExecStart=python3 /opt/iot/secure_sensor_management_system/apps/sensors/ExampleSensor/RNGSensor.py
     ```
 
     Finally enable the sensors service using systemd:
@@ -107,7 +107,7 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
     If you have another sensor, that you want to run at the same time, you can create a new service file at `/etc/systemd/system/`. Copy the contents of the `iot.sensors.service` and then change the ExecStart path:
 
     ```
-    ExecStart=python3 /opt/iot/secure_sensor_management_system/YourSensor/YourSensor.py
+    ExecStart=python3 /opt/iot/secure_sensor_management_system/apps/sensors/YourSensor/YourSensor.py
     ```
 
     Then enable and start that new service.
@@ -128,7 +128,7 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 
     d) To install IoTLibrary as a package, go to the folder `/opt/iot/secure_sensor_management_system/` and run the command `sudo pip3 install .`
 
-    e) Navigate your way to the ManagementAttestor folder at `/opt/iot/secure_sensor_management_system/ManagementAttestor/` and add the correct ip and port addresses the file `manager_config.json`. The ip and port that you want to put there are the ones used by the attestation engine, which you should already have running somewhere.
+    e) Navigate your way to the ManagementAttestor folder at `/opt/iot/secure_sensor_management_system/apps/ManagementAttestor/` and add the correct ip and port addresses the file `manager_config.json`. The ip and port that you want to put there are the ones used by the attestation engine, which you should already have running somewhere.
 
     f) You can now run the Manager with the command `sudo python3 Manager.py`
 
