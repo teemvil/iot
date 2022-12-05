@@ -10,7 +10,7 @@ class RngSensor(BasicSensor):
     def run(self):
         while True:
             r = random.randint(1, 10)
-            self.client.publish('alert', r)
+            self.client.publish('management', r)
             time.sleep(4)
 
 
