@@ -6,6 +6,8 @@ The data aquisiton functionality is being abstracted so that the system doesn't 
 
 The system handles all communication via MQTT messages.
 
+Below are the installation and use instructions. For detailed documentation about the structure etc. please see the documentation folder.
+
 # Installation
 
 The system consists of three parts: 1) Device and Sensor part 2) ManagementAttestor part 3) Management UI part. Each part can be run on separete devices. In fact, it is NOT recommended to run sensors and ManagementAttestor on the same device. The only requirement is that each part is using the same MQTT broker, so that they can communicate with each other.
