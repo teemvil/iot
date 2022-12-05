@@ -138,11 +138,13 @@ The system consists of three parts: 1) Device and Sensor part 2) ManagementAttes
 
     c) Check the MQTT configuration by going to the folder `/opt/iot/website/server`, where you will find a file named `server_config.json`. MAKE SURE THIS FILE HAS THE CORRECT MQTT CLIENT INFO!!
 
-    c) Then navigate your way back to the website folder at `/opt/iot/website/` and start the server using the command `npm start`
+    d) Run `npm install`.
+
+    e) Then navigate your way back to the website folder at `/opt/iot/website/` and start the server using the command `npm start`
 
     IF THIS DOES NOT WORK, MAKE SURE YOU HAVE NPM INSTALLED ON YOUR SYSTEM. You can install it with the command `sudo apt install npm nodejs`
 
-    d) You should now be able to access the management UI by going to the address `https://localhost:3000` or if you changed the RESTport value in the `server_config.json`, then `https://localhost:<RESTport>`.
+    f) You should now be able to access the management UI by going to the address `http://localhost:3000` or if you changed the RESTport value in the `server_config.json`, then `http://localhost:<RESTport>`.
 
 # Design
 

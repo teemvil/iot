@@ -9,8 +9,8 @@ def read_config():
         return json.loads(f.read())
 
 
-IP = read_config()["ip"]
-PORT = read_config()["port"]
+IP = read_config()["attestation_server_ip"]
+PORT = read_config()["attestation_server_port"]
 BASE_URL = f"http://{IP}:{PORT}"
 
 
@@ -111,7 +111,7 @@ def create_dict(payload, sid) -> dict:
 
     o = {"eid": eid, "pid": pid, "cps": cps, "sid": sid}
 
-    print("create_dict printing o: ",o)
+    print("create_dict printing o: ", o)
 
     return o
 
