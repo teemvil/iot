@@ -1,5 +1,3 @@
-documentation to be filled in...
-
 # Setup
 
 ## Requirements
