@@ -12,8 +12,6 @@ In this project we used three raspberry pi devices. Sensors in use were IR-senso
 Tutorials for different kinds of raspberry pi sensors:
 https://tutorials-raspberrypi.com/raspberry-pi-sensors-overview-50-important-components/
 
-//images here if needed
-
 We connected the lux-sensor and web-camera to one raspberry pi. The IR-sensor and time of flight-sensor were connected separately on remaining two raspberry pi devices.
 
 ## Required software for pi
