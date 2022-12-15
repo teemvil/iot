@@ -40,7 +40,6 @@ When the system starts up it sends various MQTT messages to notify the broker ab
 
 ## MQTT topic naming conventions
 
-Sensors are named as `sensor/webcam`, `sensor/ir`, `sensor/lux`, `sensor/tof`.
 
 ### Management channel
 
